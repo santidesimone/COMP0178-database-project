@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a proposal for a starter project for the group project in the COMP0178 Database Fundamentals module.
+This is a proposal for a starter project template to be used for the group project coursework.
 
 If you follow the instructions below to run the project locally, it will:
 
