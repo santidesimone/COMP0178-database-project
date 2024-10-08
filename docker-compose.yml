@@ -1,0 +1,30 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    build: ./database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ucl
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password 
+    volumes:
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
