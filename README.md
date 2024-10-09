@@ -7,8 +7,8 @@ This is a proposal for a starter project template to be used for the group proje
 If you follow the instructions below to run the project locally, it will:
 
 1. Set up MySQL inside a Docker container. Additionally, it will create a database called 'ucl' and a table named 'students,' populating it with initial data.  
-2. Create a front end using the Angular framework. This webpage will be served by a lightweight Nginx server and will currently display a "Hello World" page. Both the Angular app and the Nginx server are inside a Docker container.  
-3. Build a back end using Node.js, also inside a container. This server contains one endpoint: `/students`. When you access this endpoint, the server connects to the database, runs an SQL query, and returns the contents of the 'students' table from the 'ucl' database to the client.  
+2. Create a frontend using the Angular framework. This webpage will be served by a lightweight Nginx server and will currently display a "Hello World" page. Both the Angular app and the Nginx server will be inside another Docker container.  
+3. Build a backend server using Node.js, also inside another Docker container. This server contains one endpoint: `/students`. When you access this endpoint, the server connects to the database, runs an SQL query, and returns the contents of the 'students' table from the 'ucl' database to the client.  
 
 ## Prerequisites
 
