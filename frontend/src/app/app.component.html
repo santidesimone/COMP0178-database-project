@@ -10,6 +10,15 @@
 <h1>Hello World!</h1>
 
 
+<div *ngIf="students.length > 0">
+  <h2>Students List</h2>
+  <ul>
+    <li *ngFor="let student of students">
+      {{ student.name }} ({{ student.email }})
+    </li>
+  </ul>
+</div>
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
