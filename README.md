@@ -56,7 +56,7 @@ Make sure you have the following installed on your machine:
 To connect to the MySQL database and interact with it, open a new terminal and run the following command:
 
 ```bash
-docker exec -it project-starter-database-1 mysql -u root -p
+docker exec -it comp0178-database-project-database-1  mysql -u root -p
 ```
 
 ![connecting-to-db-via-cmd](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3ZkZzRtbWxtbW9pMXVkNGVxcnMyY3pjcWh1ZnJqZGI2NnRhNmZ3dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9oNn5lkNwx2O51ipKN/giphy.gif)
