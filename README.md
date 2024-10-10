@@ -12,8 +12,7 @@ If you follow the instructions below to run the project locally, it will:
 
 ## Architecture
 
-![Diagram](https://drive.google.com/file/d/19uT5MEb1Zp0-OzAZ5ecBEYZDIi-YqwQM/preview)
-
+![image](https://drive.google.com/uc?export=view&id=19uT5MEb1Zp0-OzAZ5ecBEYZDIi-YqwQM) 
 
 ## Prerequisites
 
