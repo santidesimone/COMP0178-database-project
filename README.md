@@ -10,6 +10,10 @@ If you follow the instructions below to run the project locally, it will:
 2. Create a frontend using the Angular framework. This webpage will be served by a lightweight Nginx server and will currently display a "Hello World" page. Both the Angular app and the Nginx server will be inside another Docker container.  
 3. Build a backend server using Node.js, also inside another Docker container. This server contains one endpoint: `/students`. When you access this endpoint, the server connects to the database, runs an SQL query, and returns the contents of the 'students' table from the 'ucl' database to the client.  
 
+## Architecture
+
+![image](https://drive.google.com/uc?export=view&id=19uT5MEb1Zp0-OzAZ5ecBEYZDIi-YqwQM) 
+
 ## Prerequisites
 
 Make sure you have the following installed on your machine:
