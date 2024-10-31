@@ -1,35 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import { StudentService } from './services/student.service';
-import { CommonModule } from '@angular/common'; // Import CommonModule for ngIf and ngFor
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+export class AppComponent {
+  currentRoute: string = '';  // Store the current route
 
-export class AppComponent implements OnInit{
-  title = 'frontend';
-  some_var = 'some_value';
+  title = 'angular-boilerplate-1';
 
-  students: any[] = [];
+  constructor(private router: Router) {
+    // Listen to navigation events and update the current route
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.currentRoute = event.urlAfterRedirects;
+    });
+  }
 
-  // Inject the StudentService
-  constructor(private studentService: StudentService) { }
-
-  // Fetch students when the component initializes
-  ngOnInit(): void {
-    this.studentService.getStudents().subscribe(
-      (data) => {
-        this.students = data;
-        console.log(this.students);  // Log the students to see the data
-      },
-      (error) => {
-        console.error('Error fetching students:', error);
+    toggleCart() {
+    const cartSidebar = document.getElementById('cartSidebar');
+    if (cartSidebar) {
+      if (cartSidebar.style.display === 'none' || cartSidebar.style.display === '') {
+        cartSidebar.style.display = 'block';
+      } else {
+        cartSidebar.style.display = 'none';
       }
-    );
+    }
+  }
+
+  closeCart() {
+    const cartSidebar = document.getElementById('cartSidebar');
+    if (cartSidebar) {
+      cartSidebar.style.display = 'none';
+    }
   }
 
 }

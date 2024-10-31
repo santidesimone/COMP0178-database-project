@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Sidebar Styles */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Start off-screen */
+  width: 300px; /* Width of the sidebar */
+  height: 100%; /* Full height */
+  background-color: #f8f9fa; /* Background color */
+  /*  box-shadow: -6px 0 6px rgba(0, 0, 0, 0.5); Shadow only on the left side */
+  transition: right 0.3s ease; /* Smooth transition for sliding */
+  z-index: 1000; /* Ensure it is above other content */
+  border: 1px solid #e7e7e7;
+}
+
+/* Open Sidebar */
+.cart-sidebar.open {
+  right: 0; /* Slide in to the screen */
+}
+
+

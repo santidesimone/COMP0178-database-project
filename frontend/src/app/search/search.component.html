@@ -1,0 +1,57 @@
+<h1 class="text-center mb-4">Search Page</h1>
+<form (submit)="onSearch()" class="container d-flex justify-content-center">
+  <div class="w-50"> <!-- Adjust width as needed -->
+    <div class="form-group mb-3">
+      <label for="query" class="form-label">Search:</label>
+      <input type="text" id="query" name="query" [(ngModel)]="query" class="form-control" placeholder="Enter your search term">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Search</button>
+  </div>
+</form>
+
+
+<!-- Filter Options -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" class="form-control" placeholder="Enter location">
+    </div>
+    <div class="col-md-4">
+      <label for="price">Price Range:</label>
+      <input type="text" id="price" name="price" class="form-control" placeholder="e.g. 10 - 100">
+    </div>
+    <div class="col-md-4">
+      <label for="category">Category:</label>
+      <select id="category" name="category" class="form-control">
+        <option value="">Select Category</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+        <option value="books">Books</option>
+        <option value="furniture">Furniture</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Search Results Section -->
+<div class="container mt-5">
+  <div class="row">
+    <!-- Use *ngFor to repeat cards dynamically -->
+    <div class="col-md-4 mb-4" *ngFor="let result of searchResults">
+      <!-- <a [routerLink]="['/auction-detail', result.id]" class="text-decoration-none text-dark"> -->
+      <a [routerLink]="['/auction-detail']" class="text-decoration-none text-dark">
+        <div class="card h-100">
+          <img [src]="result.imageUrl" class="card-img-top" alt="{{ result.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ result.title }}</h5>
+            <p class="card-text">Price: {{ result.price }}</p>
+            <p class="card-text">{{ result.description }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+

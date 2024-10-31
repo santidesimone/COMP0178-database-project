@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <h1>Auction Detail</h1>
+  
+  <!-- Auction Details Section -->
+  <div class="row">
+    <div class="col-md-6">
+      <img [src]="auction.imageUrl" class="img-fluid" alt="{{ auction.title }}">
+    </div>
+    <div class="col-md-6">
+      <h2>{{ auction.title }}</h2>
+      <p><strong>Description:</strong> {{ auction.description }}</p>
+      <p><strong>Starting Price:</strong> {{ auction.startingPrice }}</p>
+      <p><strong>Reserve Price:</strong> {{ auction.reservePrice }}</p>
+      <p><strong>Category:</strong> {{ auction.category }}</p>
+      
+      <div class="mt-4">
+        <button class="btn btn-primary me-2" (click)="makeOffer()">Make an Offer</button>
+        <button class="btn btn-secondary" (click)="addToCart()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Seller Rating Section -->
+<div class="mt-4">
+  <h5>Rate the Seller</h5>
+  <div class="star-rating">
+    <span class="fa fa-star" (click)="rateSeller(1)" (mouseover)="hoverRating(1)" (mouseout)="resetHover()"></span>
+    <span class="fa fa-star" (click)="rateSeller(2)" (mouseover)="hoverRating(2)" (mouseout)="resetHover()"></span>
+    <span class="fa fa-star" (click)="rateSeller(3)" (mouseover)="hoverRating(3)" (mouseout)="resetHover()"></span>
+    <span class="fa fa-star" (click)="rateSeller(4)" (mouseover)="hoverRating(4)" (mouseout)="resetHover()"></span>
+    <span class="fa fa-star" (click)="rateSeller(5)" (mouseover)="hoverRating(5)" (mouseout)="resetHover()"></span>
+  </div>
+  <div class="mt-2">
+    <textarea [(ngModel)]="comment" placeholder="Leave a comment..." rows="3" class="form-control"></textarea>
+    <button class="btn btn-primary mt-2" (click)="submitComment()">Submit</button>
+  </div>
+</div> 
+
+<!-- Display Comments -->
+<div class="mt-4">
+  <h5>Comments</h5>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let comm of comments">{{ comm }}</li>
+  </ul>
+</div>
