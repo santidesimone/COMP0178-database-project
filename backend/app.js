@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 // Use the routes
-app.use('/', routes); // Mount the routes at the root path
+app.use('/api/', routes); // Mount the routes at the root path
 
 // Start the server
 app.listen(port, () => {
