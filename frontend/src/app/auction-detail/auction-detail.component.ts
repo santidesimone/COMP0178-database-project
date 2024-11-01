@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   standalone: true,
   imports: [FormsModule],
   templateUrl: './auction-detail.component.html',
-  styleUrl: './auction-detail.component.css'
+  styleUrls: ['./auction-detail.component.css'] // Corrected from styleUrl to styleUrls
 })
 export class AuctionDetailComponent {
   auction = {
@@ -20,26 +20,25 @@ export class AuctionDetailComponent {
 
   makeOffer() {
     // Logic for making an offer
-    alert('Offer made!')
+    alert('Offer made!');
   }
 
   addToCart() {
     // Logic for adding to cart
-    alert('Item added to cart!')
+    alert('Item added to cart!');
   }
 
-// Rating functionality
+  // Rating functionality
   rating: number = 0; // Store the selected rating
   comment: string = ''; // Store the user's comment
   comments: string[] = []; // Store all comments
 
   rateSeller(stars: number) {
     this.rating = stars; // Set the selected rating
-    console.log('Rated seller with ${stars} stars.');
+    console.log(`Rated seller with ${stars} stars.`); // Fixed string interpolation
   }
 
   hoverRating(stars: number) {
-    // Optional: Highlight the stars up to the hovered one
     const starsElements = document.querySelectorAll('.star-rating .fa-star');
     starsElements.forEach((star, index) => {
       star.classList.toggle('checked', index < stars);
@@ -47,7 +46,6 @@ export class AuctionDetailComponent {
   }
 
   resetHover() {
-    // Reset star highlighting when mouse leaves
     const starsElements = document.querySelectorAll('.star-rating .fa-star');
     starsElements.forEach((star, index) => {
       star.classList.toggle('checked', index < this.rating);
@@ -61,6 +59,4 @@ export class AuctionDetailComponent {
       console.log('Comment submitted:', this.comment);
     }
   }
-
 }
-
