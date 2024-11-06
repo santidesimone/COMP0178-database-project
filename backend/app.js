@@ -2,7 +2,6 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/index'); // Import the routes module
-
 const app = express();
 const port = 3000;
 
@@ -13,9 +12,9 @@ app.use(cors());
 app.use(express.json());
 
 // Simple root endpoint
-app.get('/', (req, res) => {
-  res.send('Hello from Node.js backend!');
-});
+// app.get('/', (req, res) => {
+//   res.send('Hello from Node.js backend!');
+// });
 
 // Use the routes
 app.use('/api/', routes); // Mount the routes at the root path
