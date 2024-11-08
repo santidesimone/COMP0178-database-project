@@ -1,287 +1,204 @@
 -- -----------------------------------------------------
--- Schema auction_db
+-- Table `User`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `auction_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `auction_db`;
-
--- -----------------------------------------------------
--- Table `Seller`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Seller` (
-  `User_UserID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(20) NOT NULL,
-  `Password` VARCHAR(255) NOT NULL,
+CREATE TABLE IF NOT EXISTS `User` (
+  `UserID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Username` VARCHAR(50) NOT NULL,
   `Email` VARCHAR(255) NOT NULL,
-  `StatusID` INT(20) NOT NULL,
+  `Password` VARCHAR(255) NOT NULL,
+  `Role` ENUM('buyer', 'seller', 'both') NOT NULL,
+  `Status` ENUM('active', 'suspended', 'banned') NOT NULL DEFAULT 'active',
   `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ContactInfo` VARCHAR(255),
   `LastLoginDate` DATETIME,
-  PRIMARY KEY (`User_UserID`),
-  UNIQUE INDEX `Username_UNIQUE` (`Username` ASC),
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC),
-  INDEX `idx_seller_status` (`StatusID`)
+  `NotificationPreference` JSON, -- Stores notification settings
+  PRIMARY KEY (`UserID`),
+  UNIQUE INDEX `Username_UNIQUE` (`Username`),
+  UNIQUE INDEX `Email_UNIQUE` (`Email`)
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `Buyer`
+-- Table `Category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Buyer` (
-  `User_UserID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(20) NOT NULL,
-  `Password` VARCHAR(255) NOT NULL,
-  `Email` VARCHAR(255) NOT NULL,
-  `StatusID` INT(20) NOT NULL,
-  `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ShippingAddress` TEXT,
-  `LastLoginDate` DATETIME,
-  PRIMARY KEY (`User_UserID`),
-  UNIQUE INDEX `Username_UNIQUE` (`Username` ASC),
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC),
-  INDEX `idx_buyer_status` (`StatusID`)
+CREATE TABLE IF NOT EXISTS `Category` (
+  `CategoryID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ParentCategoryID` INT UNSIGNED,
+  `Name` VARCHAR(50) NOT NULL,
+  `DisplayOrder` INT NOT NULL DEFAULT 0,
+  `Level` INT NOT NULL, -- For hierarchy level tracking
+  `Path` VARCHAR(255), -- Stores full category path for easy navigation
+  PRIMARY KEY (`CategoryID`),
+  INDEX `fk_Category_Parent_idx` (`ParentCategoryID`),
+  INDEX `idx_category_path` (`Path`),
+  CONSTRAINT `fk_Category_Parent`
+    FOREIGN KEY (`ParentCategoryID`)
+    REFERENCES `Category` (`CategoryID`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `Auction`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Auction` (
-  `AuctionID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Seller_User_UserID` INT(20) UNSIGNED NOT NULL,
+  `AuctionID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Title` VARCHAR(255) NOT NULL,
   `Description` TEXT,
-  `StartingPrice` DECIMAL(10,2) UNSIGNED NOT NULL,
-  `ReservePrice` DECIMAL(10,2) UNSIGNED NOT NULL,
-  `CurrentBid` DECIMAL(10,2) UNSIGNED,
-  `Category` VARCHAR(50) NOT NULL,
+  `StartingPrice` DECIMAL(10,2) NOT NULL,
+  `ReservePrice` DECIMAL(10,2) NOT NULL,
+  `CurrentBid` DECIMAL(10,2),
+  `CategoryID` INT UNSIGNED NOT NULL,
+  `SellerID` INT UNSIGNED NOT NULL,
+  `WinnerID` INT UNSIGNED, -- Track winner directly
   `ImageURL` VARCHAR(255),
+  `Status` ENUM('draft', 'active', 'ended', 'cancelled') NOT NULL DEFAULT 'draft',
   `StartDate` DATETIME NOT NULL,
   `EndDate` DATETIME NOT NULL,
-  `Status` ENUM('active', 'ended', 'cancelled') NOT NULL DEFAULT 'active',
   `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ViewCount` INT UNSIGNED DEFAULT 0, -- For popularity tracking
+  `BidCount` INT UNSIGNED DEFAULT 0, -- For activity tracking
+  `LastBidDate` DATETIME, -- For quick reference
+  `NotificationsSent` JSON, -- Track notification status
   PRIMARY KEY (`AuctionID`),
-  INDEX `fk_Auction_Seller_idx` (`Seller_User_UserID` ASC),
-  INDEX `idx_auction_status` (`Status`, `EndDate`),
-  INDEX `idx_auction_category` (`Category`),
+  INDEX `fk_Auction_Seller_idx` (`SellerID`),
+  INDEX `fk_Auction_Category_idx` (`CategoryID`),
+  INDEX `idx_auction_status_date` (`Status`, `EndDate`),
+  INDEX `idx_auction_search` (`Title`, `Status`, `EndDate`),
+  FULLTEXT INDEX `idx_auction_fulltext` (`Title`, `Description`),
   CONSTRAINT `fk_Auction_Seller`
-    FOREIGN KEY (`Seller_User_UserID`)
-    REFERENCES `Seller` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
-) ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `ShoppingCart`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ShoppingCart` (
-  `CartID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Buyer_User_UserID` INT(20) UNSIGNED NOT NULL,
-  `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`CartID`),
-  INDEX `fk_ShoppingCart_Buyer_idx` (`Buyer_User_UserID` ASC),
-  CONSTRAINT `fk_ShoppingCart_Buyer`
-    FOREIGN KEY (`Buyer_User_UserID`)
-    REFERENCES `Buyer` (`User_UserID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `CartItem`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `CartItem` (
-  `CartItemID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `CartID` INT(20) UNSIGNED NOT NULL,
-  `AuctionID` INT(20) UNSIGNED NOT NULL,
-  `AddedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`CartItemID`),
-  UNIQUE INDEX `unique_cart_auction` (`CartID`, `AuctionID`),
-  INDEX `fk_CartItem_Auction_idx` (`AuctionID` ASC),
-  CONSTRAINT `fk_CartItem_Cart`
-    FOREIGN KEY (`CartID`)
-    REFERENCES `ShoppingCart` (`CartID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_CartItem_Auction`
-    FOREIGN KEY (`AuctionID`)
-    REFERENCES `Auction` (`AuctionID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+    FOREIGN KEY (`SellerID`)
+    REFERENCES `User` (`UserID`),
+  CONSTRAINT `fk_Auction_Category`
+    FOREIGN KEY (`CategoryID`)
+    REFERENCES `Category` (`CategoryID`)
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `Bid`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Bid` (
-  `BidID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Auction_AuctionID` INT(20) UNSIGNED NOT NULL,
-  `Buyer_User_UserID` INT(20) UNSIGNED NOT NULL,
-  `BidAmount` DECIMAL(10,2) UNSIGNED NOT NULL,
+  `BidID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `AuctionID` INT UNSIGNED NOT NULL,
+  `BidderID` INT UNSIGNED NOT NULL,
+  `BidAmount` DECIMAL(10,2) NOT NULL,
   `BidTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Status` ENUM('active', 'outbid', 'won', 'lost') NOT NULL DEFAULT 'active',
+  `AutoBidEnabled` BOOLEAN DEFAULT FALSE,
+  `MaxAutoBidAmount` DECIMAL(10,2), -- For automatic bidding
+  `NotificationSent` BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (`BidID`),
-  INDEX `fk_Bid_Auction_idx` (`Auction_AuctionID` ASC),
-  INDEX `fk_Bid_Buyer_idx` (`Buyer_User_UserID` ASC),
-  INDEX `idx_bid_amount_time` (`BidAmount`, `BidTime`),
+  INDEX `fk_Bid_Auction_idx` (`AuctionID`),
+  INDEX `fk_Bid_User_idx` (`BidderID`),
+  INDEX `idx_bid_amount_time` (`AuctionID`, `BidAmount` DESC, `BidTime` DESC),
+  CONSTRAINT `fk_Bid_User`
+    FOREIGN KEY (`BidderID`)
+    REFERENCES `User` (`UserID`),
   CONSTRAINT `fk_Bid_Auction`
-    FOREIGN KEY (`Auction_AuctionID`)
+    FOREIGN KEY (`AuctionID`)
     REFERENCES `Auction` (`AuctionID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_Bid_Buyer`
-    FOREIGN KEY (`Buyer_User_UserID`)
-    REFERENCES `Buyer` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `Rating`
+-- Table `ShoppingCart`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Rating` (
-  `RatingID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `AuctionID` INT(20) UNSIGNED NOT NULL,
-  `BuyerID` INT(20) UNSIGNED NOT NULL,
-  `SellerID` INT(20) UNSIGNED NOT NULL,
-  `RatingValue` INT(3) UNSIGNED NOT NULL,
-  `ReviewText` TEXT,
-  `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`RatingID`),
-  UNIQUE INDEX `unique_auction_rating` (`AuctionID`, `BuyerID`, `SellerID`),
-  INDEX `fk_Rating_Buyer_idx` (`BuyerID` ASC),
-  INDEX `fk_Rating_Seller_idx` (`SellerID` ASC),
-  CONSTRAINT `check_rating_value` 
-    CHECK (`RatingValue` BETWEEN 1 AND 5),
-  CONSTRAINT `fk_Rating_Auction`
+CREATE TABLE IF NOT EXISTS `ShoppingCart` (
+  `CartID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` INT UNSIGNED NOT NULL,
+  `AuctionID` INT UNSIGNED NOT NULL,
+  `NotifyOnBid` BOOLEAN DEFAULT TRUE,
+  `NotifyBeforeEnd` BOOLEAN DEFAULT TRUE,
+  `PriceThreshold` DECIMAL(10,2), -- Notify when price reaches this
+  `EndingSoon` BOOLEAN DEFAULT FALSE, -- Flag for ending soon
+  `AddedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `PreferenceScore` INT DEFAULT 0, -- For recommendation system
+  PRIMARY KEY (`CartID`),
+  UNIQUE INDEX `unique_cart` (`UserID`, `AuctionID`),
+  INDEX `idx_cart_preferences` (`UserID`, `PreferenceScore`),
+  CONSTRAINT `fk_Cart_User`
+    FOREIGN KEY (`UserID`)
+    REFERENCES `User` (`UserID`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_Cart_Auction`
     FOREIGN KEY (`AuctionID`)
     REFERENCES `Auction` (`AuctionID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_Rating_Buyer`
-    FOREIGN KEY (`BuyerID`)
-    REFERENCES `Buyer` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_Rating_Seller`
-    FOREIGN KEY (`SellerID`)
-    REFERENCES `Seller` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `Question`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Question` (
-  `QuestionID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `AuctionID` INT(20) UNSIGNED NOT NULL,
-  `AskedByUserID` INT(20) UNSIGNED NOT NULL,
+  `QuestionID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `AuctionID` INT UNSIGNED NOT NULL,
+  `AskerID` INT UNSIGNED NOT NULL,
   `QuestionText` TEXT NOT NULL,
+  `Status` ENUM('pending', 'answered', 'archived') NOT NULL DEFAULT 'pending',
+  `IsPublic` BOOLEAN DEFAULT TRUE,
   `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `UpdatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Helpful` INT DEFAULT 0, -- Track helpful votes
   PRIMARY KEY (`QuestionID`),
-  INDEX `fk_Question_Auction_idx` (`AuctionID` ASC),
-  INDEX `fk_Question_User_idx` (`AskedByUserID` ASC),
+  INDEX `fk_Question_Auction_idx` (`AuctionID`),
+  INDEX `fk_Question_User_idx` (`AskerID`),
+  FULLTEXT INDEX `idx_question_search` (`QuestionText`),
   CONSTRAINT `fk_Question_Auction`
     FOREIGN KEY (`AuctionID`)
-    REFERENCES `Auction` (`AuctionID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    REFERENCES `Auction` (`AuctionID`),
   CONSTRAINT `fk_Question_User`
-    FOREIGN KEY (`AskedByUserID`)
-    REFERENCES `Buyer` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    FOREIGN KEY (`AskerID`)
+    REFERENCES `User` (`UserID`)
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `Answer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Answer` (
-  `AnswerID` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `QuestionID` INT(20) UNSIGNED NOT NULL,
-  `AnsweredByUserID` INT(20) UNSIGNED NOT NULL,
+  `AnswerID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `QuestionID` INT UNSIGNED NOT NULL,
+  `AnswererID` INT UNSIGNED NOT NULL,
   `AnswerText` TEXT NOT NULL,
+  `IsOfficial` BOOLEAN DEFAULT FALSE, -- Marks seller's official response
+  `Helpful` INT DEFAULT 0, -- Track helpful votes
   `CreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `UpdatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`AnswerID`),
-  INDEX `fk_Answer_Question_idx` (`QuestionID` ASC),
-  INDEX `fk_Answer_User_idx` (`AnsweredByUserID` ASC),
+  INDEX `fk_Answer_Question_idx` (`QuestionID`),
+  INDEX `fk_Answer_User_idx` (`AnswererID`),
   CONSTRAINT `fk_Answer_Question`
     FOREIGN KEY (`QuestionID`)
-    REFERENCES `Question` (`QuestionID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    REFERENCES `Question` (`QuestionID`),
   CONSTRAINT `fk_Answer_User`
-    FOREIGN KEY (`AnsweredByUserID`)
-    REFERENCES `Seller` (`User_UserID`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE
+    FOREIGN KEY (`AnswererID`)
+    REFERENCES `User` (`UserID`)
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Add triggers
+-- Table `Rating`
 -- -----------------------------------------------------
-DELIMITER //
-
--- Ensure EndDate is after StartDate
-CREATE TRIGGER before_auction_insert 
-BEFORE INSERT ON Auction
-FOR EACH ROW
-BEGIN
-    IF NEW.EndDate <= NEW.StartDate THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'End date must be after start date';
-    END IF;
-END//
-
--- Update CurrentBid when new bid is placed
-CREATE TRIGGER after_bid_insert
-AFTER INSERT ON Bid
-FOR EACH ROW
-BEGIN
-    UPDATE Auction 
-    SET CurrentBid = NEW.BidAmount
-    WHERE AuctionID = NEW.Auction_AuctionID 
-    AND (CurrentBid IS NULL OR NEW.BidAmount > CurrentBid);
-END//
-
--- Ensure new bid is higher than current bid
-CREATE TRIGGER before_bid_insert
-BEFORE INSERT ON Bid
-FOR EACH ROW
-BEGIN
-    DECLARE current_bid DECIMAL(10,2);
-    SELECT CurrentBid INTO current_bid
-    FROM Auction
-    WHERE AuctionID = NEW.Auction_AuctionID;
-    
-    IF current_bid IS NOT NULL AND NEW.BidAmount <= current_bid THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Bid must be higher than current bid';
-    END IF;
-END//
-
--- Auto-update auction status
-CREATE TRIGGER check_auction_end_date
-BEFORE UPDATE ON Auction
-FOR EACH ROW
-BEGIN
-    IF NEW.EndDate <= NOW() AND NEW.Status = 'active' THEN
-        SET NEW.Status = 'ended';
-    END IF;
-END//
-
--- Prevent bids on ended auctions
-CREATE TRIGGER before_bid_check_auction
-BEFORE INSERT ON Bid
-FOR EACH ROW
-BEGIN
-    DECLARE auction_status VARCHAR(10);
-    SELECT Status 
-    INTO auction_status
-    FROM Auction
-    WHERE AuctionID = NEW.Auction_AuctionID;
-    
-    IF auction_status != 'active' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot bid on inactive or ended auctions';
-    END IF;
-END//
-
-DELIMITER ;
+CREATE TABLE IF NOT EXISTS `Rating` (
+  `RatingID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `AuctionID` INT UNSIGNED NOT NULL,
+  `FromUserID` INT UNSIGNED NOT NULL,
+  `ToUserID` INT UNSIGNED NOT NULL,
+  `RatingValue` INT NOT NULL,
+  `ReviewText` TEXT,
+  `RatingType` ENUM('buyer_to_seller', 'seller_to_buyer') NOT NULL,
+  `Criteria` JSON, -- Stores detailed rating criteria
+  `TransactionDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ReviewDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Helpful` INT DEFAULT 0,
+  PRIMARY KEY (`RatingID`),
+  UNIQUE INDEX `unique_transaction_rating` (`AuctionID`, `FromUserID`, `ToUserID`),
+  INDEX `idx_rating_user_from` (`FromUserID`),
+  INDEX `idx_rating_user_to` (`ToUserID`),
+  CONSTRAINT `check_rating_value` 
+    CHECK (`RatingValue` BETWEEN 1 AND 5),
+  CONSTRAINT `fk_Rating_From`
+    FOREIGN KEY (`FromUserID`)
+    REFERENCES `User` (`UserID`),
+  CONSTRAINT `fk_Rating_To`
+    FOREIGN KEY (`ToUserID`)
+    REFERENCES `User` (`UserID`),
+  CONSTRAINT `fk_Rating_Auction`
+    FOREIGN KEY (`AuctionID`)
+    REFERENCES `Auction` (`AuctionID`)
+) ENGINE = InnoDB;
