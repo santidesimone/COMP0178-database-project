@@ -16,7 +16,7 @@ services:
     build: ./database
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: ucl
+      MYSQL_DATABASE: auctions
       MYSQL_ROOT_HOST: '%'
     ports:
       - "3307:3306"

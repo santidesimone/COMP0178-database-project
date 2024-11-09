@@ -5,7 +5,7 @@ const db = mysql.createConnection({
   host: 'database',    // Host machine
   user: 'root',        // Your MySQL username
   password: 'rootpassword', // Your MySQL password
-  database: 'ucl'      // The database you're working with
+  database: 'auctions'      // The database you're working with
 });
 
 // Connect to the database
