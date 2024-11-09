@@ -13,7 +13,7 @@ VALUES ('Deactivated'), ('Active'), ('Banned');
 
 -- 2. Create the `Users` Table
 CREATE TABLE `Users` (
-    `User_ID` INT AUTO_INCREMENT PRIMARY KEY,
+    `UserID` INT AUTO_INCREMENT PRIMARY KEY,
     `Email` VARCHAR(100) NOT NULL UNIQUE,
     `CreatedDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `Username` VARCHAR(100) NOT NULL,
@@ -24,22 +24,22 @@ CREATE TABLE `Users` (
 
 -- 3. Create the `BuyerDetails` Table
 CREATE TABLE `BuyerDetails` (
-    `BuyerID` INT PRIMARY KEY,
+    `BuyerID` INT AUTO_INCREMENT PRIMARY KEY,
     `UserID` INT NOT NULL,
     `ShippingAddress` VARCHAR(255) NOT NULL,
-    FOREIGN KEY (`UserID`) REFERENCES `Users`(`User_ID`)
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
 -- 4. Create the `SellerDetails` Table
 CREATE TABLE `SellerDetails` (
-    `SellerID` INT PRIMARY KEY,
+    `SellerID` INT AUTO_INCREMENT PRIMARY KEY,
     `UserID` INT NOT NULL,
     `StreetAddress` VARCHAR(255),
     `City` VARCHAR(100),
     `StateProvince` VARCHAR(100),
     `PostalCode` VARCHAR(20),
     `Country` VARCHAR(100),
-    FOREIGN KEY (`UserID`) REFERENCES `Users`(`User_ID`)
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
 -- 5. Create the `ItemCategory` Table
@@ -95,7 +95,7 @@ CREATE TABLE `AuctionRatings` (
     `Rating` INT CHECK (`Rating` BETWEEN 1 AND 5) NOT NULL,
     `RatingDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
-    FOREIGN KEY (`UserID`) REFERENCES `Users`(`User_ID`)
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
 -- 9. Create the `Questions` Table
@@ -106,7 +106,7 @@ CREATE TABLE `Questions` (
     `QuestionText` TEXT NOT NULL,
     `QuestionDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
-    FOREIGN KEY (`BuyerID`) REFERENCES `Users`(`User_ID`)
+    FOREIGN KEY (`BuyerID`) REFERENCES `Users`(`UserID`)
 );
 
 -- 10. Create the `Answers` Table
@@ -117,7 +117,7 @@ CREATE TABLE `Answers` (
     `AnswerText` TEXT NOT NULL,
     `AnswerDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`QuestionID`) REFERENCES `Questions`(`QuestionID`),
-    FOREIGN KEY (`SellerID`) REFERENCES `Users`(`User_ID`)
+    FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`)
 );
 
 -- Change authentication method for the root user (or specify another user if needed)
