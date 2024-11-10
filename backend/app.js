@@ -12,7 +12,7 @@ app.use(cors());
 // Parse JSON request bodies
 app.use(express.json());
 
-app.post('/api/signin', (req, res) => {
+app.post('/api/signup', (req, res) => {
   const body = req.body;
   let response = {}
   const query = `

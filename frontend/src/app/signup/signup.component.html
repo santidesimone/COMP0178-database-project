@@ -1,0 +1,90 @@
+<div class="container">
+
+
+  <div class="row justify-content-center" style="margin-top: 5px;"> 
+    <div class="col-md-5"> 
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="card p-4 shadow-sm"> 
+        <h4 class="text-center mb-3">Create A New Account</h4>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" class="form-control" formControlName="email" required>
+          <div style="color: red; margin: 6px 0 6px;" class="">
+            {{ signupForm.get('email')?.touched && signupForm.get('email')?.hasError('required')  ? 'Email is required.' : '' }} 
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" class="form-control" formControlName="username" required>
+          <div style="color: red; margin: 6px 0 6px;" class="">
+            {{ signupForm.get('username')?.hasError('required') && signupForm.get('username')?.touched? 'Username is required.': '' }} 
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" class="form-control" formControlName="password" required>
+          <div style="color: red; margin: 6px 0 6px;" class="">
+            {{ signupForm.get('password')?.touched && signupForm.get('password')?.hasError('required') ? 'Password is required.' : '' }}
+          </div>
+        </div>
+
+        <div class="form-check"> 
+          <input type="checkbox" id="isBuyer" class="form-check-input" [(ngModel)]="isBuyer" [ngModelOptions]="{standalone: true}">
+          <label class="form-check-label" for="isBuyer">Buyer</label>
+        </div>
+
+        <div *ngIf="isBuyer" class="form-group mt-2">
+          <h4>Buyer Details</h4>
+          <label for="shippingAddress">Shipping Address:</label>
+          <input type="text" id="shippingAddress" class="form-control" formControlName="shippingAddress">
+        </div>
+
+        <div class="form-check mt-3">
+          <input type="checkbox" id="isSeller" class="form-check-input" [(ngModel)]="isSeller" [ngModelOptions]="{standalone: true}">
+          <label class="form-check-label" for="isSeller">Seller</label>
+        </div>
+
+        <div style="color: red; margin: 6px 0 6px;" class="">
+          {{ (signupForm.touched && !isBuyer && !isSeller) ? 'Please select at least one User Profile (Buyer or Seller).' : '' }}
+        </div>
+
+        <div *ngIf="isSeller" class="mt-3">
+          <h4>Seller Details</h4>
+
+          <div class="form-group">
+            <label for="streetAddress">Street Address:</label>
+            <input type="text" id="streetAddress" class="form-control" formControlName="streetAddress">
+          </div>
+
+          <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" class="form-control" formControlName="city">
+          </div>
+
+          <div class="form-group">
+            <label for="stateProvince">State/Province:</label>
+            <input type="text" id="stateProvince" class="form-control" formControlName="stateProvince">
+          </div>
+
+          <div class="form-group">
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" class="form-control" formControlName="postalCode">
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" class="form-control" formControlName="country">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3" [disabled]="signupForm.invalid || (!isSeller && !isBuyer)">Sign Up</button>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+      </form>
+
+    </div> 
+  </div>
+</div>
