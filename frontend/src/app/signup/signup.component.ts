@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common'; // Import NgFor for template rendering
 import { Observable } from 'rxjs'; 
 import { SessionComponent } from './../session.component'; // Adjust the path if needed
@@ -81,9 +81,9 @@ export class SignupComponent {
       next: (response) => {
         console.log('Signup successful:', response);
         // Handle successful signup (e.g., redirect to login page)
-        this.sessionComponent.setUser(requestBody);  
+        // this.sessionComponent.setUser(requestBody);  
         // redirect to search page
-        this.router.navigate(['/search']); 
+        this.router.navigate(['/signin']); 
         //
       },
       error: (error) => {

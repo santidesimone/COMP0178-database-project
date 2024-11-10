@@ -61,9 +61,26 @@ VALUES
     ('Books');
 
 -- 6. Create the `Auctions` Table
+-- CREATE TABLE `Auctions` (
+--     `AuctionID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `SellerID` INT NOT NULL,
+--     `StartingPrice` DECIMAL(10, 2),
+--     `ReservePrice` DECIMAL(10, 2),
+--     `ImageURL` VARCHAR(255),
+--     `StartDate` DATETIME,
+--     `EndDate` DATETIME,
+--     -- `HighestBid` INT,
+--     `CategoryID` INT NOT NULL,
+--     FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
+--     -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),
+--     FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`)
+-- );
+-- 6. Create the `Auctions` Table
 CREATE TABLE `Auctions` (
     `AuctionID` INT AUTO_INCREMENT PRIMARY KEY,
     `SellerID` INT NOT NULL,
+    `ItemName` VARCHAR(255),
+    `ItemDescription` TEXT,
     `StartingPrice` DECIMAL(10, 2),
     `ReservePrice` DECIMAL(10, 2),
     `ImageURL` VARCHAR(255),
