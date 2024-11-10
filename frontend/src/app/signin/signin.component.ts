@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { SessionComponent } from './../session.component'; // Adjust the path if needed
 
 @Component({
   selector: 'app-signin',
@@ -11,31 +13,35 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class SigninComponent {
-  signinForm: FormGroup;
-  isSeller = false;
-  isBuyer = false;
-  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
-    this.signinForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+  constructor(private   http: HttpClient,
+              private router: Router,
+              private sessionComponent: SessionComponent, 
+  ) { }
+
+  onSubmit(signinForm: any) {
+    const email = signinForm.value.email;
+    const password = signinForm.value.password;
+
+    this.http.post('http://localhost:3000/api/signin', { email, password }).subscribe({
+      next: (response) => {
+        console.log('Signin successful:', response);
+      //   {
+      //     "UserID": 1,
+      //     "Email": "santiagox@example.com",
+      //     "CreatedDate": "2024-11-10T11:31:48.000Z",
+      //     "Username": "santiagox1990",
+      //     "Password": "securepasswordhash",
+      //     "StatusID": 1
+      // }
+        this.sessionComponent.setUser((response as any[])[0]);  
+        this.router.navigate(['/search']); 
+        // Handle successful signin, e.g., redirect to another page
+      },
+      error: (error) => {
+        console.error('Signin failed:', error);
+        // Handle signin error, e.g., display an error message
+      }
     });
-  }
-
-  onSubmit() {
-
-  //   this.http.post('/api/signin', requestBody).subscribe(
-  //     (response) => {
-  //       // Handle successful signup (e.g., redirect to login page)
-  //       console.log('Signup successful:', response);
-  //     },
-  //     (error) => {
-  //       // Handle signup error (e.g., display error message)
-  //       console.error('Signup failed:', error);
-  //       this.errorMessage = 'Signup failed. Please try again later.';
-  //     }
-  //   );
-
   }
 }

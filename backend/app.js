@@ -82,6 +82,18 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
+app.post('/api/signin', (req, res) => {
+  const body = req.body;
+  const query = `SELECT * FROM Users WHERE email = '${body.email}' AND password = '${body.password}';`;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching students:', err.stack);
+      res.status(500).send('Error fetching students');
+      return;
+    }
+    res.json(results);
+  });
+});
 
 
 // Start the server

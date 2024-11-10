@@ -2,20 +2,30 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { NgIf } from '@angular/common'; // Import NgFor for template rendering
+import { SessionComponent } from './session.component'; // Adjust the path if needed
+
+
+// Import: Make sure you import the SessionComponent into your app.module.ts.
+// Declare: Add SessionComponent to the declarations array of your @NgModule.
+// Provide: Add SessionComponent to the providers array of your @NgModule. This makes it available for injection throughout your application.
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   currentRoute: string = '';  // Store the current route
-
+  inviteLinkBannerIsVisible: boolean = false;
   title = 'angular-boilerplate-1';
 
-  constructor(private router: Router) {
+  constructor(
+              private router: Router,
+              private sessionComponent: SessionComponent, 
+            ) {
     // Listen to navigation events and update the current route
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -42,4 +52,8 @@ export class AppComponent {
     }
   }
 
+  logout() {
+    this.sessionComponent.clearUser();  
+  }
+  
 }

@@ -40,9 +40,8 @@
           <i class="fa-solid fa-cart-shopping"></i>
         </button>
         <!-- Signin Icon Button -->
-        <a class="btn btn-outline-secondary" href="/signin" title="Signin"> <!-- Added button class -->
+        <a class="btn btn-outline-secondary" (click)="logout()" title="Logout"> <!-- Added button class -->
           <i class="fas fa-sign-in-alt"></i>
-
         </a>
       </div>
     </div>
@@ -62,10 +61,7 @@
 
 
 
-
-
-
-<div class="position-fixed" style="bottom: 20px; left: 20px; width: 300px;">
+<div *ngIf="inviteLinkBannerIsVisible" class="position-fixed" style="bottom: 20px; left: 20px; width: 300px;">
   <div class="card text-center">
     <div class="card-body">
       <h5 class="card-title">Share Your Invite Link</h5>

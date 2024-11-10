@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { NgIf } from '@angular/common'; // Import NgFor for template rendering
 import { Observable } from 'rxjs'; 
+import { SessionComponent } from './../session.component'; // Adjust the path if needed
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +21,10 @@ export class SignupComponent {
   isBuyer = false;
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, 
+              private http: HttpClient, 
+              private sessionComponent: SessionComponent, 
+              private router: Router) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required],
@@ -76,6 +81,10 @@ export class SignupComponent {
       next: (response) => {
         console.log('Signup successful:', response);
         // Handle successful signup (e.g., redirect to login page)
+        this.sessionComponent.setUser(requestBody);  
+        // redirect to search page
+        this.router.navigate(['/search']); 
+        //
       },
       error: (error) => {
         console.error('Signup failed:', error);
