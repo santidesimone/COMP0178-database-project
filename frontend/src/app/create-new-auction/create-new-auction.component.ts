@@ -22,6 +22,7 @@ export class CreateNewAuctionComponent {
     private router: Router,
     private sessionComponent: SessionComponent
   ) {
+    console.log("current signed in user:", this.sessionComponent.getUser() )
     this.createAuctionForm = this.fb.group({
       SellerID: ['',],
       ItemName: ['', Validators.required],
@@ -36,6 +37,7 @@ export class CreateNewAuctionComponent {
   }
 
   onSubmit() {
+    console.log('create auction button was pressed')
     this.errorMessage = ''; 
 
     if (this.createAuctionForm.invalid) {
@@ -44,30 +46,42 @@ export class CreateNewAuctionComponent {
       return;
     }
     const formData = this.createAuctionForm.value;
-    if (!this.sessionComponent.getUser) {
-      console.log('no user session')
+    if (this.sessionComponent.getUser() == null) {
+      console.log('no user stored in session')
       return;
     }
     const user = this.sessionComponent.getUser();
+    console.log("current user:");
     console.log(user);
+    console.log("----:");
+
+        
+    function formatDateToMySQL(date: Date): string {
+      return date.toISOString().slice(0, 19).replace('T', ' ');
+    }
+    
+
+
     let requestBody: {
-      SellerID: string,
+      SellerID: number,
       ItemName: string,
       ItemDescription: string,
       StartingPrice: number,
       ReservePrice: number,
-      StartDate: Date,
-      EndDate: Date,
+      StartDate: string,
+      EndDate: string,
       CategoryID: string,
       ImageURL: string
     } = {
-      SellerID: user != null ? String(user["UserID"]) : "",
+      SellerID: user != null ? user["userID"] : 1,
       ItemName: formData.ItemName, 
       ItemDescription: formData.ItemDescription,
       StartingPrice: formData.StartingPrice,
       ReservePrice: formData.ReservePrice,
-      StartDate: new Date(), 
-      EndDate: new Date(formData.EndDate), 
+      StartDate: formatDateToMySQL(new Date()), 
+      // EndDate: new Date(formData.EndDate), 
+      // EndDate: new Date(formatDateToMySQL(formData.EndDate)),
+      EndDate: formatDateToMySQL(new Date(formData.EndDate)),
       CategoryID: formData.CategoryID, 
       ImageURL: formData.ImageURL
     };
@@ -75,6 +89,7 @@ export class CreateNewAuctionComponent {
     console.log("requestBody")
     console.log(requestBody)
     console.log("requestBody")
+
 
 
     // CategoryID: "1"
@@ -87,19 +102,19 @@ export class CreateNewAuctionComponent {
     // StartDate: "2024-11-10 14:00:00"
           // StartingPrice: undefined
 
-    // this.http.post('http://localhost:3000/api/auctions', requestBody)
-    //   .subscribe({
-    //     next: (response) => {
-    //       console.log("-----------")
-    //       console.log(response)
-    //       console.log("-----------")
-    //       // console.log('Auction created successfully:', response);
-    //       // Handle success (show message, redirect, etc.)
-    //     },
-    //     error: (error) => {
-    //       console.error('Error creating auction:', error);
-    //       // Handle error (show message, etc.)
-    //     }
-    //   });
+    this.http.post('http://localhost:3000/api/auctions', requestBody)
+      .subscribe({
+        next: (response) => {
+          console.log('Auction created successfully:', response);
+          // may be an alert saying "Auction created successfully"
+          alert("Auction was created successfully")
+          this.router.navigate(['/search']); 
+          // Handle success (show message, redirect, etc.)
+        },
+        error: (error) => {
+          console.error('Error creating auction:', error);
+          // Handle error (show message, etc.)
+        }
+      });
   }
 }

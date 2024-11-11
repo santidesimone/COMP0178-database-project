@@ -203,3 +203,100 @@ FLUSH PRIVILEGES;
 -- INSERT INTO `Answers` (`QuestionID`, `SellerID`, `AnswerText`)
 -- VALUES
 --    
+
+-- User 0
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+        VALUES ('sellerbuyer@example.com', 'sellerbuyer1990', 'secure', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+        VALUES (
+        (SELECT `UserID` FROM `Users` WHERE `Email` = 'sellerbuyer@example.com'),
+        '999 Main Street2, Orange, CA 91234'
+        );
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+        VALUES (
+        (SELECT `UserID` FROM `Users` WHERE `Email` = 'sellerbuyer@example.com'), 
+        '456 Elm Street', 'Austin', 'IL', '62704', 'USA'
+        );
+
+
+-- User 1
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+    VALUES ('user1@example.com', 'userone1991', 'securepassword1', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+    VALUES (
+        (SELECT `UserID` FROM `Users` WHERE `Email` = 'user1@example.com'),
+        '10 Downing Street, London, SW1A 2AA, UK'
+    );
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user1@example.com'), 
+    '221B Baker Street', 'London', 'Greater London', 'NW1 6XE', 'UK'
+);
+
+-- User 2
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+VALUES ('user2@example.com', 'usertwo1992', 'securepassword2', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user2@example.com'),
+    '32 London Bridge Street, London, SE1 9SG, UK'
+);
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user2@example.com'), 
+    '7 Savile Row', 'London', 'Greater London', 'W1S 3PE', 'UK'
+);
+
+-- User 3
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+VALUES ('user3@example.com', 'userthree1993', 'securepassword3', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user3@example.com'),
+    '160 Old Street, London, EC1V 9BW, UK'
+);
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user3@example.com'), 
+    '50 Commercial Street', 'London', 'Greater London', 'E1 6LT', 'UK'
+);
+
+-- User 4
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+VALUES ('user4@example.com', 'userfour1994', 'securepassword4', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user4@example.com'),
+    '100 Victoria Embankment, London, EC4Y 0DY, UK'
+);
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user4@example.com'), 
+    '58 Fenchurch Street', 'London', 'Greater London', 'EC3M 4AB', 'UK'
+);
+
+-- User 5
+INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
+VALUES ('user5@example.com', 'userfive1995', 'securepassword5', 1);
+
+INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user5@example.com'),
+    '1 Churchill Place, London, E14 5HP, UK'
+);
+
+INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
+VALUES (
+    (SELECT `UserID` FROM `Users` WHERE `Email` = 'user5@example.com'), 
+    '25 Canada Square', 'London', 'Greater London', 'E14 5LB', 'UK'
+);

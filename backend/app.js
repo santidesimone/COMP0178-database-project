@@ -12,6 +12,7 @@ app.use(cors());
 // Parse JSON request bodies
 app.use(express.json());
 
+//to do: handle asyncronicity
 app.post('/api/signup', (req, res) => {
   const body = req.body;
   let response = {}
@@ -82,73 +83,6 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
-// app.post('/api/signin', (req, res) => {
-//   const body = req.body;
-//   let responseData = {}
-//   const query = `SELECT * FROM Users WHERE email = '${body.email}' AND password = '${body.password}';`;
-//   db.query(query, (err, results) => {
-//     if (err) {
-//       console.error('Error fetching students:', err.stack);
-//       res.status(500).send('Error fetching students');
-//       return;
-//     }
-//     if (results.length>0){
-//       responseData = {
-//         email: results[0]["Email"],
-//         username: results[0]["Username"],
-//         userID: results[0]["UserID"]
-//       }
-//     }
-//     else{
-//       return res.status(200).json(responseData);
-//     }
-
-//     const query2 = `SELECT * FROM BuyerDetails WHERE userID = '${responseData["userID"]}'`;
-//     db.query(query2, (err, results2) => {
-//       if (err) {
-//         console.error('Error fetching data:', err.stack);
-//         // res.status(500).send('Error fetching data');
-//         responseData["sellerDetails"] = err;
-//         res.status(500).send(responseData);
-//         return;
-//       }
-//       else{
-//         console.log("- - - - - - ")
-//         console.log(results2)
-//         console.log(results2[0]["RowDataPacket"])
-//         console.log("- - - - - - ")
-//         responseData["sellerDetails"] = results2[0]["RowDataPacket"];
-//         // if(results2.length > 0 ){
-//         //   responseData["buyerDetails"] = results2[0];
-//         // }
-//       }
-//     });
-
-//     const query3 = `SELECT * FROM SellerDetails WHERE userID = '${responseData["userID"]}'`;
-//     db.query(query3, (err, results3) => {
-//       if (err) {
-//         console.error('Error fetching data:', err.stack);
-//         // res.status(500).send('Error fetching data');
-//         responseData["sellerDetails"] = err;
-//         res.status(500).send(response);
-//         return;
-//       }
-//       else{
-//         console.log("- - - - - - ")
-//         console.log(results3)
-//         console.log()
-//         console.log("- - - - - - ")
-//         responseData["sellerDetails"] = results3[0]["RowDataPacket"];
-
-//       }
-//     });
-
-//     res.status(200).json(responseData);
-    
-//     // res.json(results);
-//   });
-// });
-
 app.post('/api/signin', (req, res) => {
   const body = req.body;
   let responseData = {};
@@ -215,11 +149,8 @@ app.post('/api/signin', (req, res) => {
 
 app.post('/api/auctions', (req, res) => {
   const body = req.body;
-  console.log("/ / / / / / / /")
-  console.log(body)
-  console.log("/ / / / / / / /")
-  let parsedCategoryID = parseFloat(body.CategoryID); 
   let parsedSellerID = parseFloat(body.SellerID); 
+  let parsedCategoryID = parseFloat(body.CategoryID); 
 
   const query = `INSERT INTO Auctions 
                       (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL)
@@ -234,21 +165,10 @@ app.post('/api/auctions', (req, res) => {
                               '${parsedCategoryID}', 
                               '${body.ImageURL}');
   `
-  // CategoryID: "5"
-  // EndDate: "2024-11-15 14:00:00"
-  // StartDate: "2024-11-10 14:00:00"
-
-  // ImageURL: "http://some-url.com/img2"
-  // ItemDescription: "test2"
-  // ItemName: "test1"
-  // ReservePrice: 170
-  // SellerID: "1"
-  // StartingPrice: 150
-
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error fetching students:', err.stack);
-      res.status(500).send('Error fetching students');
+      console.error('Error fetching data:', err.stack);
+      res.status(500).send('Error fetching data');
       return;
     }
     res.json(results);

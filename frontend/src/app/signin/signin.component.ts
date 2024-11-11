@@ -76,8 +76,10 @@ export class SigninComponent {
       //     "Password": "securepasswordhash",
       //     "StatusID": 1
       // }
-      this.sessionComponent.setUser((response as any));  
+      this.sessionComponent.setUser(response);  
+      console.log("signin response")
       console.log(response)
+      console.log("---------------")
       this.router.navigate(['/search']); 
         // Handle successful signin, e.g., redirect to another page
       },
