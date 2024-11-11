@@ -175,6 +175,49 @@ app.post('/api/auctions', (req, res) => {
   });
 });
 
+app.get('/api/search', (req, res) => {
+  const { 
+    keywords, 
+    minPrice, 
+    maxPrice, 
+    category, 
+    city, 
+    stateProvince 
+  } = req.query;
+
+  let sql = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
+  const values = [`%${keywords}%`]; // Use 'values' instead of 'params'
+
+  if (minPrice && maxPrice) {
+    sql += ` AND currentPrice BETWEEN ? AND ?`;
+    values.push(minPrice, maxPrice);
+  }
+
+  if (category) {
+    sql += ` AND category = ?`;
+    values.push(category);
+  }
+
+  if (city) {
+    sql += ` AND city = ?`;
+    values.push(city);
+  }
+
+  if (stateProvince) {
+    sql += ` AND stateProvince = ?`;
+    values.push(stateProvince);
+  }
+
+  // Execute the SQL query using db.query
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err.stack);
+      res.status(500).send('Error fetching data');
+      return;
+    }
+    res.json(results);
+  });
+});
 
 // Start the server
 app.listen(port, () => {

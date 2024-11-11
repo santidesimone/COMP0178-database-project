@@ -55,3 +55,54 @@
   </div>
 </div>
 
+
+
+
+<!-- <div>
+  <h2>Search Auctions</h2>
+
+  <form (ngSubmit)="onSearch()">
+    <div>
+      <label for="keywords">Keywords:</label>
+      <input type="text" id="keywords" name="keywords" [(ngModel)]="keywords">
+    </div>
+
+    <div>
+      <label for="minPrice">Min Price:</label>
+      <input type="number" id="minPrice" name="minPrice" [(ngModel)]="minPrice">
+    </div>
+
+    <div>
+      <label for="maxPrice">Max Price:</label>
+      <input type="number" id="maxPrice" name="maxPrice" [(ngModel)]="maxPrice">
+    </div>
+
+    <div>
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" [(ngModel)]="category">
+    </div>
+
+    <div>
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" [(ngModel)]="city">
+    </div>
+
+    <div>
+      <label for="stateProvince">State/Province:</label>
+      <input type="text" id="stateProvince" name="stateProvince" [(ngModel)]="stateProvince">
+    </div>
+
+    <button type="submit">Search</button>
+  </form>
+
+  <div *ngIf="searchResults.length > 0">
+    <h3>Search Results:</h3>
+    <ul>
+      <li *ngFor="let result of searchResults">
+        <a [routerLink]="['/auction', result.id]"> {{ result.itemName }} - ${{ result.currentPrice }}
+        </a>
+        <p>{{ result.description }}</p> 
+        </li>
+    </ul>
+  </div>
+</div> -->
