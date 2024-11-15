@@ -236,6 +236,18 @@ app.post('/api/search', (req, res) => {
   });
 });
 
+app.post('/api/search/all', (req, res) => {
+  let query = `SELECT * FROM Auctions`;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err.stack);
+      res.status(500).send('Error fetching data');
+      return;
+    }
+    res.json(results);
+  });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);

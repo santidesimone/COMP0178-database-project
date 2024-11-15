@@ -53,23 +53,26 @@
   </div>
 </form>
 
-<div class="container">
+<!-- <div class="container">
   <h4>searchResults: </h4>
   <pre>{{ searchResults | json }}</pre> 
-</div>
+</div> -->
 
-<div class="container mt-5" NgIf="searchResults && searchResults.length > 0"> 
+<div class="container mt-5">
   <div class="row">
-    <div class="col-md-4 mb-4" NgFor="let result of searchResults"> 
-      <!-- [routerLink]="['/auction-detail', result.AuctionID]" -->
-      <a class="text-decoration-none text-dark"> 
+    <div 
+    *ngFor="let result of searchResults; let i = index" 
+      class="col-md-4 mb-4"
+    >
+    <!-- [routerLink]="['/auction-detail', result.AuctionID]" -->
+      <a class="text-decoration-none text-dark">
         <div class="card h-100">
-          <img NgIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" > 
+          <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
           <div class="card-body">
-            <h5 NgIf="result.ItemName" class="card-title">{{ result.ItemName }}</h5> 
-            <p class="card-text">Price: ${{ result.StartingPrice }}</p> 
-            <p class="card-text">{{ result.ItemDescription }}</p> 
-            <p class="card-text">End Date: {{ result.EndDate }}</p> 
+            <h5 class="card-title">{{ result.ItemName }}</h5>
+            <p class="card-text">Price: ${{ result.StartingPrice }}</p>
+            <p class="card-text">{{ result.ItemDescription }}</p>
+            <p class="card-text">End Date: {{ result.EndDate }}</p>
           </div>
         </div>
       </a>
