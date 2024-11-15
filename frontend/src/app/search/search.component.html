@@ -1,23 +1,12 @@
-<!-- <h1 class="text-center mb-4">Search Page</h1> -->
-<!-- <form (submit)="onSearch()" class="container d-flex justify-content-center">
-  <div class="w-50">
-    <div class="form-group mb-3">
-      <label for="query" class="form-label">Search:</label>
-      <input type="text" id="query" name="query" [(ngModel)]="query" class="form-control" placeholder="Enter your search term">
-    </div>
-    <button type="submit" class="btn btn-primary w-100">Search</button>
-  </div>
-</form> -->
-
 <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="container d-flex justify-content-center">
   <div class="w-50">
     <div class="form-group mb-3">
       
       <label for="keywords" class="form-label">Keywords:</label>
       <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
-      <div NgIf="searchForm.get('keywords')?.hasError('required') && searchForm.get('keywords')?.touched" class="text-danger">
+      <!-- <div NgIf="searchForm.get('keywords')?.hasError('required') && searchForm.get('keywords')?.touched" class="text-danger">
         Keywords are required.
-      </div>
+      </div> -->
     </div>
 
     <div class="form-group mb-3">
@@ -64,97 +53,26 @@
   </div>
 </form>
 
-
-<!-- Filter Options -->
 <div class="container">
-  <div class="row">
-    <div class="col-md-4">
-      <label for="location">Location:</label>
-      <input type="text" id="location" name="location" class="form-control" placeholder="Enter location">
-    </div>
-    <div class="col-md-4">
-      <label for="price">Price Range:</label>
-      <input type="text" id="price" name="price" class="form-control" placeholder="e.g. 10 - 100">
-    </div>
-    <div class="col-md-4">
-      <label for="category">Category:</label>
-      <select id="category" name="category" class="form-control">
-        <option value="">Select Category</option>
-        <option value="electronics">Electronics</option>
-        <option value="clothing">Clothing</option>
-        <option value="books">Books</option>
-        <option value="furniture">Furniture</option>
-      </select>
-    </div>
-  </div>
+  <h4>searchResults: </h4>
+  <pre>{{ searchResults | json }}</pre> 
 </div>
 
-<!-- <div class="container mt-5" NgFor="searchResults.length > 0"> 
+<div class="container mt-5" NgIf="searchResults && searchResults.length > 0"> 
   <div class="row">
-    <div class="col-md-4 mb-4" NgFor="let result of searchResults">
-      [routerLink]="['/auction-detail', result['AuctionID']]"
-      <a  class="text-decoration-none text-dark"> 
+    <div class="col-md-4 mb-4" NgFor="let result of searchResults"> 
+      <!-- [routerLink]="['/auction-detail', result.AuctionID]" -->
+      <a class="text-decoration-none text-dark"> 
         <div class="card h-100">
-          <img [src]="result['ImageURL']" class="card-img-top" alt="{{ result.ItemName }}"> 
+          <img NgIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" > 
           <div class="card-body">
-            <h5 class="card-title">{{ result.ItemName }}</h5> 
-            <p class="card-text">Starting Price: ${{ result.StartingPrice }}</p> 
+            <h5 NgIf="result.ItemName" class="card-title">{{ result.ItemName }}</h5> 
+            <p class="card-text">Price: ${{ result.StartingPrice }}</p> 
             <p class="card-text">{{ result.ItemDescription }}</p> 
+            <p class="card-text">End Date: {{ result.EndDate }}</p> 
           </div>
         </div>
       </a>
     </div>
   </div>
-</div> -->
-
-
-
-
-<!-- <div>
-  <h2>Search Auctions</h2>
-
-  <form (ngSubmit)="onSearch()">
-    <div>
-      <label for="keywords">Keywords:</label>
-      <input type="text" id="keywords" name="keywords" [(ngModel)]="keywords">
-    </div>
-
-    <div>
-      <label for="minPrice">Min Price:</label>
-      <input type="number" id="minPrice" name="minPrice" [(ngModel)]="minPrice">
-    </div>
-
-    <div>
-      <label for="maxPrice">Max Price:</label>
-      <input type="number" id="maxPrice" name="maxPrice" [(ngModel)]="maxPrice">
-    </div>
-
-    <div>
-      <label for="category">Category:</label>
-      <input type="text" id="category" name="category" [(ngModel)]="category">
-    </div>
-
-    <div>
-      <label for="city">City:</label>
-      <input type="text" id="city" name="city" [(ngModel)]="city">
-    </div>
-
-    <div>
-      <label for="stateProvince">State/Province:</label>
-      <input type="text" id="stateProvince" name="stateProvince" [(ngModel)]="stateProvince">
-    </div>
-
-    <button type="submit">Search</button>
-  </form>
-
-  <div *ngIf="searchResults.length > 0">
-    <h3>Search Results:</h3>
-    <ul>
-      <li *ngFor="let result of searchResults">
-        <a [routerLink]="['/auction', result.id]"> {{ result.itemName }} - ${{ result.currentPrice }}
-        </a>
-        <p>{{ result.description }}</p> 
-        </li>
-    </ul>
-  </div>
-</div> -->
+</div>

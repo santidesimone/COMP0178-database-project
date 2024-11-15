@@ -186,7 +186,10 @@ app.post('/api/search', (req, res) => {
   const stateProvince = body.stateProvince;
   const endDate = body.endDate;
   
-  
+  console.log("/api/search': req.body ------------")
+  console.log(req.body)
+  console.log("------------")
+
   let query = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
   const values = [`%${keywords}%`]; 
 
@@ -219,7 +222,10 @@ app.post('/api/search', (req, res) => {
     query += ` AND endDate <= ?`; 
     values.push(endDate);
   }
-  console.log(query)
+  console.log("/api/search': query ------------")
+  console.log(query, values)
+  console.log("------------")
+
   db.query(query, values, (err, results) => {
     if (err) {
       console.error('Error fetching data:', err.stack);

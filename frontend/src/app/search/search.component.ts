@@ -3,15 +3,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
 // import { Router } from '@angular/router';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { JsonPipe } from '@angular/common'; 
 
  
 @Component({
   selector: 'app-search',
   standalone: true,
   imports: [
-    FormsModule, ReactiveFormsModule,
+    FormsModule, ReactiveFormsModule, JsonPipe, NgFor, NgIf
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
@@ -35,6 +36,35 @@ constructor(private fb: FormBuilder,
       stateProvince: [''],
       endDate: ['']
     });
+
+    this.searchResults = [
+        {
+            "AuctionID": 1,
+            "SellerID": 1,
+            "ItemName": "Test 1",
+            "ItemDescription": "Test 1 Description.",
+            "StartingPrice": 50,
+            "ReservePrice": 75,
+            "ImageURL": "https://placehold.co/300x200",
+            "StartDate": "2024-11-14T00:00:00.000Z",
+            "EndDate": "2024-11-22T00:00:00.000Z",
+            "CategoryID": 1
+        },
+        {
+            "AuctionID": 2,
+            "SellerID": 2,
+            "ItemName": "Test 2",
+            "ItemDescription": "Test 2 Description.",
+            "StartingPrice": 50,
+            "ReservePrice": 75,
+            "ImageURL": "https://placehold.co/300x200",
+            "StartDate": "2024-11-14T00:00:00.000Z",
+            "EndDate": "2024-11-22T00:00:00.000Z",
+            "CategoryID": 4
+        }
+    ]
+    console.log('searchResults init:', this.searchResults);
+
   }
 
   onSearch() {
