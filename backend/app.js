@@ -175,41 +175,52 @@ app.post('/api/auctions', (req, res) => {
   });
 });
 
-app.get('/api/search', (req, res) => {
-  const { 
-    keywords, 
-    minPrice, 
-    maxPrice, 
-    category, 
-    city, 
-    stateProvince 
-  } = req.query;
 
-  let sql = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
-  const values = [`%${keywords}%`]; // Use 'values' instead of 'params'
+app.post('/api/search', (req, res) => {
+  const body = req.body;
+  const keywords = body.keywords;
+  const minPrice = body.minPrice;
+  const maxPrice = body.maxPrice;
+  const category = body.category;
+  const city = body.city;
+  const stateProvince = body.stateProvince;
+  const endDate = body.endDate;
+  
+  
+  let query = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
+  const values = [`%${keywords}%`]; 
 
-  if (minPrice && maxPrice) {
-    sql += ` AND currentPrice BETWEEN ? AND ?`;
-    values.push(minPrice, maxPrice);
+  if (minPrice) {
+    query += ` AND StartingPrice >= ?`;
+    values.push(minPrice);
+  }
+
+  if (maxPrice) {
+    query += ` AND StartingPrice <= ?`;
+    values.push(maxPrice);
   }
 
   if (category) {
-    sql += ` AND category = ?`;
+    query += ` AND CategoryID = ?`;
     values.push(category);
   }
 
   if (city) {
-    sql += ` AND city = ?`;
+    query += ` AND city = ?`;
     values.push(city);
   }
 
   if (stateProvince) {
-    sql += ` AND stateProvince = ?`;
+    query += ` AND stateProvince = ?`;
     values.push(stateProvince);
   }
 
-  // Execute the SQL query using db.query
-  db.query(sql, values, (err, results) => {
+  if (endDate) {
+    query += ` AND endDate <= ?`; 
+    values.push(endDate);
+  }
+  console.log(query)
+  db.query(query, values, (err, results) => {
     if (err) {
       console.error('Error fetching data:', err.stack);
       res.status(500).send('Error fetching data');

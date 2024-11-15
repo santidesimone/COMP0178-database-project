@@ -1,9 +1,63 @@
 <!-- <h1 class="text-center mb-4">Search Page</h1> -->
-<form (submit)="onSearch()" class="container d-flex justify-content-center">
-  <div class="w-50"> <!-- Adjust width as needed -->
+<!-- <form (submit)="onSearch()" class="container d-flex justify-content-center">
+  <div class="w-50">
     <div class="form-group mb-3">
       <label for="query" class="form-label">Search:</label>
       <input type="text" id="query" name="query" [(ngModel)]="query" class="form-control" placeholder="Enter your search term">
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Search</button>
+  </div>
+</form> -->
+
+<form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="container d-flex justify-content-center">
+  <div class="w-50">
+    <div class="form-group mb-3">
+      
+      <label for="keywords" class="form-label">Keywords:</label>
+      <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
+      <div NgIf="searchForm.get('keywords')?.hasError('required') && searchForm.get('keywords')?.touched" class="text-danger">
+        Keywords are required.
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="minPrice" class="form-label">Min Price:</label>
+      <input type="number" id="minPrice" name="minPrice" formControlName="minPrice" class="form-control">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="maxPrice" class="form-label">Max Price:</label>
+      <input type="number" id="maxPrice" name="maxPrice" formControlName="maxPrice" class="form-control">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="category" class="form-label">Category:</label>
+      <select id="category" name="category" formControlName="category" class="form-control">
+        <option value="">Select Category</option>
+        <option value="1">Electronics</option>
+        <option value="2"> Fashion </option>
+        <option value="3"> Home & Garden </option>
+        <option value="4"> Art & Collectibles </option>
+        <option value="5"> Toys & Hobbies </option>
+        <option value="6"> Sports & Outdoors </option>
+        <option value="7"> Automotive </option>
+        <option value="8"> Books </option>
+      </select>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="city" class="form-label">City:</label>
+      <input type="text" id="city" name="city" formControlName="city" class="form-control">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="stateProvince" class="form-label">State/Province:</label>
+      <input type="text" id="stateProvince" name="stateProvince" formControlName="stateProvince" class="form-control">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="endDate" class="form-label">End Date:</label>
+      <input type="date" id="endDate" name="endDate" formControlName="endDate" class="form-control">
     </div>
 
     <button type="submit" class="btn btn-primary w-100">Search</button>
@@ -35,25 +89,23 @@
   </div>
 </div>
 
-<!-- Search Results Section -->
-<div class="container mt-5">
+<!-- <div class="container mt-5" NgFor="searchResults.length > 0"> 
   <div class="row">
-    <!-- Use *ngFor to repeat cards dynamically -->
-    <div class="col-md-4 mb-4" *ngFor="let result of searchResults">
-      <!-- <a [routerLink]="['/auction-detail', result.id]" class="text-decoration-none text-dark"> -->
-      <a [routerLink]="['/auction-detail']" class="text-decoration-none text-dark">
+    <div class="col-md-4 mb-4" NgFor="let result of searchResults">
+      [routerLink]="['/auction-detail', result['AuctionID']]"
+      <a  class="text-decoration-none text-dark"> 
         <div class="card h-100">
-          <img [src]="result.imageUrl" class="card-img-top" alt="{{ result.title }}">
+          <img [src]="result['ImageURL']" class="card-img-top" alt="{{ result.ItemName }}"> 
           <div class="card-body">
-            <h5 class="card-title">{{ result.title }}</h5>
-            <p class="card-text">Price: {{ result.price }}</p>
-            <p class="card-text">{{ result.description }}</p>
+            <h5 class="card-title">{{ result.ItemName }}</h5> 
+            <p class="card-text">Starting Price: ${{ result.StartingPrice }}</p> 
+            <p class="card-text">{{ result.ItemDescription }}</p> 
           </div>
         </div>
       </a>
     </div>
   </div>
-</div>
+</div> -->
 
 
 

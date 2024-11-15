@@ -188,11 +188,7 @@ FLUSH PRIVILEGES;
 -- -- **Insert sample data for `AuctionRatings`**
 -- INSERT INTO `AuctionRatings` (`AuctionID`, `UserID`, `Rating`)
 -- VALUES
---     (1, 4, 4),
---     (2, 5, 5),
---     (3, 3, 3);
-
--- -- **Insert sample data for `Questions`**
+--     - -- **Insert sample data for `Questions`**
 -- INSERT INTO `Questions` (`AuctionID`, `BuyerID`, `QuestionText`)
 -- VALUES
 --     (1, 4, 'Is the product brand new?'),
@@ -204,6 +200,7 @@ FLUSH PRIVILEGES;
 -- VALUES
 --    
 
+--  Add users of both profiles, buyer and seller
 -- User 0
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`) 
         VALUES ('sellerbuyer@example.com', 'sellerbuyer1990', 'secure', 1);
@@ -300,3 +297,17 @@ VALUES (
     (SELECT `UserID` FROM `Users` WHERE `Email` = 'user5@example.com'), 
     '25 Canada Square', 'London', 'Greater London', 'E14 5LB', 'UK'
 );
+--  Add auctions
+-- Insert 10 items into the Auctions table
+-- Insert 10 items into the Auctions table with starting dates as yesterday
+INSERT INTO Auctions (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, ImageURL, StartDate, EndDate, CategoryID) VALUES
+    (1, 'Antique Vase', 'A beautiful antique vase from the 19th century.', 50.00, 75.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 4), -- Collectibles
+    (2, 'Vintage Record Player', 'A classic record player in excellent condition.', 100.00, 150.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 1), -- Electronics
+    (3, 'Leather Jacket', 'A stylish leather jacket, barely used.', 75.00, 100.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 2), -- Fashion
+    (4, 'Rare Book Collection', 'A collection of rare books by various authors.', 200.00, 300.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 8), -- Books
+    (1, 'Handmade Wooden Table', 'A beautiful handmade wooden table with intricate carvings.', 300.00, 400.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 3), -- Home & Garden
+    (2, 'Antique Clock', 'A vintage clock in working condition.', 80.00, 120.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 3 WEEK), 4), -- Collectibles
+    (3, 'Designer Dress', 'A stunning designer dress, perfect for special occasions.', 150.00, 200.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 3 WEEK), 2), -- Fashion
+    (4, 'Original Painting', 'An original painting by a local artist.', 400.00, 500.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 4 WEEK), 4), -- Collectibles
+    (1, 'Set of Silverware', 'A complete set of silverware for 12 people.', 120.00, 180.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 5 WEEK), 3), -- Home & Garden
+    (2, 'Vintage Camera', 'A vintage camera in good condition with original case.', 60.00, 90.00, 'https://placehold.co/300x200', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 5 WEEK), 1); -- Electronics
