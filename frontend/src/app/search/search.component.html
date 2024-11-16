@@ -1,81 +1,79 @@
-<form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="container d-flex justify-content-center">
-  <div class="w-50">
-    <div class="form-group mb-3">
-      
-      <label for="keywords" class="form-label">Keywords:</label>
-      <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
-      <!-- <div NgIf="searchForm.get('keywords')?.hasError('required') && searchForm.get('keywords')?.touched" class="text-danger">
-        Keywords are required.
-      </div> -->
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="minPrice" class="form-label">Min Price:</label>
-      <input type="number" id="minPrice" name="minPrice" formControlName="minPrice" class="form-control">
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="maxPrice" class="form-label">Max Price:</label>
-      <input type="number" id="maxPrice" name="maxPrice" formControlName="maxPrice" class="form-control">
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="category" class="form-label">Category:</label>
-      <select id="category" name="category" formControlName="category" class="form-control">
-        <option value="">Select Category</option>
-        <option value="1">Electronics</option>
-        <option value="2"> Fashion </option>
-        <option value="3"> Home & Garden </option>
-        <option value="4"> Art & Collectibles </option>
-        <option value="5"> Toys & Hobbies </option>
-        <option value="6"> Sports & Outdoors </option>
-        <option value="7"> Automotive </option>
-        <option value="8"> Books </option>
-      </select>
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="city" class="form-label">City:</label>
-      <input type="text" id="city" name="city" formControlName="city" class="form-control">
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="stateProvince" class="form-label">State/Province:</label>
-      <input type="text" id="stateProvince" name="stateProvince" formControlName="stateProvince" class="form-control">
-    </div>
-
-    <div class="form-group mb-3">
-      <label for="endDate" class="form-label">End Date:</label>
-      <input type="date" id="endDate" name="endDate" formControlName="endDate" class="form-control">
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100">Search</button>
-  </div>
-</form>
-
-<!-- <div class="container">
-  <h4>searchResults: </h4>
-  <pre>{{ searchResults | json }}</pre> 
-</div> -->
-
-<div class="container mt-5">
+<div class="container-fluid">
   <div class="row">
-    <div 
-    *ngFor="let result of searchResults; let i = index" 
-      class="col-md-4 mb-4"
-    >
-    <!-- [routerLink]="['/auction-detail', result.AuctionID]" -->
-      <a class="text-decoration-none text-dark">
-        <div class="card h-100">
-          <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ result.ItemName }}</h5>
-            <p class="card-text">Price: ${{ result.StartingPrice }}</p>
-            <p class="card-text">{{ result.ItemDescription }}</p>
-            <p class="card-text">End Date: {{ result.EndDate }}</p>
+    <div class="col-md-3 mt-3"> 
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="sticky-top"> 
+        <div class="form-group mb-3">
+          <label for="keywords" class="form-label">Keywords:</label>
+          <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="minPrice" class="form-label">Min Price:</label>
+          <input type="number" id="minPrice" name="minPrice" formControlName="minPrice" class="form-control">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="maxPrice" class="form-label">Max Price:</label>
+          <input type="number" id="maxPrice" name="maxPrice" formControlName="maxPrice" class="form-control">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="category" class="form-label">Category:</label>
+          <select id="category" name="category" formControlName="category" class="form-control">
+            <option value="">Select Category</option>
+            <option value="1">Electronics</option>
+            <option value="2"> Fashion </option>
+            <option value="3"> Home & Garden </option>
+            <option value="4"> Art & Collectibles </option>
+            <option value="5"> Toys & Hobbies </option>
+            <option value="6"> Sports & Outdoors </option>
+            <option value="7"> Automotive </option>
+            <option value="8"> Books </option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="city" class="form-label">City:</label>
+          <input type="text" id="city" name="city" formControlName="city" class="form-control">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="stateProvince" class="form-label">State/Province:</label>
+          <input type="text" id="stateProvince" name="stateProvince" formControlName="stateProvince" class="form-control">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="endDate" class="form-label">End Date:</label>
+          <input type="date" id="endDate" name="endDate" formControlName="endDate" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+      </form>
+    </div>
+
+    <div class="col-md-9">
+      <div class="container mt-5">
+        <div class="row">
+          <div 
+            *ngFor="let result of searchResults; let i = index" 
+            class="col-md-4 mb-4"
+          >
+            <a class="text-decoration-none text-dark">
+              <div class="card h-100">
+                <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ result.ItemName }}</h5>
+                  <p class="card-text">Price: ${{ result.StartingPrice }}</p>
+                  <p class="card-text">{{ result.ItemDescription }}</p>
+                  <p class="card-text">End Date: {{ result.EndDate }}</p>
+                  <p class="card-text">City: {{ result.City }}</p>
+                  <p class="card-text">StateProvince: {{ result.StateProvince }}</p>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
-      </a>
-    </div>
+      </div>
+    </div> 
   </div>
 </div>

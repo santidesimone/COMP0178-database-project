@@ -28,7 +28,7 @@ constructor(private fb: FormBuilder,
     private router: Router) {
   
     this.searchForm = this.fb.group({
-      keywords: ['', [Validators.required]], 
+      keywords: [''], 
       minPrice: [''],
       maxPrice: [''],
       category: [''],
@@ -105,9 +105,13 @@ constructor(private fb: FormBuilder,
         category: formData.category,
         city: formData.city,
         stateProvince: formData.stateProvince,
-        endDate: formData.endDatee
+        endDate: formData.endDate
+ 
       };
 
+    console.log("formData.endDate")
+    console.log(formData.endDate)
+    console.log("-----------------")
 
     this.http.post('http://localhost:3000/api/search', requestBody).subscribe({
         next: (response: any) => { // Use any for the response type

@@ -67,7 +67,9 @@ export class SigninComponent {
 
     this.http.post('http://localhost:3000/api/signin', requestBody).subscribe({
       next: (response) => {
+        console.log('- - - - - - - - - - - - ');
         console.log('Signin successful:', response);
+        console.log('- - - - - - - - - - - - ');
       //   {
       //     "UserID": 1,
       //     "Email": "santiagox@example.com",

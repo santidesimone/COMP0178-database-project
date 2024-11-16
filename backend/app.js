@@ -176,6 +176,210 @@ app.post('/api/auctions', (req, res) => {
 });
 
 
+// app.post('/api/search', (req, res) => {
+//   const body = req.body;
+//   const keywords = body.keywords;
+//   const minPrice = body.minPrice;
+//   const maxPrice = body.maxPrice;
+//   const category = body.category;
+//   const city = body.city;
+//   const stateProvince = body.stateProvince;
+//   const endDate = body.endDate;
+  
+//   console.log("/api/search': req.body ------------")
+//   console.log(req.body)
+//   console.log("------------")
+
+//   let query = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
+//   const values = [`%${keywords}%`]; 
+
+//   if (minPrice) {
+//     query += ` AND StartingPrice >= ?`;
+//     values.push(minPrice);
+//   }
+
+//   if (maxPrice) {
+//     query += ` AND StartingPrice <= ?`;
+//     values.push(maxPrice);
+//   }
+
+//   if (category) {
+//     query += ` AND CategoryID = ?`;
+//     values.push(category);
+//   }
+
+//   if (city) {
+//     query += ` AND city = ?`;
+//     values.push(city);
+//   }
+
+//   if (stateProvince) {
+//     query += ` AND stateProvince = ?`;
+//     values.push(stateProvince);
+//   }
+
+//   if (endDate) {
+//     query += ` AND endDate <= ?`; 
+//     values.push(endDate);
+//   }
+//   console.log("/api/search': query ------------")
+//   console.log(query, values)
+//   console.log("------------")
+
+//   db.query(query, values, (err, results) => {
+//     if (err) {
+//       console.error('Error fetching data:', err.stack);
+//       res.status(500).send('Error fetching data');
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+// app.post('/api/search', (req, res) => {
+//   const body = req.body;
+//   const keywords = body.keywords;
+//   const minPrice = body.minPrice;
+//   const maxPrice = body.maxPrice;
+//   const category = body.category;
+//   const city = body.city;
+//   const stateProvince = body.stateProvince;
+//   const endDate = body.endDate;
+  
+//   console.log("/api/search': req.body ------------")
+//   console.log(req.body)
+//   console.log("------------")
+
+//   let query = `SELECT A.* FROM Auctions A`;
+//   const values = [`%${keywords}%`];
+
+//   // Check if city or stateProvince filters are present
+//   if (city || stateProvince) {
+//     query += ` JOIN SellerDetails SD ON A.SellerID = SD.SellerID`;
+//   }
+
+//   query += ` WHERE A.ItemName LIKE ?`; 
+
+//   if (minPrice) {
+//     query += ` AND A.StartingPrice >= ?`;
+//     values.push(minPrice);
+//   }
+
+//   if (maxPrice) {
+//     query += ` AND A.StartingPrice <= ?`;
+//     values.push(maxPrice);
+//   }
+
+//   if (category) {
+//     query += ` AND A.CategoryID = ?`;
+//     values.push(category);
+//   }
+
+//   if (city) {
+//     query += ` AND SD.City = ?`;
+//     values.push(city);
+//   }
+
+//   if (stateProvince) {
+//     query += ` AND SD.StateProvince = ?`;
+//     values.push(stateProvince);
+//   }
+
+//   if (endDate) {
+//     query += ` AND A.EndDate <= ?`;
+//     values.push(endDate);
+//   }
+
+//   console.log("/api/search': query ------------")
+//   console.log(query, values)
+//   console.log("------------")
+
+//   db.query(query, values, (err, results) => {
+//     if (err) {
+//       console.error('Error fetching data:', err.stack);
+//       res.status(500).send('Error fetching data');
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+// app.post('/api/search', (req, res) => {
+//   const body = req.body;
+//   const keywords = body.keywords;
+//   const minPrice = body.minPrice;
+//   const maxPrice = body.maxPrice;
+//   const category = body.category;
+//   const city = body.city;
+//   const stateProvince = body.stateProvince;
+//   const endDate = body.endDate;
+
+//   console.log("/api/search': req.body ------------")
+//   console.log(req.body)
+//   console.log("------------")
+
+//   let query = `SELECT A.* FROM Auctions A`;
+//   const values = []; // Initialize values as an empty array
+
+//   // Check if city or stateProvince filters are present
+//   if (city || stateProvince) {
+//     query += ` JOIN SellerDetails SD ON A.SellerID = SD.SellerID`;
+//   }
+
+//   // Conditional WHERE clause for keywords
+//   if (keywords) {
+//     query += ` WHERE A.ItemName LIKE ?`;
+//     values.push(`%${keywords}%`);
+//   } else {
+//     // If no keywords, just start with WHERE clause (if other filters exist)
+//     query += ` WHERE 1=1`; // This is always true, allowing for other conditions
+//   }
+
+//   if (minPrice) {
+//     query += ` AND A.StartingPrice >= ?`;
+//     values.push(minPrice);
+//   }
+
+//   if (maxPrice) {
+//     query += ` AND A.StartingPrice <= ?`;
+//     values.push(maxPrice);
+//   }
+
+//   if (category) {
+//     query += ` AND A.CategoryID = ?`;
+//     values.push(category);
+//   }
+
+//   if (city) {
+//     query += ` AND SD.City = ?`;
+//     values.push(city);
+//   }
+
+//   if (stateProvince) {
+//     query += ` AND SD.StateProvince = ?`;
+//     values.push(stateProvince);
+//   }
+
+//   if (endDate) {
+//     query += ` AND A.EndDate <= ?`;
+//     values.push(endDate + " 00:00:00");
+//   }
+
+//   console.log("/api/search': query ------------")
+//   console.log(query, values)
+//   console.log("------------")
+
+//   db.query(query, values, (err, results) => {
+//     if (err) {
+//       console.error('Error fetching data:', err.stack);
+//       res.status(500).send('Error fetching data');
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+
 app.post('/api/search', (req, res) => {
   const body = req.body;
   const keywords = body.keywords;
@@ -185,43 +389,53 @@ app.post('/api/search', (req, res) => {
   const city = body.city;
   const stateProvince = body.stateProvince;
   const endDate = body.endDate;
-  
+
   console.log("/api/search': req.body ------------")
   console.log(req.body)
   console.log("------------")
 
-  let query = `SELECT * FROM Auctions WHERE itemName LIKE ?`;
-  const values = [`%${keywords}%`]; 
+  // Select Auction fields along with City and StateProvince from SellerDetails
+  let query = `SELECT A.*, SD.City, SD.StateProvince FROM Auctions A
+               JOIN SellerDetails SD ON A.SellerID = SD.SellerID`; // Always join SellerDetails
+  const values = []; // Initialize values as an empty array
+
+  // Conditional WHERE clause for keywords
+  if (keywords) {
+    query += ` WHERE A.ItemName LIKE ?`;
+    values.push(`%${keywords}%`);
+  } 
 
   if (minPrice) {
-    query += ` AND StartingPrice >= ?`;
+    query += ` AND A.StartingPrice >= ?`;
     values.push(minPrice);
   }
 
   if (maxPrice) {
-    query += ` AND StartingPrice <= ?`;
+    query += ` AND A.StartingPrice <= ?`;
     values.push(maxPrice);
   }
 
   if (category) {
-    query += ` AND CategoryID = ?`;
+    query += ` AND A.CategoryID = ?`;
     values.push(category);
   }
 
+  // Conditionally add city and stateProvince filters only if provided in the request body
   if (city) {
-    query += ` AND city = ?`;
+    query += ` AND SD.City = ?`;
     values.push(city);
   }
 
   if (stateProvince) {
-    query += ` AND stateProvince = ?`;
+    query += ` AND SD.StateProvince = ?`;
     values.push(stateProvince);
   }
 
   if (endDate) {
-    query += ` AND endDate <= ?`; 
-    values.push(endDate);
+    query += ` AND A.EndDate <= ?`;
+    values.push(endDate + " 00:00:00");
   }
+
   console.log("/api/search': query ------------")
   console.log(query, values)
   console.log("------------")
@@ -232,12 +446,20 @@ app.post('/api/search', (req, res) => {
       res.status(500).send('Error fetching data');
       return;
     }
+
+    // Send the results (which will include City and StateProvince, even if they were not filtered)
     res.json(results);
   });
 });
 
 app.post('/api/search/all', (req, res) => {
-  let query = `SELECT * FROM Auctions`;
+  // Query to fetch all auctions along with City and StateProvince from SellerDetails
+  let query = `
+    SELECT A.*, SD.City, SD.StateProvince 
+    FROM Auctions A
+    JOIN SellerDetails SD ON A.SellerID = SD.SellerID
+  `;
+  
   db.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching data:', err.stack);
@@ -247,6 +469,7 @@ app.post('/api/search/all', (req, res) => {
     res.json(results);
   });
 });
+
 
 // Start the server
 app.listen(port, () => {
