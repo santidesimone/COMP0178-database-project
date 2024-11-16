@@ -379,7 +379,6 @@ app.post('/api/auctions', (req, res) => {
 //   });
 // });
 
-
 app.post('/api/search', (req, res) => {
   const body = req.body;
   const keywords = body.keywords;
@@ -436,6 +435,9 @@ app.post('/api/search', (req, res) => {
     values.push(endDate + " 00:00:00");
   }
 
+  // Order the results by EndDate (most recent first)
+  query += ` ORDER BY A.EndDate DESC`;
+
   console.log("/api/search': query ------------")
   console.log(query, values)
   console.log("------------")
@@ -458,6 +460,7 @@ app.post('/api/search/all', (req, res) => {
     SELECT A.*, SD.City, SD.StateProvince 
     FROM Auctions A
     JOIN SellerDetails SD ON A.SellerID = SD.SellerID
+    ORDER BY A.EndDate DESC
   `;
   
   db.query(query, (err, results) => {

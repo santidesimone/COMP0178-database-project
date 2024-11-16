@@ -325,7 +325,7 @@ VALUES (
 INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `ReservePrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`) VALUES
     (1, 'Antique Vase', 'A beautiful antique vase from the 19th century.', 50.00, 75.00, 'https://i.ibb.co/BGgHZ3t/1.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 20 WEEK), 4), -- Collectibles
     (2, 'Vintage Record Player', 'A classic record player in excellent condition.', 100.00, 150.00, 'https://i.ibb.co/MCDknZC/2.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 1), -- Electronics
-    (3, 'Leather Jacket', 'A stylish leather jacket, barely used.', 75.00, 100.00, 'https://i.ibb.co/svqtrYT/3.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 12), -- Fashion
+    (3, 'Leather Jacket', 'A stylish leather jacket, barely used.', 75.00, 100.00, 'https://i.ibb.co/svqtrYT/3.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 2), -- Fashion
     (4, 'Rare Book Collection', 'A collection of rare books by various authors.', 200.00, 300.00, 'https://i.ibb.co/0qwZpLT/4.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 30 WEEK), 8), -- Books
     (1, 'Handmade Wooden Table', 'A beautiful handmade wooden table with intricate carvings.', 300.00, 400.00, 'https://i.ibb.co/tYdY13W/5.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 3), -- Home & Garden
     (2, 'Antique Clock', 'A vintage clock in working condition.', 80.00, 120.00, 'https://i.ibb.co/0KxxRW1/7.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 3 WEEK), 4), -- Collectibles

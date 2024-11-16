@@ -27,6 +27,16 @@ export class AuctionDetailComponent implements OnInit {
     console.log(this.data)
   }
 
+  makeOffer() {
+    // Logic for making an offer
+    // alert('Offer made!');
+  }
+  
+  addToCart() {
+    // Logic for adding to cart
+    // alert('Item added to cart!');
+  }
+
 }
 
 
@@ -41,15 +51,7 @@ export class AuctionDetailComponent implements OnInit {
 //   imageUrl: 'https://placehold.co/500x400'
 // };
 
-// makeOffer() {
-//   // Logic for making an offer
-//   alert('Offer made!');
-// }
 
-// addToCart() {
-//   // Logic for adding to cart
-//   alert('Item added to cart!');
-// }
 
 // // Rating functionality
 // rating: number = 0; // Store the selected rating

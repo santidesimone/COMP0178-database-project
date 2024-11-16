@@ -1,29 +1,33 @@
 <div class="container mt-5">
-  <h1>Auction Detail</h1>
+  <!-- <h1>Auction Detail</h1> -->
 
-  {{
+  <!-- {{
     data | json
   }}
-  
+   -->
   <!-- Auction Details Section -->
-  <!-- <div class="row">
+  <div class="row">
     <div class="col-md-6">
-      <img [src]="auction.imageUrl" class="img-fluid" alt="{{ auction.title }}">
+      <img [src]="data.ImageURL" class="img-fluid" alt="{{ data.ImageURL }}">
     </div>
     <div class="col-md-6">
-      <h2>{{ auction.title }}</h2>
-      <p><strong>Description:</strong> {{ auction.description }}</p>
-      <p><strong>Starting Price:</strong> {{ auction.startingPrice }}</p>
-      <p><strong>Reserve Price:</strong> {{ auction.reservePrice }}</p>
-      <p><strong>Category:</strong> {{ auction.category }}</p>
-      
+      <h2>{{ data.ItemName }}</h2>
+      <p><strong>Description:</strong> {{ data.ItemDescription }}</p>
+      <p><strong>Starting Price:</strong> {{ data.StartingPrice }}</p>
+      <p><strong>End Date:</strong> {{ data.EndDate }}</p>
+      <p><strong>City:</strong> {{ data.City }}</p>
+      <p><strong>State Province:</strong> {{ data.StateProvince }}</p>
+      <!-- <p><strong>Reserve Price:</strong> {{ data.reservePrice }}</p> -->
+      <!-- <p><strong>Category:</strong> {{ data.category }}</p> -->
+
+
       <div class="mt-4">
         <button class="btn btn-primary me-2" (click)="makeOffer()">Make an Offer</button>
         <button class="btn btn-secondary" (click)="addToCart()">Add to Cart</button>
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 <!-- Seller Rating Section -->
 <!-- <div class="mt-4">
