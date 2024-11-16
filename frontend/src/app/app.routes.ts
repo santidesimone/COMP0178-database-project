@@ -9,7 +9,8 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },  
   { path: 'signin', component: SigninComponent },   
   { path: 'search', component: SearchComponent },  // Search route
-  { path: 'auction-detail', component: AuctionDetailComponent },  // Auction Detail route
+  // { path: 'auction-
+  { path: 'auction-detail/:auctionID', component: AuctionDetailComponent },  // Auction Detail route with parameter
   { path: 'create-new-auction', component: CreateNewAuctionComponent },  // Create New Auction route
   { path: '', redirectTo: 'signin', pathMatch: 'full' },  // Default route to redirect to signin
 

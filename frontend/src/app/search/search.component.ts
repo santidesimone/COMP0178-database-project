@@ -37,33 +37,6 @@ constructor(private fb: FormBuilder,
       endDate: ['']
     });
 
-    // this.searchResults = [
-    //     {
-    //         "AuctionID": 1,
-    //         "SellerID": 1,
-    //         "ItemName": "Test 1",
-    //         "ItemDescription": "Test 1 Description.",
-    //         "StartingPrice": 50,
-    //         "ReservePrice": 75,
-    //         "ImageURL": "https://placehold.co/300x200",
-    //         "StartDate": "2024-11-14T00:00:00.000Z",
-    //         "EndDate": "2024-11-22T00:00:00.000Z",
-    //         "CategoryID": 1
-    //     },
-    //     {
-    //         "AuctionID": 2,
-    //         "SellerID": 2,
-    //         "ItemName": "Test 2",
-    //         "ItemDescription": "Test 2 Description.",
-    //         "StartingPrice": 50,
-    //         "ReservePrice": 75,
-    //         "ImageURL": "https://placehold.co/300x200",
-    //         "StartDate": "2024-11-14T00:00:00.000Z",
-    //         "EndDate": "2024-11-22T00:00:00.000Z",
-    //         "CategoryID": 4
-    //     }
-    // ]
-    // console.log('searchResults init:', this.searchResults);
     this.http.post('http://localhost:3000/api/search/all', {}).subscribe({
         next: (response: any) => { // Use any for the response type
             this.searchResults = response; // Store the JSON result in the array
@@ -77,6 +50,14 @@ constructor(private fb: FormBuilder,
         }
       });
 
+  }
+  navigateToAuctionDetail(auction: any): void {
+    // this.router.navigate(['/auction-detail', auctionID]);
+    this.router.navigateByUrl('/auction-detail', { state: auction });
+
+    console.log("----------------------------")
+    console.log(auction)
+    console.log("----------------------------")
   }
 
   onSearch() {
@@ -127,3 +108,30 @@ constructor(private fb: FormBuilder,
       });
   }
 }
+    // this.searchResults = [
+    //     {
+    //         "AuctionID": 1,
+    //         "SellerID": 1,
+    //         "ItemName": "Test 1",
+    //         "ItemDescription": "Test 1 Description.",
+    //         "StartingPrice": 50,
+    //         "ReservePrice": 75,
+    //         "ImageURL": "https://placehold.co/300x200",
+    //         "StartDate": "2024-11-14T00:00:00.000Z",
+    //         "EndDate": "2024-11-22T00:00:00.000Z",
+    //         "CategoryID": 1
+    //     },
+    //     {
+    //         "AuctionID": 2,
+    //         "SellerID": 2,
+    //         "ItemName": "Test 2",
+    //         "ItemDescription": "Test 2 Description.",
+    //         "StartingPrice": 50,
+    //         "ReservePrice": 75,
+    //         "ImageURL": "https://placehold.co/300x200",
+    //         "StartDate": "2024-11-14T00:00:00.000Z",
+    //         "EndDate": "2024-11-22T00:00:00.000Z",
+    //         "CategoryID": 4
+    //     }
+    // ]
+    // console.log('searchResults init:', this.searchResults);

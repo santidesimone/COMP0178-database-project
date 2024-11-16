@@ -58,7 +58,10 @@
             *ngFor="let result of searchResults; let i = index" 
             class="col-md-4 mb-4"
           >
-            <a class="text-decoration-none text-dark">
+            <!-- <a class="text-decoration-none text-dark"> -->
+            <!-- <a [routerLink]="['/auction-detail', result.AuctionID]" class="text-decoration-none text-dark"> -->
+            <a class="text-decoration-none text-dark" (click)="navigateToAuctionDetail(result)">
+
               <div class="card h-100">
                 <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
                 <div class="card-body">

@@ -1,8 +1,12 @@
 <div class="container mt-5">
   <h1>Auction Detail</h1>
+
+  {{
+    data | json
+  }}
   
   <!-- Auction Details Section -->
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-6">
       <img [src]="auction.imageUrl" class="img-fluid" alt="{{ auction.title }}">
     </div>
@@ -19,10 +23,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Seller Rating Section -->
-<div class="mt-4">
+<!-- <div class="mt-4">
   <h5>Rate the Seller</h5>
   <div class="star-rating">
     <span class="fa fa-star" (click)="rateSeller(1)" (mouseover)="hoverRating(1)" (mouseout)="resetHover()"></span>
@@ -35,12 +39,12 @@
     <textarea [(ngModel)]="comment" placeholder="Leave a comment..." rows="3" class="form-control"></textarea>
     <button class="btn btn-primary mt-2" (click)="submitComment()">Submit</button>
   </div>
-</div> 
+</div>  -->
 
 <!-- Display Comments -->
-<div class="mt-4">
+<!-- <div class="mt-4">
   <h5>Comments</h5>
   <ul class="list-group">
     <li class="list-group-item" NgFor="let comment of comments">{{ comment }}</li>
   </ul>
-</div>
+</div> -->
