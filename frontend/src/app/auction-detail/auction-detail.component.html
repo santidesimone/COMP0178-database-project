@@ -6,7 +6,7 @@
   }}
    -->
   <!-- Auction Details Section -->
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-6">
       <img [src]="data.ImageURL" class="img-fluid" alt="{{ data.ImageURL }}">
     </div>
@@ -17,17 +17,66 @@
       <p><strong>End Date:</strong> {{ data.EndDate }}</p>
       <p><strong>City:</strong> {{ data.City }}</p>
       <p><strong>State Province:</strong> {{ data.StateProvince }}</p>
-      <!-- <p><strong>Reserve Price:</strong> {{ data.reservePrice }}</p> -->
-      <!-- <p><strong>Category:</strong> {{ data.category }}</p> -->
-
-
       <div class="mt-4">
         <button class="btn btn-primary me-2" (click)="makeOffer()">Make an Offer</button>
         <button class="btn btn-secondary" (click)="addToCart()">Add to Cart</button>
       </div>
     </div>
   </div>
+</div> -->
+
+<!-- <div class="row">
+  <div class="col-md-6">
+    <img [src]="data.ImageURL" class="img-fluid" alt="{{ data.ImageURL }}">
+  </div>
+  <div class="col-md-6">
+    <h2>{{ data.ItemName }}</h2>
+    <p><strong>Description:</strong> {{ data.ItemDescription }}</p>
+    <p><strong>Starting Price:</strong> {{ data.StartingPrice }}</p>
+    <p><strong>End Date:</strong> {{ data.EndDate }}</p>
+    <p><strong>City:</strong> {{ data.City }}</p>
+    <p><strong>State Province:</strong> {{ data.StateProvince }}</p>
+
+    <form (submit)="makeOffer()"> 
+      <div class="input-group mt-3">
+        <input type="number" class="form-control" placeholder="Enter offer amount" [(ngModel)]="offerAmount" name="offerAmount"> 
+        <button class="btn btn-primary" type="submit">Make Offer</button>
+      </div>
+    </form>
+
+    <button class="btn btn-secondary mt-2" (click)="addToCart()">Add to Cart</button> 
+  </div>
+</div> -->
+
+<div class="row">
+  <div class="col-md-6">
+    <img [src]="data.ImageURL" class="img-fluid" alt="{{ data.ImageURL }}">
+  </div>
+  <div class="col-md-6">
+    <h2>{{ data.ItemName }}</h2>
+    <p><strong>Description:</strong> {{ data.ItemDescription }}</p>
+    <p><strong>Starting Price:</strong> {{ data.StartingPrice }}</p>
+    <p><strong>End Date:</strong> {{ data.EndDate }}</p>
+    <p><strong>City:</strong> {{ data.City }}</p>
+    <p><strong>State Province:</strong> {{ data.StateProvince }}</p>
+
+    <form (submit)="makeOffer()">
+      <div class="input-group mt-3">
+        <span class="input-group-text">£</span> 
+        <input type="number" class="form-control" placeholder="Enter offer amount" 
+               [(ngModel)]="offerAmount" name="offerAmount" [min]="data.StartingPrice" required>
+        <button class="btn btn-primary" type="submit">Make Offer</button>
+      </div>
+    </form>
+
+    <button class="btn btn-secondary mt-2" (click)="addToCart()">Add to Cart</button>
+    <br>
+    <button class="btn btn-outline-secondary">
+      <i class="fa fa-heart"></i> 
+    </button>
+  </div>
 </div>
+
 
 <!-- Seller Rating Section -->
 <!-- <div class="mt-4">
