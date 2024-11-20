@@ -75,6 +75,13 @@ VALUES
 --     -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),
 --     FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`)
 -- );
+
+-- ?. Create the `AuctionStatus` Table
+-- CREATE TABLE `AuctionStatus` (`StatusID` INT AUTO_INCREMENT PRIMARY KEY, `StatusName` VARCHAR(255) NOT NULL);
+-- -- Insert default AuctionStatus values
+-- INSERT INTO `AuctionStatus` (`StatusName`) VALUES ('Open'),('Closed');
+
+
 -- 6. Create the `Auctions` Table
 CREATE TABLE `Auctions` (
     `AuctionID` INT AUTO_INCREMENT PRIMARY KEY,
@@ -87,6 +94,7 @@ CREATE TABLE `Auctions` (
     `StartDate` DATETIME,
     `EndDate` DATETIME,
     -- `HighestBid` INT,
+    -- `AuctionStatusID` INT DEFAULT 1,  -- Add this line
     `CategoryID` INT NOT NULL,
     FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
     -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),

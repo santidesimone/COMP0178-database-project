@@ -77,6 +77,19 @@
   </div>
 </div>
 
+<div *ngIf="bids && bids.length > 0">
+  <h3>Bids</h3>
+  <ul>
+    <li *ngFor="let bid of bids">
+      <p><strong>Bidder ID:</strong> {{ bid.BidderID }}</p>
+      <p><strong>Amount:</strong> ${{ bid.BidAmount }}</p>
+      <p><strong>Time:</strong> {{ bid.BidTime }}</p>
+    </li>
+  </ul>
+</div>
+
+<p *ngIf="bids && bids.length === 0">There are currently no bids for this item.</p>
+
 
 <!-- Seller Rating Section -->
 <!-- <div class="mt-4">

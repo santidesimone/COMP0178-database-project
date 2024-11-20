@@ -473,6 +473,99 @@ app.post('/api/search/all', (req, res) => {
   });
 });
 
+app.post('/api/bid', (req, res) => {
+  const body = req.body;
+  const BidAmount = req.body.BidAmount;
+  // const bidderId = req.body.bidderId;
+  const AuctionID = req.body.AuctionID;
+  const BidderUserID = req.body.BidderUserID;
+  // 1. Insert the bid if bidAmount >= StartingPrice (using subquery)
+  // let query = `
+  //   INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
+  //   SELECT ?, ?, ? 
+  //   FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ?) AS Auction
+  //   WHERE Auction.StartingPrice <= ?
+  // `;
+  console.log("//////// req.body");
+  console.log(req.body);
+  console.log("//////// req.body");
+
+  // let query = `
+  //   INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
+  //   SELECT 
+  //       ?,                
+  //       (SELECT BuyerID FROM BuyerDetails WHERE UserID = ?),
+  //       ?                 
+  //   FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ?) AS Auction
+  //   WHERE Auction.StartingPrice < ?;    
+  // `;
+
+    const query = `
+    INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
+    SELECT 
+        ${BidAmount},                
+        (SELECT BuyerID FROM BuyerDetails WHERE UserID = ${BidderUserID}),
+        ${AuctionID}                 
+    FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ${AuctionID}) AS Auction
+    WHERE Auction.StartingPrice <= ${BidAmount};  
+  `;
+    console.log('Full query being executed:', query);
+  // We already have the auction's StartingPrice in the frontend. However, for extra security, we designed the query for creating a new Bid so that it will only insert a new bid into the Bids table if the condition Auction.StartingPrice <= BidAmount is satisfied.
+
+
+  db.query(query, [BidAmount, BidderUserID, AuctionID, AuctionID, BidAmount], (err, results) => {
+    if (err) {
+      console.error('Error inserting bid:', err.stack);
+      res.status(500).send('Error inserting bid');
+      return;
+    }
+    // Check if any rows were inserted
+    if (results.affectedRows === 0) {
+      return res.status(400).send('Bid amount cannot be lower than the starting price or the buyer ID is invalid.');
+    }
+    res.json(results);
+  });
+});
+
+app.get('/api/bids/:auctionId', (req, res) => {
+
+  console.log("executing /api/bids/:auctionId")
+  const auctionId = req.params.auctionId;
+  console.log(auctionId)
+
+  const query = `
+    SELECT * 
+    FROM Bids 
+    WHERE AuctionID = ?
+    ORDER BY BidAmount DESC
+  `;
+
+  db.query(query, [auctionId], (err, results) => {
+    if (err) {
+      console.error('Error fetching bids:', err.stack);
+      res.status(500).send('Error fetching bids');
+      return;
+    }
+    res.json(results);
+  });
+});
+// app.post('/api/fetch-bids', (req, res) => {
+//   const AuctionID = req.body.AuctionID;
+//   const query = `
+//     SELECT * 
+//     FROM Bids 
+//     WHERE AuctionID = ?
+//   `;
+
+//   db.query(query, [AuctionID], (err, results) => {
+//     if (err) {
+//       console.error('Error fetching bids:', err.stack);
+//       res.status(500).send('Error fetching bids');
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
 
 // Start the server
 app.listen(port, () => {
