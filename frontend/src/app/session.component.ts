@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+              
 
 @Injectable({
   providedIn: 'root'
@@ -13,24 +15,44 @@ import { BehaviorSubject } from 'rxjs';
 export class SessionComponent implements OnInit {
   currentUser = null;
   public isSellerProfileSource = new BehaviorSubject<any>(false); // Initialize with null or initial value
+  public isBuyerProfileSource = new BehaviorSubject<any>(false); // Initialize with null or initial value
   isSellerProfile$ = this.isSellerProfileSource.asObservable();
+  isBuyerProfile$ = this.isBuyerProfileSource.asObservable();
+
 
   updateIsSellerProfile(newValue: any) {
     this.isSellerProfileSource.next(newValue);
   }
 
-  getIsSellerProfile(newValue: any) {
+  getIsSellerProfile() {
     return this.isSellerProfile$;
   }
 
-  constructor(private router: Router) { }
+  updateIsBuyerProfile(newValue: any) {
+    this.isBuyerProfileSource.next(newValue);
+  }
+
+  getIsBuyerProfile() {
+    return this.isBuyerProfile$;
+  }
+
+  constructor(
+              private router: Router,
+              private route: ActivatedRoute,
+  ) 
+  { 
+
+
+  }
 
   ngOnInit() {
-    // Retrieve the user from localStorage if it exists
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-    }
+    this.route.paramMap.subscribe(params => {
+      // Retrieve the user from localStorage if it exists
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        this.currentUser = JSON.parse(storedUser);
+      }
+    });
   }
 
   setUser(user: any) {
@@ -43,6 +65,12 @@ export class SessionComponent implements OnInit {
     }
     else{
       this.updateIsSellerProfile(false)
+    }
+    if (user.hasOwnProperty('buyerDetails')) {
+      this.updateIsBuyerProfile(true)
+    }
+    else{
+      this.updateIsBuyerProfile(false)
     }
   }
 

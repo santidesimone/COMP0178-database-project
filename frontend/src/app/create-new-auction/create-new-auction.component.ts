@@ -36,6 +36,11 @@ export class CreateNewAuctionComponent {
     });
   }
 
+  ngOnInit(): void {
+    if(!this.sessionComponent.getUser()){
+      this.router.navigate(['/signin']); 
+    }
+  }
   onSubmit() {
     console.log('create auction button was pressed')
     this.errorMessage = ''; 
@@ -55,13 +60,10 @@ export class CreateNewAuctionComponent {
     console.log(user);
     console.log("----:");
 
-        
     function formatDateToMySQL(date: Date): string {
       return date.toISOString().slice(0, 19).replace('T', ' ');
     }
     
-
-
     let requestBody: {
       SellerID: number,
       ItemName: string,
@@ -86,21 +88,9 @@ export class CreateNewAuctionComponent {
       ImageURL: formData.ImageURL
     };
 
-    console.log("requestBody")
-    console.log(requestBody)
-    console.log("requestBody")
-
-
-
-    // CategoryID: "1"
-    // EndDate: "2024-11-15 14:00:00"
-          // ImageURL: undefined
-    // ItemDescription: "test1"
-    // ItemName: "test1"
-          // ReservePrice: undefined
-    // SellerID: "1"
-    // StartDate: "2024-11-10 14:00:00"
-          // StartingPrice: undefined
+    // console.log("requestBody")
+    // console.log(requestBody)
+    // console.log("requestBody")
 
     this.http.post('http://localhost:3000/api/auctions', requestBody)
       .subscribe({

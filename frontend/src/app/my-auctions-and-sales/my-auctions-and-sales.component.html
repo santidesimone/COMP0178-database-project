@@ -1,0 +1,53 @@
+<div style="width: 100%; height: 32px;"></div>
+
+<h3>My Sales</h3>
+
+<p style="font-style: italic;">See the items you've successfully sold in auctions.</p>
+
+<hr>
+
+<div *ngIf="userIsSeller && currentSales && currentSales.length > 0">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let sale of currentSales">
+        <div class="card h-100">
+          <img *ngIf="sale.ImageURL" [src]="sale.ImageURL" class="card-img-top" alt="{{ sale.ItemName }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ sale.ItemName }}</h5>
+            <p class="card-text"><strong>Price:</strong> ${{ sale.StartingPrice }}</p> 
+            <p class="card-text"><strong>End Date:</strong> {{ sale.EndDate }}</p> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<p *ngIf="userIsSeller &&  currentSales && currentSales.length === 0">  You haven't sold any item yet. </p>
+  
+  
+
+<h3>My Auctions</h3>
+
+<p style="font-style: italic;">View the list of auctions you've created that are currently open.</p>
+<hr>
+
+<div *ngIf="userIsSeller && currentAuctions && currentAuctions.length > 0">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let auction of currentAuctions">
+        <div class="card h-100">
+          <img *ngIf="auction.ImageURL" [src]="auction.ImageURL" class="card-img-top" alt="{{ auction.ItemName }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ auction.ItemName }}</h5>
+            <p class="card-text"><strong>Starting Price:</strong> ${{ auction.StartingPrice }}</p>
+            <p class="card-text"><strong>End Date:</strong> {{ auction.EndDate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <p *ngIf="userIsSeller && currentAuctions && currentAuctions.length === 0">You have no auctions yet.</p>
+
+  <p *ngIf="!userIsSeller">
+    No auctions here. Your account has a Buyer-only profile. 
+    <a routerLink="/change-profile">Update your profile</a> to Buyer-Seller to create auctions. 
+  </p>

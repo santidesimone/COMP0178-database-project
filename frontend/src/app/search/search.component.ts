@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgFor, NgIf} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { JsonPipe } from '@angular/common'; 
+import { SessionComponent } from '../session.component'; // Adjust the path if needed
 
  
 @Component({
@@ -25,7 +26,9 @@ result: any;
 
 constructor(private fb: FormBuilder, 
     private http: HttpClient, 
-    private router: Router) {
+    private router: Router,
+    private sessionComponent: SessionComponent, 
+  ) {
   
     this.searchForm = this.fb.group({
       keywords: [''], 
@@ -54,10 +57,14 @@ constructor(private fb: FormBuilder,
   navigateToAuctionDetail(auction: any): void {
     // this.router.navigate(['/auction-detail', auctionID]);
     this.router.navigateByUrl('/auction-detail', { state: auction });
-
     console.log("----------------------------")
     console.log(auction)
     console.log("----------------------------")
+  }
+  ngOnInit(): void {
+    if(!this.sessionComponent.getUser()){
+      this.router.navigate(['/signin']); 
+    }
   }
 
   onSearch() {
@@ -108,30 +115,3 @@ constructor(private fb: FormBuilder,
       });
   }
 }
-    // this.searchResults = [
-    //     {
-    //         "AuctionID": 1,
-    //         "SellerID": 1,
-    //         "ItemName": "Test 1",
-    //         "ItemDescription": "Test 1 Description.",
-    //         "StartingPrice": 50,
-    //         "ReservePrice": 75,
-    //         "ImageURL": "https://placehold.co/300x200",
-    //         "StartDate": "2024-11-14T00:00:00.000Z",
-    //         "EndDate": "2024-11-22T00:00:00.000Z",
-    //         "CategoryID": 1
-    //     },
-    //     {
-    //         "AuctionID": 2,
-    //         "SellerID": 2,
-    //         "ItemName": "Test 2",
-    //         "ItemDescription": "Test 2 Description.",
-    //         "StartingPrice": 50,
-    //         "ReservePrice": 75,
-    //         "ImageURL": "https://placehold.co/300x200",
-    //         "StartDate": "2024-11-14T00:00:00.000Z",
-    //         "EndDate": "2024-11-22T00:00:00.000Z",
-    //         "CategoryID": 4
-    //     }
-    // ]
-    // console.log('searchResults init:', this.searchResults);

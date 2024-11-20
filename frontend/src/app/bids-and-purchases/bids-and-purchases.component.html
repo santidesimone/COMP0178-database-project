@@ -1,0 +1,44 @@
+<div style="width: 100%; height: 32px;"></div>
+
+<h3>My Purchases</h3>
+<p style="font-style: italic;">View the items you've won in auctions.</p> 
+<hr> 
+
+<div *ngIf="userIsBuyer && purchases && purchases.length > 0">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let purchase of purchases">
+        <div class="card h-100">
+          <img *ngIf="purchase.ImageURL" [src]="purchase.ImageURL" class="card-img-top" alt="{{ purchase.ItemName }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ purchase.ItemName }}</h5>
+            <p class="card-text"><strong>Price:</strong> ${{ purchase.StartingPrice }}</p> 
+            <p class="card-text"><strong>End Date:</strong> {{ purchase.EndDate }}</p> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="userIsBuyer &&  purchases && purchases.length === 0">  You haven't won any auctions yet. </p>
+  
+<div style="width: 100%; height: 25px;"></div>
+
+<h3>My Bids</h3>
+<hr> 
+
+<div *ngIf="userIsBuyer &&  bids && bids.length > 0">
+<ul>
+    <li *ngFor="let bid of bids">
+    <p><strong>Auction ID:</strong> {{ bid.AuctionID }}</p> 
+    <p><strong>Amount:</strong> ${{ bid.BidAmount }}</p>
+    <p><strong>Time:</strong> {{ bid.BidTime }}</p>
+    </li>
+</ul>
+</div>
+
+<p *ngIf="userIsBuyer && bids && bids.length === 0">You haven't placed any bids yet.</p>
+
+<p *ngIf="!userIsBuyer">
+  Your account has a Seller-only profile. 
+  <a routerLink="/change-profile">Update your profile</a> to Buyer-Seller to participate in auctions as a bidder. 
+</p>

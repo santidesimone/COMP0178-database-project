@@ -15,19 +15,14 @@ import { SessionComponent } from './../session.component'; // Adjust the path if
 })
 
 export class SigninComponent {
-
-  // constructor(private   http: HttpClient,
-  //             private router: Router,
-  //             private sessionComponent: SessionComponent, 
-  // ) { }
-
   signinForm: FormGroup;
   errorMessage = '';
 
   constructor(private fb: FormBuilder, 
               private http: HttpClient, 
               private sessionComponent: SessionComponent, 
-              private router: Router) {
+              private router: Router,
+            ) {
 
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,10 +31,12 @@ export class SigninComponent {
 
   }
 
+  ngOnInit() {
+    this.updateAuctionStatuses();
+  }
+
   onSubmit() {
-
     this.errorMessage = ''; 
-
     if (this.signinForm.invalid) {
       console.log('form is invalid!')
       console.log(this.signinForm)
@@ -55,16 +52,7 @@ export class SigninComponent {
       email: formData.email,
       password: formData.password, 
     };
-
-    console.log(requestBody)
-    // const email = signinForm.value.email;
-    // const password = signinForm.value.password;
-
-    // console.log(" email & password")
-    // console.log(email)
-    // console.log(password)
-    // console.log(" email & password")
-
+    // console.log(requestBody)
     this.http.post('http://localhost:3000/api/signin', requestBody).subscribe({
       next: (response) => {
         console.log('- - - - - - - - - - - - ');
@@ -88,6 +76,17 @@ export class SigninComponent {
       error: (error) => {
         console.error('Signin failed:', error);
         // Handle signin error, e.g., display an error message
+      }
+    });
+  }
+
+  updateAuctionStatuses() {
+    this.http.post('http://localhost:3000/api/update-auctions-status', {}).subscribe({ 
+      next: (response: any) => {
+        console.log('Auction statuses updated:', response);
+      },
+      error: (error) => {
+        console.error('Error updating auction statuses:', error);
       }
     });
   }

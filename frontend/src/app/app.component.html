@@ -2,18 +2,27 @@
 
 <nav class="navbar navbar-expand-lg bg-light fixed-top" style="border-bottom: 1px solid #e7e7e7;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Auctions App</a>
+    <a class="navbar-brand" href="/search">Auctions App</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/search">Discover</a>
+        <li class="nav-item border-start border-end">
+          <a class="nav-link" href="/search">Search items</a>
         </li>
-        <!-- <li ngIf="  this.sessionComponent.getUser()"class="nav-item"> -->
-          <li *ngIf="userIsSeller"  class="nav-item">
+        <li *ngIf="userIsSeller"  class="nav-item border-start border-end">
           <a class="nav-link" href="/create-new-auction">New Auction</a>
+        </li>
+
+        <li class="nav-item border-start border-end">
+          <a class="nav-link" href="/my-auctions-and-sales">My Auctions & Sales </a>
+        </li>
+
+        <li   class="nav-item border-start border-end">
+          <a class="nav-link" href="/bids-and-purchases">My Bids & Purchases 
+
+          </a>
         </li>
       </ul>
       <div class="d-flex align-items-center"> <!-- Aligns items vertically -->
@@ -38,11 +47,9 @@
 
   <router-outlet />
 
-  <!-- <hr>
-  Current route: {{currentRoute}} -->
+  <!--  Current route: {{currentRoute}} -->
   
 </div>
-
 
 
 <div *ngIf="inviteLinkBannerIsVisible" class="position-fixed" style="bottom: 20px; left: 20px; width: 300px;">
@@ -56,11 +63,11 @@
   </div>
 </div>
 
-<script>
+<!-- <script>
   function copyLink() {
     const inviteLinkInput = document.querySelector('input[type="text"]');
     inviteLinkInput.select();
     document.execCommand('copy');
     alert('Invite link copied to clipboard!');
   }
-</script>
+</script> -->

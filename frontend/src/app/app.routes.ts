@@ -5,13 +5,16 @@ import { SearchComponent } from './search/search.component';  // Import the Sear
 import { AuctionDetailComponent } from './auction-detail/auction-detail.component';
 import { CreateNewAuctionComponent } from './create-new-auction/create-new-auction.component';
 
+import { BidsAndPurchasesComponent } from './bids-and-purchases/bids-and-purchases.component';
+import { MyAuctionsAndSalesComponent } from './my-auctions-and-sales/my-auctions.component';
+
 export const routes: Routes = [
   { path: 'signup', component: SignupComponent },  
   { path: 'signin', component: SigninComponent },   
-  { path: 'search', component: SearchComponent },  // Search route
-  // { path: 'auction-
-  { path: 'auction-detail', component: AuctionDetailComponent },  // Auction Detail route with parameter
-  { path: 'create-new-auction', component: CreateNewAuctionComponent },  // Create New Auction route
-  { path: '', redirectTo: 'signin', pathMatch: 'full' },  // Default route to redirect to signin
-
+  { path: 'search', component: SearchComponent },  
+  { path: 'auction-detail', component: AuctionDetailComponent },  
+  { path: 'bids-and-purchases', component: BidsAndPurchasesComponent },  
+  { path: 'my-auctions-and-sales', component: MyAuctionsAndSalesComponent },  
+  { path: 'create-new-auction', component: CreateNewAuctionComponent },  
+  { path: '', redirectTo: 'signin', pathMatch: 'full' }, 
 ];
