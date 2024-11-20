@@ -340,6 +340,8 @@ app.post('/api/search/all', (req, res) => {
     SELECT A.*, SD.City, SD.StateProvince 
     FROM Auctions A
     JOIN SellerDetails SD ON A.SellerID = SD.SellerID
+    WHERE A.EndDate > NOW()
+    AND A.AuctionStatusID = 1  
     ORDER BY A.EndDate DESC
   `;
   
