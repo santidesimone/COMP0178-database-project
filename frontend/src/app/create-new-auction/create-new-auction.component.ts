@@ -51,11 +51,17 @@ export class CreateNewAuctionComponent {
       return;
     }
     const formData = this.createAuctionForm.value;
-    if (this.sessionComponent.getUser() == null) {
+    const user = this.sessionComponent.getUser();
+
+    if (Object.keys(user).length === 0 ) {
       console.log('no user stored in session')
       return;
     }
-    const user = this.sessionComponent.getUser();
+    
+    // let userID = 1;
+    // if(user && user.hasOwnProperty('userID') ){
+    //   userID = user["userID"]
+    // }
     console.log("current user:");
     console.log(user);
     console.log("----:");
@@ -75,7 +81,10 @@ export class CreateNewAuctionComponent {
       CategoryID: string,
       ImageURL: string
     } = {
-      SellerID: user != null ? user["userID"] : 1,
+      // SellerID: user?.userID ?? 1, 
+      // SellerID: user && user.hasOwnProperty('userID') ? user["userID"] : 1,
+      // SellerID: user && user.hasOwnProperty('userID') ? user["userID"] : 1,
+      SellerID: (user as any).userID || 1, 
       ItemName: formData.ItemName, 
       ItemDescription: formData.ItemDescription,
       StartingPrice: formData.StartingPrice,

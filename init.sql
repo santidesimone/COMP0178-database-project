@@ -129,6 +129,14 @@ CREATE TABLE `Answers` (
     FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`)
 );
 
+CREATE TABLE `Favorites` (
+    `FavoriteID` INT AUTO_INCREMENT PRIMARY KEY,
+    `UserID` INT NOT NULL,
+    `AuctionID` INT NOT NULL,
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`),
+    FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
+);
+
 -- Change authentication method for the root user (or specify another user if needed)
 ALTER USER 'root'@'%' IDENTIFIED WITH `mysql_native_password` BY 'rootpassword';
 

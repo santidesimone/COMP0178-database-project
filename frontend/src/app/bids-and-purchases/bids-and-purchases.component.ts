@@ -41,6 +41,7 @@ export class BidsAndPurchasesComponent implements OnInit {
 
     ) {
     this.user = this.sessionComponent.getUser();
+    // this.buyerUserID = this.user != null ? this.user["userID"] : 1;
     this.buyerUserID = this.user != null ? this.user["userID"] : 1;
   }
 

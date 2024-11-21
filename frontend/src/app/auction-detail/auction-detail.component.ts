@@ -53,6 +53,8 @@ export class AuctionDetailComponent implements OnInit {
         this.fetchBids();
       });
     // }
+    // this.fetchFavorites(); // Fetch favorites on component initialization
+
   }
 
   fetchBids() {
@@ -82,7 +84,8 @@ export class AuctionDetailComponent implements OnInit {
   makeOffer() {
     console.log('Offer made:', this.offerAmount);
     const user = this.sessionComponent.getUser();
-    const bidderUserID = user != null ? user["userID"] : 1;
+    // const bidderUserID = user != null ? user["userID"] : 1;
+    const bidderUserID = (user as any).userID || 1;
 
     const requestBody = {
       BidAmount: this.offerAmount,
@@ -158,4 +161,51 @@ export class AuctionDetailComponent implements OnInit {
 
   }
 
+  fetchFavorites() {
+    // Call API to get user's favorites
+    // this.http.get(`/api/favorites/${this.userId}`).subscribe({ // Replace with your actual endpoint
+    //   next: (favorites: any) => {
+    //     this.favorites = favorites.map((favorite: any) => favorite.AuctionID); 
+    //   },
+    //   error: (error) => {
+    //     console.error('Error fetching favorites:', error);
+    //   }
+    // });
+  }
+
+  // isFavorite(auctionId: number): boolean {
+  //   return this.favorites.includes(auctionId);
+  // }
+
+  toggleFavorite(auctionId: number) {
+    // if (this.isFavorite(auctionId)) {
+    //   // Remove favorite
+    //   this.http.delete('/api/favorites', { body: { userId: this.userId, auctionId } }).subscribe({
+    //     next: () => {
+    //       console.log('Removed from favorites');
+    //       this.favorites = this.favorites.filter(id => id !== auctionId); // Update the favorites array
+    //     },
+    //     error: (error) => {
+    //       console.error('Error removing favorite:', error);
+    //     }
+    //   });
+    // } else {
+    //   // Add favorite
+    //   this.http.post('/api/favorites', { userId: this.userId, auctionId }).subscribe({
+    //     next: () => {
+    //       console.log('Added to favorites');
+    //       this.favorites.push(auctionId); // Update the favorites array
+    //     },
+    //     error: (error) => {
+    //       console.error('Error adding favorite:', error);
+    //     }
+    //   });
+    // }
+  }
+
+
 }
+
+
+
+

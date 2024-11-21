@@ -527,7 +527,7 @@ app.post('/api/update-auctions-status', (req, res) => {
     UPDATE Auctions
     SET AuctionStatusID = 2  
     WHERE (EndDate <= NOW() AND AuctionStatusID = 1)  
-       OR AuctionID IN (SELECT AuctionID FROM Bids WHERE BidAmount >= ReservePrice) 
+    OR AuctionID IN (SELECT AuctionID FROM Bids WHERE BidAmount >= ReservePrice);
   `;
   db.query(query, (err, results) => {
     if (err) {
@@ -536,7 +536,43 @@ app.post('/api/update-auctions-status', (req, res) => {
       return;
     }
     console.log('Auction statuses updated:', results.affectedRows); 
-    res.status(200).send('Auction statuses updated successfully');
+    res.status(200).json({"message": 'Auction statuses updated successfully'});
+  });
+});
+
+app.post('/api/favorites', (req, res) => {
+  const { userId, auctionId } = req.body;
+
+  const query = `
+    INSERT INTO Favorites (UserID, AuctionID) 
+    VALUES (?, ?)
+  `;
+
+  db.query(query, [userId, auctionId], (err, result) => {
+    if (err) {
+      console.error('Error adding favorite:', err.stack);
+      res.status(500).send('Error adding favorite');
+      return;
+    }
+    res.status(200).json({"message":'Added to favorites'});
+  });
+});
+
+app.delete('/api/favorites', (req, res) => {
+  const { userId, auctionId } = req.body;
+
+  const query = `
+    DELETE FROM Favorites 
+    WHERE UserID = ? AND AuctionID = ?
+  `;
+
+  db.query(query, [userId, auctionId], (err, result) => {
+    if (err) {
+      console.error('Error removing favorite:', err.stack);
+      res.status(500).send('Error removing favorite');
+      return;
+    }
+    res.status(200).json({"message": 'Removed from favorites'});
   });
 });
 

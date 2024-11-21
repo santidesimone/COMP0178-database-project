@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   template: '' 
 })
 export class SessionComponent implements OnInit {
-  currentUser = null;
+  currentUser = {};
   public isSellerProfileSource = new BehaviorSubject<any>(false); // Initialize with null or initial value
   public isBuyerProfileSource = new BehaviorSubject<any>(false); // Initialize with null or initial value
   isSellerProfile$ = this.isSellerProfileSource.asObservable();
@@ -55,7 +55,7 @@ export class SessionComponent implements OnInit {
     });
   }
 
-  setUser(user: any) {
+  setUser(user: object) {
     this.currentUser = user;
     // Store user information in localStorage
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -74,18 +74,18 @@ export class SessionComponent implements OnInit {
     }
   }
 
-  getUser() {
+  getUser(): object {
     // Retrieve user information from localStorage
     if (!this.currentUser) {
       const storedUser = localStorage.getItem('currentUser');
-      this.currentUser = storedUser ? JSON.parse(storedUser) : null;
+      this.currentUser = storedUser ? JSON.parse(storedUser) : {};
     }
     return this.currentUser;
   }
 
   clearUser() {
     // Clear the user information from component and localStorage
-    this.currentUser = null;
+    this.currentUser = {};
     localStorage.removeItem('currentUser');
     console.log("Current user removed from localStorage");
     this.router.navigate(['/signin']);
