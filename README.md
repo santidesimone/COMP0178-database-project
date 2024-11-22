@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This is a proposal for a starter project template to be used for the group project coursework.
+This is the group project coursework for COMP0178 2024.
 
 If you follow the instructions below to run the project locally, it will:
 
-1. Set up MySQL inside a Docker container. Additionally, it will create a database called 'ucl' and a table named 'students,' populating it with initial data.  
-2. Create a frontend using the Angular framework. This webpage will be served by a lightweight Nginx server and will currently display a "Hello World" page. Both the Angular app and the Nginx server will be inside another Docker container.  
-3. Build a backend server using Node.js, also inside another Docker container. This server contains one endpoint: `/students`. When you access this endpoint, the server connects to the database, runs an SQL query, and returns the contents of the 'students' table from the 'ucl' database to the client.  
+1. Set up MySQL inside a Docker container. Additionally, it will create a database called 'auctions' and populate it with initial data.  
+2. Create a frontend using the Angular framework. This webpage will be served by a lightweight Nginx server. Both the Angular app and the Nginx server will be inside another Docker container.  
+3. Build a backend server using Node.js, also inside another Docker container. This server contains various endpoints. When you interact with these endpoints either directly via Postman or through the frontend layer, the server connects to the database, runs an SQL query, and returns the result of the operation.
 
 ## Architecture
 
@@ -20,6 +20,9 @@ Make sure you have the following installed on your machine:
 
 - **Docker**
 - **MySQL**
+
+Alternatively, for development purposes:
+
 - **Node.js**
 - **npm**
 - **Angular**
@@ -50,7 +53,7 @@ Make sure you have the following installed on your machine:
 
    ![front-end](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzB2NHp2ZWNhM2tjY2h6ZHdoMTZteWNxYW4xOWR5MzJkcmNubmVodSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qHyAD4hxyahL48yBZD/giphy.gif)
 
-   - **Backend:** Open your browser and go to [http://localhost:3000/students](http://localhost:3000/students)
+   - **Backend:** Open your browser and go to [http://localhost:3000/](http://localhost:3000/)
 
    ![backend-connected-to-database](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDA2c2pnNHJqeXZuMmQ4OTU3ZGhmajE4ZGMxNnA2cTdmNzVnMWxkcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9sX6eAdgq9WEjRxjBi/giphy.gif)
 
