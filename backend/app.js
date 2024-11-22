@@ -3,89 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const db = require('./db.js'); // Import the database connection
+const db = require('./db.js');
 
-// Use CORS middleware
 app.use(cors());
-
-// Parse JSON request bodies
 app.use(express.json());
 
-// //to do: handle asyncronicity
-// app.post('/api/signup', (req, res) => {
-//   const body = req.body;
-//   let response = {}
-//   const query = `
-//       INSERT INTO Users (Email, Username, Password, StatusID) 
-//           VALUES (
-//                   '${body.email}', 
-//                   '${body.username}', 
-//                   '${body.password}', 
-//                   1);
-//    `;
-//   db.query(query, (err, results) => {
-//     if (err) {
-//       console.error('Error fetching data:', err.stack);
-//       res.status(500).send('Error fetching data');
-//       return;
-//     }
-//     else{
-//       response["user"] = results;
-
-//       if (req.body["buyerDetails"]){
-//         const query2 = `
-//         INSERT INTO BuyerDetails (UserID, ShippingAddress) 
-//               VALUES (
-//                         (SELECT UserID FROM Users WHERE Email = '${body.email}'),
-//                         '${body.buyerDetails.ShippingAddress}')
-//         `;
-//         db.query(query2, (err, results2) => {
-//           if (err) {
-//             console.error('Error fetching data:', err.stack);
-//             response["buyerDetails"] = err;
-//             res.status(500).send(response);
-//             return;
-//           }
-//           else{
-//             response["buyerDetails"] = results2;
-//           }
-//           // res.status(200).json(response);
-//         });
-//       }
-
-//       if (req.body["sellerDetails"]){
-//         const query3 = `
-//         INSERT INTO SellerDetails (UserID, StreetAddress, City, StateProvince, PostalCode, Country) 
-//               VALUES ( 
-//                         (SELECT UserID FROM Users WHERE Email = '${body.email}'),
-//                         '${body.sellerDetails.StreetAddress}', 
-//                         '${body.sellerDetails.City}', 
-//                         '${body.sellerDetails.StateProvince}', 
-//                         '${body.sellerDetails.PostalCode}', 
-//                         '${body.sellerDetails.Country}');
-//         `;
-//         db.query(query3, (err, results3) => {
-//           if (err) {
-//             console.error('Error fetching data:', err.stack);
-//             // res.status(500).send('Error fetching data');
-//             response["sellerDetails"] = err;
-//             res.status(500).send(response);
-//             return;
-//           }
-//           else{
-//             response["sellerDetails"] = results3;
-//           }
-//         });
-//       }
-//     }
-//     res.status(200).json(response);
-//   });
-// });
 app.post('/api/signup', (req, res) => {
   const body = req.body;
   let response = {};
 
-  // 1. Insert user data
   const userQuery = `
     INSERT INTO Users (Email, Username, Password, StatusID) 
     VALUES (?, ?, ?, 1);
@@ -103,7 +29,7 @@ app.post('/api/signup', (req, res) => {
     });
   })
   .then(() => {
-    // 2. Insert buyer details if provided
+
     if (req.body["buyerDetails"]) {
       const buyerQuery = `
         INSERT INTO BuyerDetails (UserID, ShippingAddress) 
@@ -121,11 +47,11 @@ app.post('/api/signup', (req, res) => {
         });
       });
     } else {
-      return Promise.resolve(); // Resolve immediately if no buyer details
+      return Promise.resolve(); 
     }
   })
   .then(() => {
-    // 3. Insert seller details if provided
+
     if (req.body["sellerDetails"]) {
       const sellerQuery = `
         INSERT INTO SellerDetails (UserID, StreetAddress, City, StateProvince, PostalCode, Country) 
@@ -154,11 +80,10 @@ app.post('/api/signup', (req, res) => {
         );
       });
     } else {
-      return Promise.resolve(); // Resolve immediately if no seller details
+      return Promise.resolve(); 
     }
   })
   .then(() => {
-    // 4. Send the response after all insertions are complete
     res.status(200).json(response);
   })
   .catch(err => {
@@ -231,33 +156,57 @@ app.post('/api/signin', (req, res) => {
   });
 });
 
-app.post('/api/auctions', (req, res) => {
-  const body = req.body;
-  let parsedSellerID = parseFloat(body.SellerID); 
-  let parsedCategoryID = parseFloat(body.CategoryID); 
+// app.post('/api/auctions', (req, res) => {
+//   const body = req.body;
+//   let parsedSellerID = parseFloat(body.SellerID); 
+//   let parsedCategoryID = parseFloat(body.CategoryID); 
 
-  const query = `INSERT INTO Auctions 
-                      (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL)
-                       VALUES ( 
-                              '${parsedSellerID}', 
-                              '${body.ItemName}', 
-                              '${body.ItemDescription}', 
-                              '${body.StartingPrice}', 
-                              '${body.ReservePrice}', 
-                              '${body.StartDate}', 
-                              '${body.EndDate}', 
-                              '${parsedCategoryID}', 
-                              '${body.ImageURL}');
-  `
-  db.query(query, (err, results) => {
+//   const query = `INSERT INTO Auctions 
+//                       (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL)
+//                        VALUES ( 
+//                               '${parsedSellerID}', 
+//                               '${body.ItemName}', 
+//                               '${body.ItemDescription}', 
+//                               '${body.StartingPrice}', 
+//                               '${body.ReservePrice}', 
+//                               '${body.StartDate}', 
+//                               '${body.EndDate}', 
+//                               '${parsedCategoryID}', 
+//                               '${body.ImageURL}');
+//   `
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error('Error fetching data:', err.stack);
+//       res.status(500).send('Error fetching data');
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+app.post('/api/auctions', (req, res) => {
+  const { SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL } = req.body;
+  const parsedSellerID = parseFloat(SellerID);
+  const parsedCategoryID = parseFloat(CategoryID);
+
+  const query = `
+    INSERT INTO Auctions 
+      (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  const values = [ parsedSellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, parsedCategoryID, ImageURL,
+  ];
+
+  db.query(query, values, (err, results) => {
     if (err) {
-      console.error('Error fetching data:', err.stack);
-      res.status(500).send('Error fetching data');
+      console.error('Error executing query:', err.stack);
+      res.status(500).send('Error executing query');
       return;
     }
     res.json(results);
   });
 });
+
 
 app.post('/api/search', (req, res) => {
   const body = req.body;
@@ -269,16 +218,10 @@ app.post('/api/search', (req, res) => {
   const stateProvince = body.stateProvince;
   const endDate = body.endDate;
 
-  console.log("/api/search': req.body ------------")
-  console.log(req.body)
-  console.log("------------")
-
-  // Select Auction fields along with City and StateProvince from SellerDetails
   let query = `SELECT A.*, SD.City, SD.StateProvince FROM Auctions A
-               JOIN SellerDetails SD ON A.SellerID = SD.SellerID`; // Always join SellerDetails
-  const values = []; // Initialize values as an empty array
+               JOIN SellerDetails SD ON A.SellerID = SD.SellerID`; 
+  const values = []; 
 
-  // Conditional WHERE clause for keywords
   if (keywords) {
     query += ` WHERE A.ItemName LIKE ?`;
     values.push(`%${keywords}%`);
@@ -299,7 +242,6 @@ app.post('/api/search', (req, res) => {
     values.push(category);
   }
 
-  // Conditionally add city and stateProvince filters only if provided in the request body
   if (city) {
     query += ` AND SD.City = ?`;
     values.push(city);
@@ -315,12 +257,7 @@ app.post('/api/search', (req, res) => {
     values.push(endDate + " 00:00:00");
   }
 
-  // Order the results by EndDate (most recent first)
   query += ` ORDER BY A.EndDate DESC`;
-
-  console.log("/api/search': query ------------")
-  console.log(query, values)
-  console.log("------------")
 
   db.query(query, values, (err, results) => {
     if (err) {
@@ -329,13 +266,11 @@ app.post('/api/search', (req, res) => {
       return;
     }
 
-    // Send the results (which will include City and StateProvince, even if they were not filtered)
     res.json(results);
   });
 });
 
 app.post('/api/search/all', (req, res) => {
-  // Query to fetch all auctions along with City and StateProvince from SellerDetails
   let query = `
     SELECT A.*, SD.City, SD.StateProvince 
     FROM Auctions A
@@ -344,7 +279,6 @@ app.post('/api/search/all', (req, res) => {
     AND A.AuctionStatusID = 1  
     ORDER BY A.EndDate DESC
   `;
-  
   db.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching data:', err.stack);
@@ -358,30 +292,8 @@ app.post('/api/search/all', (req, res) => {
 app.post('/api/bid', (req, res) => {
   const body = req.body;
   const BidAmount = req.body.BidAmount;
-  // const bidderId = req.body.bidderId;
   const AuctionID = req.body.AuctionID;
   const BidderUserID = req.body.BidderUserID;
-  // 1. Insert the bid if bidAmount >= StartingPrice (using subquery)
-  // let query = `
-  //   INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
-  //   SELECT ?, ?, ? 
-  //   FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ?) AS Auction
-  //   WHERE Auction.StartingPrice <= ?
-  // `;
-  console.log("//////// req.body");
-  console.log(req.body);
-  console.log("//////// req.body");
-
-  // let query = `
-  //   INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
-  //   SELECT 
-  //       ?,                
-  //       (SELECT BuyerID FROM BuyerDetails WHERE UserID = ?),
-  //       ?                 
-  //   FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ?) AS Auction
-  //   WHERE Auction.StartingPrice < ?;    
-  // `;
-
     const query = `
     INSERT INTO Bids (BidAmount, BidderID, AuctionID) 
     SELECT 
@@ -391,17 +303,12 @@ app.post('/api/bid', (req, res) => {
     FROM (SELECT StartingPrice FROM Auctions WHERE AuctionID = ${AuctionID}) AS Auction
     WHERE Auction.StartingPrice <= ${BidAmount};  
   `;
-    // console.log('Full query being executed:', query);
-  // We already have the auction's StartingPrice in the frontend. However, for extra security, we designed the query for creating a new Bid so that it will only insert a new bid into the Bids table if the condition Auction.StartingPrice <= BidAmount is satisfied.
-
-
   db.query(query, [BidAmount, BidderUserID, AuctionID, AuctionID, BidAmount], (err, results) => {
     if (err) {
       console.error('Error inserting bid:', err.stack);
       res.status(500).send('Error inserting bid');
       return;
     }
-    // Check if any rows were inserted
     if (results.affectedRows === 0) {
       return res.status(400).send('Bid amount cannot be lower than the starting price or the buyer ID is invalid.');
     }
@@ -410,9 +317,7 @@ app.post('/api/bid', (req, res) => {
 });
 
 app.get('/api/bids/:auctionId', (req, res) => {
-  // console.log("executing /api/bids/:auctionId")
   const auctionId = req.params.auctionId;
-  // console.log(auctionId)
   const query = `
     SELECT * 
     FROM Bids 
@@ -431,7 +336,6 @@ app.get('/api/bids/:auctionId', (req, res) => {
 
 app.get('/api/seller/auctions/:sellerUserID', (req, res) => {
   const sellerUserID = req.params.sellerUserID;
-  // console.log("executing/api/auctions/:sellerUserID", sellerUserID)
   const query = `
     SELECT A.* 
     FROM Auctions A
@@ -452,7 +356,6 @@ app.get('/api/seller/auctions/:sellerUserID', (req, res) => {
 
 app.get('/api/buyer/purchases/:buyerUserID', (req, res) => {
   const buyerUserID = req.params.buyerUserID; 
-  // console.log("executing /api/buyer/purchases/:buyerUserID", buyerUserID);
   let query = `
     SELECT A.* 
       FROM Auctions A 
@@ -467,9 +370,7 @@ app.get('/api/buyer/purchases/:buyerUserID', (req, res) => {
               BD.UserID = ${buyerUserID} 
               AND A.EndDate < NOW() 
         ORDER BY A.EndDate DESC;`;
-  // console.log('Full query being executed:', query);
 
-  // db.query(query, [buyerUserID], (err, results) => {
   db.query(query, (err, results) => {
       if (err) {
       console.error('Error fetching auctions:', err.stack);
@@ -482,7 +383,6 @@ app.get('/api/buyer/purchases/:buyerUserID', (req, res) => {
 
 app.get('/api/buyer/bids/:buyerUserID', (req, res) => {
   const buyerUserID = req.params.buyerUserID;
-  // console.log("executing /api/buyer/bids/:buyerUserID", buyerUserID);
   const query = `
     SELECT B.*
     FROM Bids B
@@ -503,7 +403,6 @@ app.get('/api/buyer/bids/:buyerUserID', (req, res) => {
 
 app.get('/api/seller/sales/:sellerUserID', (req, res) => {
   const sellerUserID = req.params.sellerUserID;
-  // console.log("executing /api/seller/sales/:sellerUserID", sellerUserID);
   const query = `
     SELECT A.* 
     FROM Auctions A
@@ -522,7 +421,6 @@ app.get('/api/seller/sales/:sellerUserID', (req, res) => {
 });
 
 app.post('/api/update-auctions-status', (req, res) => {
-  // Update auctions that have ended or met reserve price
   const query = `
     UPDATE Auctions
     SET AuctionStatusID = 2  
@@ -540,7 +438,6 @@ app.post('/api/update-auctions-status', (req, res) => {
   });
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
