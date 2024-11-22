@@ -130,7 +130,7 @@ CREATE TABLE `Answers` (
 );
 
 CREATE TABLE `Favorites` (
-    `FavoriteID` INT AUTO_INCREMENTupdate-auctions-status PRIMARY KEY,
+    `FavoriteID` INT AUTO_INCREMENT PRIMARY KEY,
     `UserID` INT NOT NULL,
     `AuctionID` INT NOT NULL,
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`),
