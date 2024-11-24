@@ -85,7 +85,7 @@ WHERE `AuctionID` = 5;
 
 INSERT INTO `Bids` (`BidAmount`, `BidderID`, `AuctionID`, `BidTime`)
 SELECT 
-    7.00,  -- BidAmount
+    20,  -- BidAmount
     3,  -- Get BuyerID for any user other than UserID 1
     (SELECT `AuctionID` FROM `Auctions` WHERE `ItemName` = 'iPhone 12 Phone Case' 
         AND `SellerID` = (SELECT `SellerID` FROM `SellerDetails` WHERE `UserID` = 1)),  -- Get AuctionID

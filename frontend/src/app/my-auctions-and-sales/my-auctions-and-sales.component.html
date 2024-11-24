@@ -13,10 +13,29 @@
           <img *ngIf="sale.ImageURL" [src]="sale.ImageURL" class="card-img-top" alt="{{ sale.ItemName }}">
           <div class="card-body">
             <h5 class="card-title">{{ sale.ItemName }}</h5>
-            <p class="card-text"><strong>Price:</strong> ${{ sale.StartingPrice }}</p> 
+            <p class="card-text"><strong>Original Starting Price:</strong> ${{ sale.StartingPrice }}</p> 
             <p class="card-text"><strong>End Date:</strong> {{ sale.EndDate }}</p> 
           </div>
-        </div>
+          <div class="card-body">
+
+            <button class="btn btn-primary" (click)="getWinnerDetails(sale.AuctionID)">
+              See Winner Details
+            </button>
+            <!-- Winner Details Object: {{winnerDetails | json}} -->
+            <div *ngIf="winnerDetails[sale.AuctionID]">
+              <div *ngIf="winnerDetails[sale.AuctionID].username && winnerDetails[sale.AuctionID].email">
+                <strong>Winner: </strong>
+                <p>Username: {{ winnerDetails[sale.AuctionID].username }}</p>
+                <p>Email: {{ winnerDetails[sale.AuctionID].email }}</p>
+                <p class="card-text">
+                  <strong>Winning Bid Amount::</strong> 
+                  ${{ winnerDetails[sale.AuctionID].winningBidAmount }}</p> 
+
+              </div>
+          </div>
+
+          </div>
+
       </div>
     </div>
   </div>

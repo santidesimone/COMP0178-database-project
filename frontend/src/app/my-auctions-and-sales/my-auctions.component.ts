@@ -33,6 +33,13 @@ export class MyAuctionsAndSalesComponent implements OnInit {
   currentAuctions: any;
   userIsSeller: any;
   currentSales: any;
+  winnerDetails: { 
+      [key: number]: { 
+          username: string, 
+          email: string,
+          winningBidAmount: number 
+        } 
+  } = {};  
 
   constructor(
       private route: ActivatedRoute,
@@ -92,6 +99,25 @@ export class MyAuctionsAndSalesComponent implements OnInit {
     });
   }
 
+  getWinnerDetails(auctionID: number): void {
+    this.http.get(`http://localhost:3000/api/auction/winner/${auctionID}`).subscribe(
+      (winner: any) => {
+        if (winner) {
+          console.log(winner)
+          this.winnerDetails[auctionID] = { 
+            username: winner.WinnerName, 
+            email: winner.WinnerEmail,
+            winningBidAmount: winner.WinningBidAmount,
+           };
+           console.log(this.winnerDetails)
+        }
+      },
+      (error) => {
+        console.error('Error fetching winner details:', error);
+      }
+    );
+  }
 }
 
 
+// 

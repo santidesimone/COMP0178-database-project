@@ -74,6 +74,7 @@ CREATE TABLE `Auctions` (
     `ItemDescription` TEXT,
     `StartingPrice` DECIMAL(10, 2),
     `ReservePrice` DECIMAL(10, 2),
+    `WinnerPrice` DECIMAL(10, 2),
     `ImageURL` VARCHAR(255),
     `StartDate` DATETIME,
     `EndDate` DATETIME,

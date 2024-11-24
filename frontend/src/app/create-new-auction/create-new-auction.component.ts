@@ -29,6 +29,7 @@ export class CreateNewAuctionComponent {
       ItemDescription: ['', Validators.required],
       StartingPrice: ['', Validators.required],
       ReservePrice: ['', Validators.required],
+      WinnerPrice: ['', Validators.required],
       StartDate: ['', ],
       EndDate: ['', Validators.required],
       CategoryID: ['', Validators.required],
@@ -70,6 +71,7 @@ export class CreateNewAuctionComponent {
       ItemDescription: string,
       StartingPrice: number,
       ReservePrice: number,
+      WinnerPrice: number,
       StartDate: string,
       EndDate: string,
       CategoryID: string,
@@ -80,6 +82,7 @@ export class CreateNewAuctionComponent {
       ItemDescription: formData.ItemDescription,
       StartingPrice: formData.StartingPrice,
       ReservePrice: formData.ReservePrice,
+      WinnerPrice: formData.WinnerPrice,
       StartDate: formatDateToMySQL(new Date()), 
       // EndDate: new Date(formData.EndDate), 
       // EndDate: new Date(formatDateToMySQL(formData.EndDate)),
@@ -88,9 +91,7 @@ export class CreateNewAuctionComponent {
       ImageURL: formData.ImageURL
     };
 
-    // console.log("requestBody")
-    // console.log(requestBody)
-    // console.log("requestBody")
+
 
     this.http.post('http://localhost:3000/api/auctions', requestBody)
       .subscribe({

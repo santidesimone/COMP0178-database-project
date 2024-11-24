@@ -184,17 +184,17 @@ app.post('/api/signin', (req, res) => {
 //   });
 // });
 app.post('/api/auctions', (req, res) => {
-  const { SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL } = req.body;
+  const { SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, WinnerPrice, StartDate, EndDate, CategoryID, ImageURL } = req.body;
   const parsedSellerID = parseFloat(SellerID);
   const parsedCategoryID = parseFloat(CategoryID);
 
   const query = `
     INSERT INTO Auctions 
-      (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, CategoryID, ImageURL)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (SellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, WinnerPrice, StartDate, EndDate, CategoryID, ImageURL)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   
-  const values = [ parsedSellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, StartDate, EndDate, parsedCategoryID, ImageURL,
+  const values = [ parsedSellerID, ItemName, ItemDescription, StartingPrice, ReservePrice, WinnerPrice, StartDate, EndDate, parsedCategoryID, ImageURL,
   ];
 
   db.query(query, values, (err, results) => {
@@ -406,8 +406,13 @@ app.get('/api/seller/sales/:sellerUserID', (req, res) => {
   const query = `
     SELECT A.* 
     FROM Auctions A
-    WHERE A.SellerID = ${sellerUserID} AND A.AuctionStatusID = 2 
-    AND A.AuctionID IN (SELECT DISTINCT AuctionID FROM Bids) 
+    WHERE A.SellerID = ${sellerUserID} 
+    AND A.AuctionStatusID = 2 
+    AND A.AuctionID IN (
+      SELECT DISTINCT B.AuctionID 
+      FROM Bids B 
+      WHERE B.BidAmount >= A.ReservePrice
+    )
     ORDER BY A.EndDate DESC
   `;
   db.query(query, (err, results) => {
@@ -420,15 +425,49 @@ app.get('/api/seller/sales/:sellerUserID', (req, res) => {
   });
 });
 
+app.get('/api/auction/winner/:AuctionID', (req, res) => {
+  const auctionID = req.params.AuctionID;
+  const query = `
+    SELECT 
+      B.BidderID AS WinnerUserID, 
+      B.BidAmount AS WinningBidAmount,
+      U.Username AS WinnerName, 
+      U.Email AS WinnerEmail
+    FROM Bids B
+    JOIN Users U ON B.BidderID = U.UserID
+    JOIN Auctions A ON B.AuctionID = A.AuctionID
+    WHERE B.AuctionID = 1 
+      AND A.AuctionStatusID = 2 
+        AND B.BidAmount >= (SELECT ReservePrice FROM Auctions WHERE AuctionID = 1)
+    ORDER BY B.BidAmount DESC
+    LIMIT 1
+  `;
+  
+  db.query(query, [auctionID, auctionID], (err, results) => {
+    if (err) {
+      console.error('Error fetching auction winner:', err.stack);
+      res.status(500).send('Error fetching auction winner');
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).send('No bids placed or no winner found');
+      return;
+    }
+    res.json(results[0]);  
+  });
+});
+
+
 app.post('/api/update-auctions-status', (req, res) => {
   const query = `
     UPDATE Auctions
     SET AuctionStatusID = 2  
     WHERE (EndDate <= NOW() AND AuctionStatusID = 1)  
-       OR AuctionID IN (SELECT AuctionID FROM Bids WHERE BidAmount >= ReservePrice) 
+    OR AuctionID IN (SELECT AuctionID FROM Bids WHERE BidAmount >= ReservePrice AND BidAmount >= WinnerPrice) 
   `;
   db.query(query, (err, results) => {
     if (err) {
+      console.log(err)
       console.error('Error updating auction statuses:', err.stack);
       res.status(500).send('Error updating auction statuses');
       return;
