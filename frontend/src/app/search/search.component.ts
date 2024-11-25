@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
 // import { Router } from '@angular/router';
-import { NgFor, NgIf} from '@angular/common';
+import { NgFor, NgIf, NgClass} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { JsonPipe } from '@angular/common'; 
 import { SessionComponent } from '../session.component'; // Adjust the path if needed
@@ -13,7 +13,7 @@ import { SessionComponent } from '../session.component'; // Adjust the path if n
   selector: 'app-search',
   standalone: true,
   imports: [
-    FormsModule, ReactiveFormsModule, JsonPipe, NgFor, NgIf
+    FormsModule, ReactiveFormsModule, JsonPipe, NgFor, NgIf, NgClass
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
@@ -22,6 +22,8 @@ export class SearchComponent {
     searchForm: FormGroup;
     errorMessage = '';
     searchResults: any[] = []; // Use any[] to store the JSON result
+    favorites: number[] = []; // Array to hold favorite auction IDs
+
 result: any;
 
 constructor(private fb: FormBuilder, 
@@ -114,4 +116,52 @@ constructor(private fb: FormBuilder,
         }
       });
   }
+
+
+  fetchFavorites() {
+    let user = this.sessionComponent.getUser();
+    let userID = user != null ? user["userID"] : 1;
+    this.http.get<number[]>(`http://localhost:3000/api/favorites?userId=${userID}`).subscribe({
+      next: (data) => {
+        this.favorites = data;
+      },
+      error: (error) => {
+        console.error('Error fetching favorites:', error);
+      }
+    });
+  }
+
+  isFavorite(auctionId: number): boolean {
+    return this.favorites.includes(auctionId);
+  }
+
+  toggleFavorite(auctionId: number): void {
+    let user = this.sessionComponent.getUser();
+    let userID = user != null ? user["userID"] : 1;
+    if (this.isFavorite(auctionId)) {
+      this.http.delete('http://localhost:3000/api/favorites', { body: { userId: userID, auctionId } }).subscribe({
+        next: () => {
+          console.log('Removed from favorites');
+          this.favorites = this.favorites.filter(id => id !== auctionId); // Update the favorites array
+        },
+        error: (error) => {
+          console.error('Error removing favorite:', error);
+        }
+      });
+    } else {
+      // Add favorite
+      this.http.post('http://localhost:3000/api/favorites', { userId: userID, auctionId }).subscribe({
+        next: () => {
+          console.log('Added to favorites');
+          this.favorites.push(auctionId); // Update the favorites array
+        },
+        error: (error) => {
+          console.error('Error adding favorite:', error);
+        }
+      });
+    }
+  }
+
+
+
 }

@@ -477,6 +477,70 @@ app.post('/api/update-auctions-status', (req, res) => {
   });
 });
 
+app.post('/api/favorites', (req, res) => {
+  const { userId, auctionId } = req.body;
+
+  const query = `
+    INSERT INTO Favorites (UserID, AuctionID)
+    SELECT ${userId}, ${auctionId}
+    WHERE NOT EXISTS (
+      SELECT 1 FROM Favorites WHERE UserID = ${userId} AND AuctionID = ${auctionId}
+    )
+  `;
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Error adding favorite:', err.stack);
+      res.status(500).send('Error adding favorite');
+      return;
+    }
+
+    // Check if the insertion was successful
+    if (result.affectedRows === 0) {
+      return res.status(400).json({ message: 'This item is already in your favorites' });
+    }
+
+    res.status(200).json({ message: 'Added to favorites' });
+  });
+});
+
+app.delete('/api/favorites', (req, res) => {
+  const { userId, auctionId } = req.body;
+
+  const query = `
+    DELETE FROM Favorites 
+    WHERE UserID = ? AND AuctionID = ?
+  `;
+
+  db.query(query, [userId, auctionId], (err, result) => {
+    if (err) {
+      console.error('Error removing favorite:', err.stack);
+      res.status(500).send('Error removing favorite');
+      return;
+    }
+    res.status(200).json({"message": 'Removed from favorites'});
+  });
+});
+
+
+app.get('/api/favorites/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const query = `
+    SELECT A.*
+    FROM Favorites F
+    JOIN Auctions A ON F.AuctionID = A.AuctionID
+    WHERE F.UserID = ?
+  `;
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error('Error adding favorite:', err.stack);
+      res.status(500).send('Error adding favorite');
+      return;
+    }
+    res.status(200).json(result);
+  });
+});
+
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
