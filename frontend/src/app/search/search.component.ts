@@ -121,7 +121,7 @@ constructor(private fb: FormBuilder,
   fetchFavorites() {
     let user = this.sessionComponent.getUser();
     let userID = user != null ? user["userID"] : 1;
-    this.http.get<number[]>(`http://localhost:3000/api/favorites?userId=${userID}`).subscribe({
+    this.http.get<number[]>(`http://localhost:3000/api/watchlist?userId=${userID}`).subscribe({
       next: (data) => {
         this.favorites = data;
       },
@@ -139,24 +139,24 @@ constructor(private fb: FormBuilder,
     let user = this.sessionComponent.getUser();
     let userID = user != null ? user["userID"] : 1;
     if (this.isFavorite(auctionId)) {
-      this.http.delete('http://localhost:3000/api/favorites', { body: { userId: userID, auctionId } }).subscribe({
+      this.http.delete('http://localhost:3000/api/watchlist', { body: { userId: userID, auctionId } }).subscribe({
         next: () => {
-          console.log('Removed from favorites');
+          console.log('Removed from watchlist');
           this.favorites = this.favorites.filter(id => id !== auctionId); // Update the favorites array
         },
         error: (error) => {
-          console.error('Error removing favorite:', error);
+          console.error('Error removing watchlist:', error);
         }
       });
     } else {
       // Add favorite
-      this.http.post('http://localhost:3000/api/favorites', { userId: userID, auctionId }).subscribe({
+      this.http.post('http://localhost:3000/api/watchlist', { userId: userID, auctionId }).subscribe({
         next: () => {
-          console.log('Added to favorites');
+          console.log('Added to watchlist');
           this.favorites.push(auctionId); // Update the favorites array
         },
         error: (error) => {
-          console.error('Error adding favorite:', error);
+          console.error('Error adding watchlist:', error);
         }
       });
     }

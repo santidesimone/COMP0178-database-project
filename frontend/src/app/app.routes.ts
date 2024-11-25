@@ -6,7 +6,7 @@ import { AuctionDetailComponent } from './auction-detail/auction-detail.componen
 import { CreateNewAuctionComponent } from './create-new-auction/create-new-auction.component';
 import { BidsAndPurchasesComponent } from './bids-and-purchases/bids-and-purchases.component';
 import { MyAuctionsAndSalesComponent } from './my-auctions-and-sales/my-auctions.component';
-import { FavoritesComponent } from './favorites/favorites.component';
+import { WatchlistComponent } from './watchlist/watchlist.component';
 
 export const routes: Routes = [
   { path: 'signup', component: SignupComponent },  
@@ -16,6 +16,6 @@ export const routes: Routes = [
   { path: 'bids-and-purchases', component: BidsAndPurchasesComponent },  
   { path: 'my-auctions-and-sales', component: MyAuctionsAndSalesComponent },  
   { path: 'create-new-auction', component: CreateNewAuctionComponent },  
-  { path: 'favorites', component: FavoritesComponent },  
+  { path: 'watchlist', component: WatchlistComponent },  
   { path: '', redirectTo: 'signin', pathMatch: 'full' }, 
 ];

@@ -486,56 +486,56 @@ app.post('/api/update-auctions-status', (req, res) => {
   });
 });
 
-app.post('/api/favorites', (req, res) => {
+app.post('/api/watchlist', (req, res) => {
   const { userId, auctionId } = req.body;
 
   const query = `
-    INSERT INTO Favorites (UserID, AuctionID)
+    INSERT INTO Watchlist (UserID, AuctionID)
     SELECT ${userId}, ${auctionId}
     WHERE NOT EXISTS (
-      SELECT 1 FROM Favorites WHERE UserID = ${userId} AND AuctionID = ${auctionId}
+      SELECT 1 FROM Watchlist WHERE UserID = ${userId} AND AuctionID = ${auctionId}
     )
   `;
 
   db.query(query, (err, result) => {
     if (err) {
-      console.error('Error adding favorite:', err.stack);
-      res.status(500).send('Error adding favorite');
+      console.error('Error adding element to watchlist:', err.stack);
+      res.status(500).send('Error adding watchlist');
       return;
     }
 
     if (result.affectedRows === 0) {
-      return res.status(400).json({ message: 'This item is already in your favorites' });
+      return res.status(400).json({ message: 'This item is already in your watchlist' });
     }
 
-    res.status(200).json({ message: 'Added to favorites' });
+    res.status(200).json({ message: 'Added to watchlist' });
   });
 });
 
-app.delete('/api/favorites', (req, res) => {
+app.delete('/api/watchlist', (req, res) => {
   const { userId, auctionId } = req.body;
 
   const query = `
-    DELETE FROM Favorites 
+    DELETE FROM Watchlist 
     WHERE UserID = ? AND AuctionID = ?
   `;
 
   db.query(query, [userId, auctionId], (err, result) => {
     if (err) {
-      console.error('Error removing favorite:', err.stack);
-      res.status(500).send('Error removing favorite');
+      console.error('Error removing from watchlist:', err.stack);
+      res.status(500).send('Error removing from watchlist');
       return;
     }
-    res.status(200).json({"message": 'Removed from favorites'});
+    res.status(200).json({"message": 'Removed from watchlist'});
   });
 });
 
 
-app.get('/api/favorites/:userId', (req, res) => {
+app.get('/api/watchlist/:userId', (req, res) => {
   const userId = req.params.userId;
   const query = `
     SELECT A.*
-    FROM Favorites F
+    FROM Watchlist F
     JOIN Auctions A ON F.AuctionID = A.AuctionID
     WHERE F.UserID = ?
   `;

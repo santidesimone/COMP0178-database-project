@@ -132,8 +132,8 @@ CREATE TABLE `Answers` (
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
-CREATE TABLE `Favorites` (
-    `FavoriteID` INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `Watchlist` (
+    `WatchedItemID` INT AUTO_INCREMENT PRIMARY KEY,
     `UserID` INT NOT NULL,
     `AuctionID` INT NOT NULL,
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`),

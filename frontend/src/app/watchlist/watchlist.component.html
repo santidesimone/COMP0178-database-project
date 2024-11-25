@@ -20,7 +20,7 @@
 </div> -->
 
 <div class="container mt-5">
-    <h3>My Favorites</h3>
+    <h3>My Watchlist</h3>
     <!---->
     <div class="row"  *ngIf="favorites && favorites.length > 0;"  >
         <!-- {{ favorites | json }} -->
@@ -35,7 +35,7 @@
                                 class="btn btn-outline-primary" 
                                 (click)="toggleFavorite(favorite.AuctionID)"
                             >
-                            <i class="fa fas fa-heart" ></i>
+                            <i class="fa fas fa-eye" ></i>
                             </button>
                     </div>
 
