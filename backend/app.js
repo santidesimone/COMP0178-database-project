@@ -650,8 +650,68 @@ app.get('/api/answers/:QuestionID', (req, res) => {
   });
 });
 
+app.post('/api/ratings', (req, res) => {
+  const { AuctionID, UserID, Rating } = req.body;
+
+  const query = `
+    INSERT INTO AuctionRatings (AuctionID, UserID, Rating)
+    SELECT ?, ?, ?
+    FROM DUAL
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM AuctionRatings
+      WHERE AuctionID = ? AND UserID = ?
+    )
+  `;
+
+  db.query(query, [AuctionID, UserID, Rating, AuctionID, UserID], (err, results) => {
+    if (err) {
+      console.error('Error inserting rating:', err.stack);
+      return res.status(500).send('Error processing rating');
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(400).json({ message: 'You have already rated this auction' });
+    }
+
+    res.status(201).json({ message: 'Rating submitted successfully' });
+  });
+});
 
 
+app.get('/api/auction/seller-details/:auctionId', (req, res) => {
+  const auctionId = req.params.auctionId;
+  const query = `
+      SELECT 
+      u.Email, 
+      u.Username,
+      AVG(ar.Rating) AS Rating 
+    FROM 
+      Auctions a
+    JOIN 
+      Users u ON a.SellerID = u.UserID 
+    LEFT JOIN 
+      AuctionRatings ar ON a.AuctionID = ar.AuctionID  
+    WHERE 
+      u.UserID = (SELECT SellerID FROM Auctions WHERE AuctionID = ?)  
+    GROUP BY 
+      u.UserID;
+  `;
+
+  db.query(query, [auctionId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving seller information:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length > 0) {
+      const sellerInfo = results[0];
+      return res.json(sellerInfo);
+    } else {
+      return res.status(404).json({ error: 'Auction not found or no seller information available' });
+    }
+  });
+});
 
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);

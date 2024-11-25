@@ -28,7 +28,7 @@ INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPric
 INSERT INTO `Auctions` 
     (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `WinnerPrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`, `AuctionStatusID`, `ReservePrice`) -- Include ReservePrice
 SELECT 
-    (SELECT `SellerID` FROM `SellerDetails` WHERE `UserID` = 1),  
+    1,  
     'iPhone 12 Phone Case', 
     'Protective and stylish phone case for iPhone 12. Excellent condition.', 
     5.00, 

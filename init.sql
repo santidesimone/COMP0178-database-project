@@ -13,3 +13,6 @@ source /database/scripts/data-population/bids.sql;
 -- Database population: Q&A
 source /database/scripts/data-population/QA.sql;
 
+-- Database population: rate the seller
+source /database/scripts/data-population/ratings.sql;
+

@@ -100,15 +100,15 @@ CREATE TABLE `Bids` (
 );
 
 -- 8. Create the `AuctionRatings` Table
-CREATE TABLE `AuctionRatings` (
-    `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
-    `AuctionID` INT NOT NULL,
-    `UserID` INT NOT NULL,  -- This should be the auction winner (Buyer)
-    `Rating` INT CHECK (`Rating` BETWEEN 1 AND 5) NOT NULL,
-    `RatingDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
-    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
-);
+-- CREATE TABLE `AuctionRatings` (
+--     `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `AuctionID` INT NOT NULL,
+--     `UserID` INT NOT NULL,  -- This should be the auction winner (Buyer)
+--     `Rating` INT CHECK (`Rating` BETWEEN 1 AND 5) NOT NULL,
+--     `RatingDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
+--     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
+-- );
 
 -- 9. Create the `Questions` Table
 CREATE TABLE `Questions` (
@@ -139,6 +139,34 @@ CREATE TABLE `Favorites` (
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`),
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
 );
+
+-- CREATE TABLE `AuctionRanking` (
+--     `RankingID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `AuctionID` INT NOT NULL,
+--     `UserID` INT NOT NULL,
+--     `Rating` DECIMAL(2,1) NOT NULL CHECK (`Rating` BETWEEN 1 AND 5),
+--     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
+--     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
+-- );
+-- CREATE TABLE AuctionRatings (
+--     `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `AuctionID` INT NOT NULL,
+--     `UserID` INT NOT NULL,
+--     `Rating` TINYINT NOT NULL CHECK (`Rating` BETWEEN 1 AND 5),
+--     CONSTRAINT UNIQUE (`AuctionID`, `UserID`), -- Ensures user can rate an auction only once
+--     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`) ON DELETE CASCADE,
+--     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
+-- );
+CREATE TABLE AuctionRatings (
+    `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
+    `AuctionID` INT NOT NULL,
+    `UserID` INT NOT NULL,
+    `Rating` TINYINT NOT NULL CHECK (`Rating` BETWEEN 1 AND 5),
+    CONSTRAINT `UniqueAuctionUser` UNIQUE (`AuctionID`, `UserID`),
+    FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`) ON DELETE CASCADE,
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
+);
+
 
 -- Change authentication method for the root user (or specify another user if needed)
 ALTER USER 'root'@'%' IDENTIFIED WITH `mysql_native_password` BY 'rootpassword';

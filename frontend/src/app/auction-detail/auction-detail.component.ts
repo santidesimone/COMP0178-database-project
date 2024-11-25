@@ -30,6 +30,7 @@ export class AuctionDetailComponent implements OnInit {
   questionText: string = '';
   answerText: string = '';
   questions: any[] = [];
+  sellerInfo: any = {};  // To store seller's information
 
   constructor(
       private route: ActivatedRoute,
@@ -55,9 +56,22 @@ export class AuctionDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.fetchBids();
       this.fetchQuestions();
+      this.getSellerInfo();
     });
   }
   
+  getSellerInfo() {
+    console.log("getSellerInfo executing")
+    this.http.get(`http://localhost:3000/api/auction/seller-details/${this.data.AuctionID}`).subscribe({
+    next: (data: any) => {
+        this.sellerInfo = data;  
+        console.log("sellerInfo data:", data)
+    },  
+    error: (error) => {
+      console.error('Error fetching bids:', error);
+    }
+  });    
+}
 
   fetchBids() {
     this.http.get(`http://localhost:3000/api/bids/${this.data.AuctionID}`).subscribe({
