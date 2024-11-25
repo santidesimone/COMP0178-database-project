@@ -100,6 +100,8 @@ export class AuctionDetailComponent implements OnInit {
         console.log('- - - - - - - - - - - - ');
         console.log('Bid successful:', response);
         console.log('- - - - - - - - - - - - ');
+        this.updateAuctionStatuses();
+
         // Handle successful bid, e.g., display a success message or update the UI
       },
       error: (error) => {
@@ -194,5 +196,5 @@ export class AuctionDetailComponent implements OnInit {
       });
     }
     
-
+  
 }
