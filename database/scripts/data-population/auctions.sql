@@ -23,8 +23,6 @@ INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPric
     (2, 'IKEA Wooden Table', 'IKEA wooden table.', 300.00, 315.00, 400.00, 'https://i.ibb.co/23h1MkQ/Screenshot-2024-11-16-at-3-59-38-PM.png', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 14 WEEK), 3); -- Home & Garden
 
 
--- https://i.ibb.co/JtkC42V/Screenshot-2024-11-25-at-12-48-31-PM.png
-
 
 -- 1. Insert the auction with AuctionStatusID = 2 and ReservePrice
 INSERT INTO `Auctions` 

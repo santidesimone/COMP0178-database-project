@@ -27,33 +27,37 @@ export class AuctionDetailComponent implements OnInit {
   bids: any;
   offerAmount: number = 0; // To store the offer amount
 
+  questionText: string = '';
+  answerText: string = '';
+  questions: any[] = [];
+
   constructor(
       private route: ActivatedRoute,
       private fb: FormBuilder, 
       private http: HttpClient, 
       private router: Router,
       private sessionComponent: SessionComponent, 
-
     ) {
 
   }
 
-
-  ngOnInit(): void { // Change return type to void
-    if(!this.sessionComponent.getUser()){
-      this.router.navigate(['/signin']); 
+  ngOnInit(): void {
+    if (!this.sessionComponent.getUser()) {
+      this.router.navigate(['/signin']);
+      return;  // Ensure we return early if the user is not authenticated
     }
-    // else{
-      this.data = history.state;
-      console.log(this.data)
-      this.offerAmount = this.data.StartingPrice;
   
-      // Subscribe to route parameter changes
-      this.route.paramMap.subscribe(params => {
-        this.fetchBids();
-      });
-    // }
+    this.data = history.state;
+    console.log(this.data);
+    this.offerAmount = this.data.StartingPrice;
+  
+    // Subscribe to route parameter changes
+    this.route.paramMap.subscribe(params => {
+      this.fetchBids();
+      this.fetchQuestions();
+    });
   }
+  
 
   fetchBids() {
     this.http.get(`http://localhost:3000/api/bids/${this.data.AuctionID}`).subscribe({
@@ -103,59 +107,92 @@ export class AuctionDetailComponent implements OnInit {
         // Handle bid error, e.g., display an error message
       }
     });
-    
-    // Logic for making an offer
-    // alert('Offer made!');
-
-    // {
-    //   "BidAmount": this.data.offerAmount,
-    //   // "BidderID": , // either user id (and perform search on backend) or directly send buyer_id if i have it here, on the frontend
-    //   "AuctionID": this.auctionID
-    // }
-    // BidAmount
-    // BidderID
-    // AuctionID
-
-
-    // create logic: if you meet Reserve Price, then you are winner
-
-    //  if winner, update auction ad ended
-
-    //  communicate to both seller and buyer 
-
-    //-- 7. Create the `Bids` Table
-    // CREATE TABLE `Bids` (
-    //     `BidID` INT AUTO_INCREMENT PRIMARY KEY,
-    //     `BidAmount` DECIMAL(10, 2) NOT NULL,
-    //     `BidTime` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    //     `BidderID` INT NOT NULL,
-    //     `AuctionID` INT NOT NULL,
-    //     FOREIGN KEY (`BidderID`) REFERENCES `BuyerDetails`(`BuyerID`),
-    //     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
-    // );
-
-    // -- 6. Create the `Auctions` Table
-    // CREATE TABLE `Auctions` (
-    //     `AuctionID` INT AUTO_INCREMENT PRIMARY KEY,
-    //     `SellerID` INT NOT NULL,
-    //     `ItemName` VARCHAR(255),
-    //     `ItemDescription` TEXT,
-    //     `StartingPrice` DECIMAL(10, 2),
-    //     `ReservePrice` DECIMAL(10, 2),
-    //     `ImageURL` VARCHAR(255),
-    //     `StartDate` DATETIME,
-    //     `EndDate` DATETIME,
-    //     -- `HighestBid` INT,
-    //     `CategoryID` INT NOT NULL,
-    //     FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
-    //     -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),
-    //     FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`)
-    // );
 
   }
-  
   addToCart() {
 
   }
+
+  askQuestion() {
+    const user = this.sessionComponent.getUser();
+    const requestBody = {
+      AuctionID: this.data.AuctionID,
+      UserID: user ? user["userID"] : 1,
+      QuestionText: this.questionText
+    };
+
+    this.http.post('http://localhost:3000/api/questions', requestBody).subscribe({
+      next: (response) => {
+        console.log('Question submitted successfully:', response);
+        this.fetchQuestions(); // Refresh the questions list
+      },
+      error: (error) => {
+        console.error('Error submitting question:', error);
+      }
+    });
+  }
+
+
+  fetchQuestions() {
+    this.http.get(`http://localhost:3000/api/questions/${this.data.AuctionID}`).subscribe({
+      next: (questions: any) => {
+        this.questions = questions;
+        console.log("Questions fetched:", this.questions);
+        this.fetchAnswers();  // Call fetchAnswers to load answers for the questions
+      },
+      error: (error) => {
+        console.error('Error fetching questions:', error);
+      }
+    });
+  }
+
+  
+  fetchAnswers() {
+    this.questions.forEach((question: any) => {
+      this.http.get(`http://localhost:3000/api/answers/${question.QuestionID}`).subscribe({
+        next: (answers: any) => {
+          // Attach the fetched answers to the question
+          question.Answers = answers;
+          console.log(`Answers for question ${question.QuestionID}:`, answers);
+        },
+        error: (error) => {
+          console.error(`Error fetching answers for question ${question.QuestionID}:`, error);
+        }
+      });
+    });
+  }
+
+    answerQuestion(questionID: number) {
+      const question = this.questions.find((q) => q.QuestionID === questionID);
+      if (!question || !question.answerText.trim()) return; // Avoid empty answers
+    
+      const user = this.sessionComponent.getUser();
+      const requestBody = {
+        QuestionID: questionID,
+        UserID: user ? user['userID'] : 1,
+        AnswerText: question.answerText,
+      };
+    
+      this.http.post('http://localhost:3000/api/answers', requestBody).subscribe({
+        next: (response: any) => {
+          console.log('Answer submitted successfully:', response);
+    
+          // Add the new answer to the corresponding question's answers array
+          if (!question.Answers) {
+            question.Answers = [];
+          }
+          question.Answers.push({
+            AnswerText: requestBody.AnswerText,
+            AnswerDate: new Date().toISOString(), // Adjust to match your backend format if needed
+            UserID: requestBody.UserID,
+          });
+    
+          // Clear the answer input field
+          question.answerText = '';
+        },
+        error: (error) => console.error('Error submitting answer:', error),
+      });
+    }
+    
 
 }

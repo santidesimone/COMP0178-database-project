@@ -110,28 +110,6 @@ CREATE TABLE `AuctionRatings` (
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
--- -- 9. Create the `Questions` Table
--- CREATE TABLE `Questions` (
---     `QuestionID` INT AUTO_INCREMENT PRIMARY KEY,
---     `AuctionID` INT NOT NULL,
---     `BuyerID` INT NOT NULL,
---     `QuestionText` TEXT NOT NULL,
---     `QuestionDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
---     FOREIGN KEY (`BuyerID`) REFERENCES `Users`(`UserID`)
--- );
-
--- -- 10. Create the `Answers` Table
--- CREATE TABLE `Answers` (
---     `AnswerID` INT AUTO_INCREMENT PRIMARY KEY,
---     `QuestionID` INT NOT NULL,
---     `SellerID` INT NOT NULL,
---     `AnswerText` TEXT NOT NULL,
---     `AnswerDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (`QuestionID`) REFERENCES `Questions`(`QuestionID`),
---     FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`)
--- );
-
 -- 9. Create the `Questions` Table
 CREATE TABLE `Questions` (
     `QuestionID` INT AUTO_INCREMENT PRIMARY KEY,

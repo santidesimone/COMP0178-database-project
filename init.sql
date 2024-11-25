@@ -10,3 +10,6 @@ source /database/scripts/data-population/auctions.sql;
 -- Database population: bids
 source /database/scripts/data-population/bids.sql;
 
+-- Database population: Q&A
+source /database/scripts/data-population/QA.sql;
+

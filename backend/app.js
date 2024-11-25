@@ -549,6 +549,110 @@ app.get('/api/favorites/:userId', (req, res) => {
   });
 });
 
+app.post('/api/questions', (req, res) => {
+  const { AuctionID, UserID, QuestionText } = req.body;
+
+  const query = `
+    INSERT INTO Questions (AuctionID, UserID, QuestionText)
+    SELECT ?, ?, ?
+    FROM Auctions
+    WHERE AuctionID = ? AND SellerID != ?
+  `;
+
+  db.query(query, [AuctionID, UserID, QuestionText, AuctionID, UserID], (err, results) => {
+    if (err) {
+      console.error('Error inserting question:', err.stack);
+      return res.status(500).send('Error inserting question');
+    }
+    if (results.affectedRows === 0) {
+      return res.status(400).send('Sellers cannot ask questions on their own auctions, or auction does not exist');
+    }
+    res.status(201).json({
+      message: 'Question added successfully',
+      QuestionID: results.insertId,
+    });
+  });
+});
+
+app.get('/api/questions/:AuctionID', (req, res) => {
+  const AuctionID = req.params.AuctionID;
+  const query = `
+    SELECT Q.QuestionID, Q.QuestionText, Q.QuestionDate, U.UserID, U.UserName
+    FROM Questions Q
+    JOIN Users U ON Q.UserID = U.UserID
+    WHERE Q.AuctionID = ?
+  `;
+  db.query(query, [AuctionID], (err, results) => {
+    if (err) {
+      console.error('Error fetching questions:', err.stack);
+      return res.status(500).send('Error fetching questions');
+    }
+    if (results.length === 0) {
+      console.log(results)
+      return res.status(404).send('No questions found for this auction');
+    }
+    res.status(200).json(results);
+  });
+});
+
+app.post('/api/answers', (req, res) => {
+  const { QuestionID, UserID, AnswerText } = req.body;
+  console.log(req.body)
+
+  const query = `
+    INSERT INTO Answers (QuestionID, UserID, AnswerText)
+    SELECT ?, ?, ?
+    FROM Questions Q
+    JOIN Auctions A ON Q.AuctionID = A.AuctionID
+    WHERE Q.QuestionID = ? AND A.SellerID = ?
+  `;
+
+  db.query(query, [QuestionID, UserID, AnswerText, QuestionID, UserID], (err, results) => {
+    if (err) {
+      console.error('Error inserting answer:', err.stack);
+      return res.status(500).send('Error inserting answer');
+    }
+    if (results.affectedRows === 0) {
+      return res.status(400).send('Only sellers can answer questions for their own auctions, or question does not exist');
+    }
+    res.status(201).json({
+      message: 'Answer added successfully',
+      AnswerID: results.insertId,
+      AnswerText,
+      AnswerDate: new Date().toISOString(), // Or your server's timestamp format
+    });
+  });
+});
+
+app.get('/api/answers/:QuestionID', (req, res) => {
+  const QuestionID = req.params.QuestionID;
+
+  const query = `
+    SELECT A.AnswerID, A.AnswerText, A.AnswerDate, U.UserID, U.UserName, A.QuestionID
+    FROM Answers A
+    JOIN Users U ON A.UserID = U.UserID
+    WHERE A.QuestionID = ?
+  `;
+
+  db.query(query, [QuestionID], (err, results) => {
+    if (err) {
+      console.error('Error fetching answers:', err.stack);
+      return res.status(500).send('Error fetching answers');
+    }
+
+    if (results.length === 0) {
+      // If no answers are found, return a more informative message
+      return res.status(404).json({ message: 'No answers found for this auction' });
+    }
+
+    // Send back the results as JSON
+    res.status(200).json(results);
+  });
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
