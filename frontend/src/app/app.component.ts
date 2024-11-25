@@ -37,6 +37,16 @@ export class AppComponent implements OnInit{
   }
 
     ngOnInit() {
+      let user:any = this.sessionComponent.getUser();
+      if (user.hasOwnProperty('sellerDetails')) {
+        this.userIsSeller = true;
+      }
+      else{
+        this.userIsSeller = false;
+      }
+      console.log("this.userIsSeller")
+      console.log(this.userIsSeller)
+      console.log("this.userIsSeller")
     }
 
     toggleCart() {

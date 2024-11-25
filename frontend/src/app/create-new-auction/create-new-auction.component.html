@@ -1,3 +1,5 @@
+<div style="width: 100%; height: 32px;"></div>
+
 <h4 class="text-center mb-4">Create New Auction</h4> 
 
 <form [formGroup]="createAuctionForm" (ngSubmit)="onSubmit()" class="card p-4 shadow-sm"> 
@@ -23,7 +25,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="WinnerPrice" class="form-label">Reserve Price:</label>
+      <label for="WinnerPrice" class="form-label">Winner Price:</label>
       <input type="number" id="WinnerPrice" name="WinnerPrice" class="form-control" formControlName="WinnerPrice" required>
     </div>
 
@@ -53,6 +55,6 @@
     <button type="submit" class="btn btn-primary" >Create Auction</button> 
 
     <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
-    createAuctionForm.invalid: {{createAuctionForm.invalid}}
+    <!-- createAuctionForm.invalid: {{createAuctionForm.invalid}} -->
   </div>
 </form>

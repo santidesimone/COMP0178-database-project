@@ -1,10 +1,9 @@
 --  Adding auctions
 INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `ReservePrice`, `WinnerPrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`) VALUES
-    (1, 'Antique Vase', 'A beautiful antique vase from the 19th century.', 50.00, 65.00, 75.00, 'https://bit.ly/vase-vintage-1', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 20 WEEK), 4), -- Collectibles
+    (1, 'Antique Vase', 'A beautiful antique vase from the 19th century.', 50.00, 65.00, 75.00, 'https://i.ibb.co/BGgHZ3t/1.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 20 WEEK), 4), -- Collectibles
     (2, 'Vintage Record Player', 'A classic record player in excellent condition.', 100.00, 115.00, 150.00, 'https://bit.ly/vintage-record-player-1', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 1), -- Electronics
     (3, 'Leather Jacket', 'A stylish leather jacket, barely used.', 75.00, 90.00, 100.00, 'https://bit.ly/leather-jacket-1', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 2), -- Fashion
-    (4, 'Rare Book Collection', 'A collection of rare books by various authors.', 200.00, 215.00, 300.00, 'https://bit.ly/rare-book-collection-1', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 30 WEEK), 8), -- Books
-
+    (4, 'Rare Book Collection', 'A collection of rare books by various authors.', 200.00, 215.00, 300.00, 'https://i.ibb.co/Yfdshh5/4.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 30 WEEK), 8), -- Books
     (1, 'Handmade Wooden Table', 'A beautiful handmade wooden table with intricate carvings.', 300.00, 315.00, 400.00, 'https://i.ibb.co/tYdY13W/5.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 WEEK), 3), -- Home & Garden
     (2, 'Antique Clock', 'A vintage clock in working condition.', 80.00, 95.00, 120.00, 'https://i.ibb.co/0KxxRW1/7.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 3 WEEK), 4), -- Collectibles
     (3, 'Designer Dress', 'A stunning designer dress, perfect for special occasions.', 150.00, 165.00, 200.00, 'https://i.ibb.co/qrtMGZy/8.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 6 WEEK), 2), -- Fashion
@@ -22,6 +21,9 @@ INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPric
     (4, 'Classic Car Model', 'A detailed 1:18 scale model of a classic car, limited edition.', 80.00, 95.00, 120.00, 'https://i.ibb.co/KLNCt0h/20.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 4 WEEK), 4), -- Collectibles
     (4, 'Novel Collection', 'A set of contemporary novels by best-selling authors.', 40.00, 55.00, 70.00, 'https://i.ibb.co/w7Q1TtZ/21.webp', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 15 WEEK), 8), -- Books
     (2, 'IKEA Wooden Table', 'IKEA wooden table.', 300.00, 315.00, 400.00, 'https://i.ibb.co/23h1MkQ/Screenshot-2024-11-16-at-3-59-38-PM.png', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 14 WEEK), 3); -- Home & Garden
+
+
+-- https://i.ibb.co/JtkC42V/Screenshot-2024-11-25-at-12-48-31-PM.png
 
 
 -- 1. Insert the auction with AuctionStatusID = 2 and ReservePrice

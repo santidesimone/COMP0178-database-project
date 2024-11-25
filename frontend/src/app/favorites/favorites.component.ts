@@ -47,7 +47,7 @@ export class FavoritesComponent implements OnInit {
       next: (data) => {
         this.favorites = data;
         console.log(this.favorites)
-        this.cdRef.detectChanges(); // Notify Angular about the changes
+        // this.cdRef.detectChanges(); // Notify Angular about the changes
 
       },
       error: (err) => {
@@ -64,7 +64,7 @@ export class FavoritesComponent implements OnInit {
         next: () => {
           console.log('Removed from favorites');
           this.favorites = this.favorites.filter(id => id !== auctionId); // Update the favorites array
-          this.cdRef.detectChanges(); // Notify Angular about the changes
+          // this.cdRef.detectChanges(); // Notify Angular about the changes
         },
         error: (error) => {
           console.error('Error removing favorite:', error);

@@ -81,7 +81,8 @@ CREATE TABLE `Auctions` (
     -- `HighestBid` INT,
     `AuctionStatusID` INT DEFAULT 1,  -- Add this line
     `CategoryID` INT NOT NULL,
-    FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
+    -- FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
+    FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`),
     -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),
     FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`)
 );
@@ -93,7 +94,8 @@ CREATE TABLE `Bids` (
     `BidTime` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `BidderID` INT NOT NULL,
     `AuctionID` INT NOT NULL,
-    FOREIGN KEY (`BidderID`) REFERENCES `BuyerDetails`(`BuyerID`),
+    -- FOREIGN KEY (`BidderID`) REFERENCES `BuyerDetails`(`BuyerID`),
+    FOREIGN KEY (`BidderID`) REFERENCES `Users`(`UserID`),
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
 );
 
@@ -108,26 +110,48 @@ CREATE TABLE `AuctionRatings` (
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
+-- -- 9. Create the `Questions` Table
+-- CREATE TABLE `Questions` (
+--     `QuestionID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `AuctionID` INT NOT NULL,
+--     `BuyerID` INT NOT NULL,
+--     `QuestionText` TEXT NOT NULL,
+--     `QuestionDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
+--     FOREIGN KEY (`BuyerID`) REFERENCES `Users`(`UserID`)
+-- );
+
+-- -- 10. Create the `Answers` Table
+-- CREATE TABLE `Answers` (
+--     `AnswerID` INT AUTO_INCREMENT PRIMARY KEY,
+--     `QuestionID` INT NOT NULL,
+--     `SellerID` INT NOT NULL,
+--     `AnswerText` TEXT NOT NULL,
+--     `AnswerDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (`QuestionID`) REFERENCES `Questions`(`QuestionID`),
+--     FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`)
+-- );
+
 -- 9. Create the `Questions` Table
 CREATE TABLE `Questions` (
     `QuestionID` INT AUTO_INCREMENT PRIMARY KEY,
     `AuctionID` INT NOT NULL,
-    `BuyerID` INT NOT NULL,
+    `UserID` INT NOT NULL,  -- Replacing BuyerID with UserID
     `QuestionText` TEXT NOT NULL,
     `QuestionDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
-    FOREIGN KEY (`BuyerID`) REFERENCES `Users`(`UserID`)
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
 -- 10. Create the `Answers` Table
 CREATE TABLE `Answers` (
     `AnswerID` INT AUTO_INCREMENT PRIMARY KEY,
     `QuestionID` INT NOT NULL,
-    `SellerID` INT NOT NULL,
+    `UserID` INT NOT NULL,  -- Replacing SellerID with UserID
     `AnswerText` TEXT NOT NULL,
     `AnswerDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`QuestionID`) REFERENCES `Questions`(`QuestionID`),
-    FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`)
+    FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
 );
 
 CREATE TABLE `Favorites` (
