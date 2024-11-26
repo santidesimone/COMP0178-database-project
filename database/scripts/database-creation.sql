@@ -24,7 +24,6 @@ CREATE TABLE `Users` (
     FOREIGN KEY (`StatusID`) REFERENCES `UserStatus`(`StatusID`)
 );
 
-
 -- 3. Create the `BuyerDetails` Table
 CREATE TABLE `BuyerDetails` (
     `BuyerID` INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,7 +67,6 @@ CREATE TABLE `AuctionStatus` (`StatusID` INT AUTO_INCREMENT PRIMARY KEY, `Status
 -- Insert default AuctionStatus values
 INSERT INTO `AuctionStatus` (`StatusName`) VALUES ('Open'),('Closed');
 
-
 -- 6. Create the `Auctions` Table
 CREATE TABLE `Auctions` (
     `AuctionID` INT AUTO_INCREMENT PRIMARY KEY,
@@ -102,17 +100,6 @@ CREATE TABLE `Bids` (
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
 );
 
--- 8. Create the `AuctionRatings` Table
--- CREATE TABLE `AuctionRatings` (
---     `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
---     `AuctionID` INT NOT NULL,
---     `UserID` INT NOT NULL,  -- This should be the auction winner (Buyer)
---     `Rating` INT CHECK (`Rating` BETWEEN 1 AND 5) NOT NULL,
---     `RatingDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
---     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
--- );
-
 -- 9. Create the `Questions` Table
 CREATE TABLE `Questions` (
     `QuestionID` INT AUTO_INCREMENT PRIMARY KEY,
@@ -143,23 +130,6 @@ CREATE TABLE `Watchlist` (
     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`)
 );
 
--- CREATE TABLE `AuctionRanking` (
---     `RankingID` INT AUTO_INCREMENT PRIMARY KEY,
---     `AuctionID` INT NOT NULL,
---     `UserID` INT NOT NULL,
---     `Rating` DECIMAL(2,1) NOT NULL CHECK (`Rating` BETWEEN 1 AND 5),
---     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`),
---     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`)
--- );
--- CREATE TABLE AuctionRatings (
---     `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
---     `AuctionID` INT NOT NULL,
---     `UserID` INT NOT NULL,
---     `Rating` TINYINT NOT NULL CHECK (`Rating` BETWEEN 1 AND 5),
---     CONSTRAINT UNIQUE (`AuctionID`, `UserID`), -- Ensures user can rate an auction only once
---     FOREIGN KEY (`AuctionID`) REFERENCES `Auctions`(`AuctionID`) ON DELETE CASCADE,
---     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
--- );
 CREATE TABLE AuctionRatings (
     `RatingID` INT AUTO_INCREMENT PRIMARY KEY,
     `AuctionID` INT NOT NULL,
@@ -178,7 +148,7 @@ CREATE TABLE `Referrals` (
     FOREIGN KEY (`ReferredUserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
 );
 
--- Change authentication method for the root user (or specify another user if needed)
+-- Change authentication method for the root user for ease of access (only in development mode)
 ALTER USER 'root'@'%' IDENTIFIED WITH `mysql_native_password` BY 'rootpassword';
 
 -- Flush privileges to ensure the changes take effect

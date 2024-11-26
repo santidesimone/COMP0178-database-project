@@ -20,19 +20,14 @@
           </button>
           <div *ngIf="winnerDetails[purchase.AuctionID]">
             <div *ngIf="winnerDetails[purchase.AuctionID].username && winnerDetails[purchase.AuctionID].email">
-              <!-- <strong>Winner: </strong>
-              <p>Username: {{ winnerDetails[purchase.AuctionID].username }}</p>
-              <p>Email: {{ winnerDetails[purchase.AuctionID].email }}</p> -->
               <p class="card-text">
                 <strong>Your Winning Bid Amount:</strong> 
                   ${{ winnerDetails[purchase.AuctionID].winningBidAmount }}
               </p> 
-              {{winnerDetails[purchase.AuctionID] | json}}
               <div class="card-text">
                 <strong>Applicable discount:</strong> 
                 <span *ngIf="winnerDetails[purchase.AuctionID]?.discountApplied">
                   ${{ winnerDetails[purchase.AuctionID].discount }}
-                  <!-- | number:'1.2-2'  -->
                 </span>
                 <span *ngIf="!winnerDetails[purchase.AuctionID]?.discountApplied">
                   No discount applied.
