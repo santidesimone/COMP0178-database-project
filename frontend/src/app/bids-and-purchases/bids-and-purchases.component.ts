@@ -11,7 +11,6 @@ interface User {
   buyerDetails?: any;
 }
 
-
 @Component({
   selector: 'app-bids-and-purchases',
   standalone: true,
@@ -29,11 +28,6 @@ export class BidsAndPurchasesComponent implements OnInit {
   userId: number | null = null;
   purchases: any[] = [];
   bids: any[] = [];
-
-  // userIsBuyer: boolean = false;
-  // user: User | null = null;
-
-  // user: { buyerDetails?: any } | null = null; 
   user: User | null = null;  // Assuming user can be null as well
   userIsBuyer: boolean = false;
   user2: any;
@@ -42,7 +36,9 @@ export class BidsAndPurchasesComponent implements OnInit {
         username: string, 
         email: string,
         winningBidAmount: number,
-        discountApplied?: boolean
+        discountApplied?: boolean,
+        discount?: any
+
       } 
   } = {};  
     
@@ -121,22 +117,6 @@ export class BidsAndPurchasesComponent implements OnInit {
     });
   }
 
-  // applyInviteLinkDiscount(userEmail: string): void {
-  //   const body = { email: userEmail };
-
-  //   this.http.post('http://localhost:3000/api/invite-link-discount', body).subscribe(
-  //     (response: any) => {
-  //       // Handling successful response
-  //       if (response) {
-  //         console.log('Referral reward status updated:', response);
-  //       }
-  //     },
-  //     (error) => {
-  //       // Handling error response
-  //       console.error('Error during invite link discount process:', error);
-  //     }
-  //   );
-  // }
   applyInviteLinkDiscount(userEmail: string, purchaseId: number): void {
     const body = { email: userEmail };
   
@@ -144,16 +124,20 @@ export class BidsAndPurchasesComponent implements OnInit {
       (response: any) => {
         // Check if the response is an object (successful discount response)
         if (response && response.user) {
+
           console.log("will apply discount !!!!")
+          console.log(response)
+          console.log("purchaseId", purchaseId)
+          console.log("this.purchases.find(p => p.AuctionID === purchaseId)",this.purchases.find(p => p.AuctionID === purchaseId))
+          console.log("this.purchases.find(p => p.AuctionID === purchaseId)?.WinnerPrice!",this.purchases.find(p => p.AuctionID === purchaseId)?.WinnerPrice!)
           // Apply a 10% discount to the purchase and map it to the purchase
-          const discount = 0.1 * this.purchases.find(p => p.AuctionID === purchaseId)?.WinningPrice!;
+          const discount = 0.1 * this.purchases.find(p => p.AuctionID === purchaseId)?.WinnerPrice!;
           const purchase = this.purchases.find(p => p.AuctionID === purchaseId);
           
           if (purchase) {
-            purchase.discountApplied = discount;  // Add a new field to store the discount
+            this.winnerDetails[purchaseId].discountApplied = true;
+            this.winnerDetails[purchaseId].discount = discount;
           }
-  
-          console.log('Discount applied:', discount);
         }
       },
       (error) => {
@@ -164,25 +148,6 @@ export class BidsAndPurchasesComponent implements OnInit {
   }
   
 
-  // getWinnerDetails(auctionID: number): void {
-  //   this.http.get(`http://localhost:3000/api/auction/winner/${auctionID}`).subscribe(
-  //     (winner: any) => {
-  //       if (winner) {
-  //         console.log(winner)
-  //         this.winnerDetails[auctionID] = { 
-  //           username: winner.WinnerName, 
-  //           email: winner.WinnerEmail,
-  //           winningBidAmount: winner.WinningBidAmount,
-  //          };
-  //          console.log(this.winnerDetails)
-  //          this.applyInviteLinkDiscount(winner.WinnerEmail)
-  //       }
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching winner details:', error);
-  //     }
-  //   );
-  // }
   getWinnerDetails(auctionID: number ): void {
     this.http.get(`http://localhost:3000/api/auction/winner/${auctionID}`).subscribe(
       (winner: any) => {
@@ -192,7 +157,6 @@ export class BidsAndPurchasesComponent implements OnInit {
             email: winner.WinnerEmail,
             winningBidAmount: winner.WinningBidAmount,
           };
-  
           // Apply discount using the winner's email and purchase ID
           const purchase = this.purchases.find(p => p.AuctionID === auctionID);
           if (purchase) {

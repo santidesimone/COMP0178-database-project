@@ -27,16 +27,26 @@
                 <strong>Your Winning Bid Amount:</strong> 
                   ${{ winnerDetails[purchase.AuctionID].winningBidAmount }}
               </p> 
-              <p class="card-text">
+              {{winnerDetails[purchase.AuctionID] | json}}
+              <div class="card-text">
                 <strong>Applicable discount:</strong> 
                 <span *ngIf="winnerDetails[purchase.AuctionID]?.discountApplied">
-                  ${{ winnerDetails[purchase.AuctionID].discountApplied }}
+                  ${{ winnerDetails[purchase.AuctionID].discount }}
                   <!-- | number:'1.2-2'  -->
                 </span>
                 <span *ngIf="!winnerDetails[purchase.AuctionID]?.discountApplied">
                   No discount applied.
                 </span>
-              </p>
+              </div>
+              <div class="card-text">
+                <strong>Total you are paying:</strong> 
+                <div *ngIf="winnerDetails[purchase.AuctionID]?.discountApplied"> 
+                    ${{ winnerDetails[purchase.AuctionID].winningBidAmount - winnerDetails[purchase.AuctionID].discount}}
+                </div>
+                <div *ngIf="!winnerDetails[purchase.AuctionID]?.discountApplied">
+                  ${{ winnerDetails[purchase.AuctionID].winningBidAmount}}
+                </div>
+              </div> 
             </div>
         </div>
 
