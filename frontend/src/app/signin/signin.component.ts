@@ -17,6 +17,7 @@ import { SessionComponent } from './../session.component'; // Adjust the path if
 export class SigninComponent {
   signinForm: FormGroup;
   errorMessage = '';
+  inviteCode: string | null = null;
 
   constructor(private fb: FormBuilder, 
               private http: HttpClient, 

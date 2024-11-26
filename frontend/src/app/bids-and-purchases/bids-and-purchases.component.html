@@ -8,11 +8,40 @@
       <div class="card h-100">
         <img *ngIf="purchase.ImageURL" [src]="purchase.ImageURL" class="card-img-top" alt="{{ purchase.ItemName }}">
         <div class="card-body">
-          <h5 class="card-title">{{ purchase.ItemName }}</h5>
-          <p class="card-text"><strong>Price:</strong> ${{ purchase.StartingPrice }}</p>
+          <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(purchase)">{{ purchase.ItemName }}</h5>
+          <p class="card-text"><strong>Starting Price:</strong> ${{ purchase.StartingPrice }}</p>
+          <p class="card-text"><strong>Reserve Price:</strong> ${{ purchase.ReservePrice }}</p>
+          <p class="card-text"><strong>Winning Price:</strong> ${{ purchase.WinningPrice }}</p>
           <p class="card-text"><strong>End Date:</strong> {{ purchase.EndDate }}</p>
 
+
+          <button class="btn btn-primary" (click)="getWinnerDetails(purchase.AuctionID)">
+            See Details
+          </button>
+          <div *ngIf="winnerDetails[purchase.AuctionID]">
+            <div *ngIf="winnerDetails[purchase.AuctionID].username && winnerDetails[purchase.AuctionID].email">
+              <!-- <strong>Winner: </strong>
+              <p>Username: {{ winnerDetails[purchase.AuctionID].username }}</p>
+              <p>Email: {{ winnerDetails[purchase.AuctionID].email }}</p> -->
+              <p class="card-text">
+                <strong>Your Winning Bid Amount:</strong> 
+                  ${{ winnerDetails[purchase.AuctionID].winningBidAmount }}
+              </p> 
+              <p class="card-text">
+                <strong>Applicable discount:</strong> 
+                <span *ngIf="winnerDetails[purchase.AuctionID]?.discountApplied">
+                  ${{ winnerDetails[purchase.AuctionID].discountApplied }}
+                  <!-- | number:'1.2-2'  -->
+                </span>
+                <span *ngIf="!winnerDetails[purchase.AuctionID]?.discountApplied">
+                  No discount applied.
+                </span>
+              </p>
+            </div>
+        </div>
+
           <!-- Rating Form -->
+          <hr>
           <form (ngSubmit)="submitRating(purchase)">
             <label for="rating-{{ purchase.AuctionID }}">Rate this purchase:</label>
             <select id="rating-{{ purchase.AuctionID }}" [(ngModel)]="purchase.newRating" name="newRating" required>

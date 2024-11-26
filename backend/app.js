@@ -1,4 +1,5 @@
 // app.js
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -7,14 +8,107 @@ const db = require('./db.js');
 app.use(cors());
 app.use(express.json());
 
+function generateUniqueId() {
+  return crypto.randomBytes(5).toString('hex'); // Generates a 10-character ID
+}
 // Signup endpoint
+// app.post('/api/signup', (req, res) => {
+//   const body = req.body;
+//   let response = {};
+//   // Constants for SQL queries
+//   const SQL_INSERT_USER = `
+//   INSERT INTO Users (Email, Username, Password, StatusID, InviteCode) 
+//   VALUES (?, ?, ?, 1, ?);
+//   `;
+
+//   const SQL_INSERT_BUYER_DETAILS = `
+//   INSERT INTO BuyerDetails (UserID, ShippingAddress) 
+//   VALUES ((SELECT UserID FROM Users WHERE Email = ?), ?);
+//   `;
+
+//   const SQL_INSERT_SELLER_DETAILS = `
+//   INSERT INTO SellerDetails (UserID, StreetAddress, City, StateProvince, PostalCode, Country) 
+//   VALUES ((SELECT UserID FROM Users WHERE Email = ?), ?, ?, ?, ?, ?);
+//   `;
+
+//   const InviteCodeForNewUser = generateUniqueId();
+
+//   // Insert into Users table
+//   new Promise((resolve, reject) => {
+//     db.query(SQL_INSERT_USER, [body.email, body.username, body.password, InviteCodeForNewUser], (err, userResults) => {
+//       if (err) {
+//         console.error('Error inserting user:', err.stack);
+//         reject(err);
+//         return;
+//       }
+//       response["user"] = userResults;
+//       resolve();
+//     });
+//   })
+//     // Insert into BuyerDetails table (if provided)
+//     .then(() => {
+//       if (body.buyerDetails) {
+//         return new Promise((resolve, reject) => {
+//           db.query(SQL_INSERT_BUYER_DETAILS, [body.email, body.buyerDetails.ShippingAddress], (err, buyerResults) => {
+//             if (err) {
+//               console.error('Error inserting buyer details:', err.stack);
+//               reject(err);
+//               return;
+//             }
+//             response["buyerDetails"] = buyerResults;
+//             resolve();
+//           });
+//         });
+//       } else {
+//         return Promise.resolve();
+//       }
+//     })
+//     // Insert into SellerDetails table (if provided)
+//     .then(() => {
+//       if (body.sellerDetails) {
+//         return new Promise((resolve, reject) => {
+//           db.query(
+//             SQL_INSERT_SELLER_DETAILS,
+//             [
+//               body.email,
+//               body.sellerDetails.StreetAddress,
+//               body.sellerDetails.City,
+//               body.sellerDetails.StateProvince,
+//               body.sellerDetails.PostalCode,
+//               body.sellerDetails.Country
+//             ],
+//             (err, sellerResults) => {
+//               if (err) {
+//                 console.error('Error inserting seller details:', err.stack);
+//                 reject(err);
+//                 return;
+//               }
+//               response["sellerDetails"] = sellerResults;
+//               resolve();
+//             }
+//           );
+//         });
+//       } else {
+//         return Promise.resolve();
+//       }
+//     })
+//     // Send success response
+//     .then(() => {
+//       res.status(200).json(response);
+//     })
+//     // Handle errors
+//     .catch(err => {
+//       console.error('Error during signup:', err);
+//       res.status(500).send('Error during signup');
+//     });
+// });
 app.post('/api/signup', (req, res) => {
   const body = req.body;
   let response = {};
   // Constants for SQL queries
   const SQL_INSERT_USER = `
-  INSERT INTO Users (Email, Username, Password, StatusID) 
-  VALUES (?, ?, ?, 1);
+  INSERT INTO Users (Email, Username, Password, StatusID, InviteCode) 
+  VALUES (?, ?, ?, 1, ?);
   `;
 
   const SQL_INSERT_BUYER_DETAILS = `
@@ -27,9 +121,16 @@ app.post('/api/signup', (req, res) => {
   VALUES ((SELECT UserID FROM Users WHERE Email = ?), ?, ?, ?, ?, ?);
   `;
 
+  const SQL_INSERT_REFERRAL = `
+    INSERT INTO Referrals (ReferrerCode, ReferredUserID) 
+    VALUES (?, (SELECT UserID FROM Users WHERE Email = ?));
+  `;
+
+  const InviteCodeForNewUser = generateUniqueId();  // Generate unique invite code for the new user
+
   // Insert into Users table
   new Promise((resolve, reject) => {
-    db.query(SQL_INSERT_USER, [body.email, body.username, body.password], (err, userResults) => {
+    db.query(SQL_INSERT_USER, [body.email, body.username, body.password, InviteCodeForNewUser], (err, userResults) => {
       if (err) {
         console.error('Error inserting user:', err.stack);
         reject(err);
@@ -86,6 +187,24 @@ app.post('/api/signup', (req, res) => {
         return Promise.resolve();
       }
     })
+    // Insert into Referrals table (if InviteCode is provided)
+    .then(() => {
+      if (body.inviteCode) {
+        return new Promise((resolve, reject) => {
+          db.query(SQL_INSERT_REFERRAL, [body.inviteCode, body.email], (err, referralResults) => {
+            if (err) {
+              console.error('Error inserting referral:', err.stack);
+              reject(err);
+              return;
+            }
+            response["referral"] = referralResults;
+            resolve();
+          });
+        });
+      } else {
+        return Promise.resolve(); // No referral, just skip
+      }
+    })
     // Send success response
     .then(() => {
       res.status(200).json(response);
@@ -114,7 +233,9 @@ app.post('/api/signin', (req, res) => {
       responseData = {
         email: results[0]["Email"],
         username: results[0]["Username"],
-        userID: results[0]["UserID"]
+        userID: results[0]["UserID"],
+        inviteCode: results[0]["InviteCode"]
+
       };
     } else {
       return res.status(401).json({ message: 'Invalid credentials' }); // 401 Unauthorized
@@ -445,9 +566,9 @@ app.get('/api/auction/winner/:AuctionID', (req, res) => {
     FROM Bids B
     JOIN Users U ON B.BidderID = U.UserID
     JOIN Auctions A ON B.AuctionID = A.AuctionID
-    WHERE B.AuctionID = 1 
+    WHERE B.AuctionID = ? 
       AND A.AuctionStatusID = 2 
-      AND B.BidAmount >= (SELECT ReservePrice FROM Auctions WHERE AuctionID = 1)
+      AND B.BidAmount >= (SELECT ReservePrice FROM Auctions WHERE AuctionID = ?)
     ORDER BY B.BidAmount DESC
     LIMIT 1
   `;
@@ -465,6 +586,7 @@ app.get('/api/auction/winner/:AuctionID', (req, res) => {
     res.json(results[0]);  
   });
 });
+
 
 
 app.post('/api/update-auctions-status', (req, res) => {
@@ -678,41 +800,107 @@ app.post('/api/ratings', (req, res) => {
   });
 });
 
+app.post('/api/invite-link-discount', (req, res) => {
+  const body = req.body;
+  const userEmail = body.email;  // Assuming the user's email is passed in the request body
+  let response = {};
 
-app.get('/api/auction/seller-details/:auctionId', (req, res) => {
-  const auctionId = req.params.auctionId;
-  const query = `
-      SELECT 
-      u.Email, 
-      u.Username,
-      AVG(ar.Rating) AS Rating 
-    FROM 
-      Auctions a
-    JOIN 
-      Users u ON a.SellerID = u.UserID 
-    LEFT JOIN 
-      AuctionRatings ar ON a.AuctionID = ar.AuctionID  
-    WHERE 
-      u.UserID = (SELECT SellerID FROM Auctions WHERE AuctionID = ?)  
-    GROUP BY 
-      u.UserID;
+  // Constants for SQL queries
+  const SQL_CHECK_USER_REFERRAL_REWARD_STATUS = `
+    SELECT ReferralRewardStatus, InviteCode
+    FROM Users
+    WHERE Email = ?
   `;
 
-  db.query(query, [auctionId], (err, results) => {
-    if (err) {
-      console.error('Error retrieving seller information:', err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+  const SQL_COUNT_REFERRALS = `
+    SELECT COUNT(*) AS ReferralCount
+    FROM Referrals
+    WHERE ReferrerCode = ?
+  `;
 
-    if (results.length > 0) {
-      const sellerInfo = results[0];
-      return res.json(sellerInfo);
-    } else {
-      return res.status(404).json({ error: 'Auction not found or no seller information available' });
-    }
-  });
+  const SQL_UPDATE_REFERRAL_STATUS = `
+    UPDATE Users
+    SET ReferralRewardStatus = 'Claimed'
+    WHERE Email = ?
+  `;
+
+  // Step 1: Check the user's ReferralRewardStatus
+  new Promise((resolve, reject) => {
+    db.query(SQL_CHECK_USER_REFERRAL_REWARD_STATUS, [userEmail], (err, userResults) => {
+      if (err) {
+        console.error('Error checking user referral status:', err.stack);
+        reject(err);
+        return;
+      }
+      if (userResults.length === 0) {
+        reject(new Error('User not found'));
+        return;
+      }
+      response["user"] = userResults[0]; // Save user data for reference
+      resolve(userResults[0]);
+    });
+  })
+    // Step 2: Check referral count only if ReferralRewardStatus is 'Pending'
+    .then((userData) => {
+      if (userData.ReferralRewardStatus !== 'Pending') {
+        return Promise.reject(new Error('Referral reward has already been claimed or is not pending'));
+      }
+      
+      // Proceed to count the referrals
+      return new Promise((resolve, reject) => {
+        db.query(SQL_COUNT_REFERRALS, [userData.InviteCode], (err, referralResults) => {
+          if (err) {
+            console.error('Error checking referral count:', err.stack);
+            reject(err);
+            return;
+          }
+          response["referralCount"] = referralResults[0].ReferralCount; // Save referral count
+          resolve(referralResults[0].ReferralCount);
+        });
+      });
+    })
+    // Step 3: If referral count >= 2, apply the discount and update ReferralRewardStatus
+    .then((referralCount) => {
+      if (referralCount >= 2) {
+        // Apply discount logic here (you can add more business logic for discount application)
+        
+        // Update the ReferralRewardStatus to 'Claimed'
+        return new Promise((resolve, reject) => {
+          db.query(SQL_UPDATE_REFERRAL_STATUS, [userEmail], (err, updateResults) => {
+            if (err) {
+              console.error('Error updating referral reward status:', err.stack);
+              reject(err);
+              return;
+            }
+            response["updateStatus"] = updateResults;
+            resolve();
+          });
+        });
+      } else {
+        return Promise.reject(new Error('Referral count is less than 2, discount not applicable'));
+      }
+    })
+    // Send success response
+    .then(() => {
+      res.status(200).json(response);
+    })
+    // Handle errors
+    .catch(err => {
+      console.error('Error during invite link discount process:', err);
+      res.status(500).send(err.message || 'Error during invite link discount process');
+    });
 });
 
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
+
+// Track Referrals in the Referrals Table
+// When a new user registers using an invite code, insert a row in the Referrals table:
+// INSERT INTO Referrals (ReferrerCode, ReferredUserID) VALUES ('ABC123', 101); 
+
+// Calculate Discount Eligibility
+//  check if a user has referred at least two people using a query like this:
+// // SELECT COUNT(*) AS ReferralCount FROM Referrals WHERE ReferrerCode = 'ABC123';
+// If ReferralCount >= 2, apply the discount for the referrer.
+

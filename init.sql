@@ -16,3 +16,6 @@ source /database/scripts/data-population/QA.sql;
 -- Database population: rate the seller
 source /database/scripts/data-population/ratings.sql;
 
+-- Database population: rate the seller
+source /database/scripts/data-population/referrals.sql;
+

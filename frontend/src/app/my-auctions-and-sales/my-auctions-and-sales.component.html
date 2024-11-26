@@ -19,7 +19,7 @@
           <div class="card-body">
 
             <button class="btn btn-primary" (click)="getWinnerDetails(sale.AuctionID)">
-              See Winner Details
+              See Details
             </button>
             <!-- Winner Details Object: {{winnerDetails | json}} -->
             <div *ngIf="winnerDetails[sale.AuctionID]">
@@ -28,7 +28,7 @@
                 <p>Username: {{ winnerDetails[sale.AuctionID].username }}</p>
                 <p>Email: {{ winnerDetails[sale.AuctionID].email }}</p>
                 <p class="card-text">
-                  <strong>Winning Bid Amount::</strong> 
+                  <strong>Winning Bid Amount:</strong> 
                   ${{ winnerDetails[sale.AuctionID].winningBidAmount }}</p> 
 
               </div>

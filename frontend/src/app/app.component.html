@@ -60,23 +60,16 @@
   
 </div>
 
-
-<div *ngIf="inviteLinkBannerIsVisible" class="position-fixed" style="bottom: 20px; left: 20px; width: 300px;">
+<!-- -->
+<div  *ngIf="inviteLinkBannerIsVisible"  class="position-fixed" style="bottom: 10px; left: 10px; width: 340px;">
   <div class="card text-center">
     <div class="card-body">
       <h5 class="card-title">Share Your Invite Link</h5>
-      <p class="card-text">Invite your friends to join our auction network! When 5 friends sign up using your link, you’ll receive a 10% discount on your next purchase!</p>
-      <input type="text" class="form-control" value="YOUR_INVITE_LINK_HERE" readonly>
-      <button class="btn btn-primary mt-2" onclick="copyLink()">Copy Link</button>
+      <p class="card-text">When 2 friends sign up using your link, you’ll receive a 10% discount on your next purchase!</p>
+      <!-- <input type="text" class="form-control" value="http://localhost:8080/signup/{{inviteCode}}" readonly> -->
+      <button class="btn btn-primary mt-2" (click)="generateInviteLink()" >Generate Invite Link</button>
+      <input *ngIf="displayInviteLink" type="text" class="form-control" [value]="getInviteLink()" readonly>
     </div>
   </div>
 </div>
 
-<!-- <script>
-  function copyLink() {
-    const inviteLinkInput = document.querySelector('input[type="text"]');
-    inviteLinkInput.select();
-    document.execCommand('copy');
-    alert('Invite link copied to clipboard!');
-  }
-</script> -->

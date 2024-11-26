@@ -19,8 +19,11 @@ CREATE TABLE `Users` (
     `Username` VARCHAR(100) NOT NULL,
     `Password` VARCHAR(255) NOT NULL,
     `StatusID` INT NOT NULL,
+    `InviteCode` VARCHAR(10) UNIQUE,
+    `ReferralRewardStatus` ENUM('Pending', 'Claimed') DEFAULT 'Pending',
     FOREIGN KEY (`StatusID`) REFERENCES `UserStatus`(`StatusID`)
 );
+
 
 -- 3. Create the `BuyerDetails` Table
 CREATE TABLE `BuyerDetails` (
@@ -167,6 +170,13 @@ CREATE TABLE AuctionRatings (
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
 );
 
+CREATE TABLE `Referrals` (
+    `ReferralID` INT AUTO_INCREMENT PRIMARY KEY,
+    `ReferrerCode` VARCHAR(10) NOT NULL, -- Code of the user who made the referral
+    `ReferredUserID` INT NOT NULL,       -- ID of the user who joined using the referral
+    `CreatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`ReferredUserID`) REFERENCES `Users`(`UserID`) ON DELETE CASCADE
+);
 
 -- Change authentication method for the root user (or specify another user if needed)
 ALTER USER 'root'@'%' IDENTIFIED WITH `mysql_native_password` BY 'rootpassword';

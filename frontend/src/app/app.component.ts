@@ -20,11 +20,14 @@ import { JsonPipe } from '@angular/common';
 export class AppComponent implements OnInit{
   myVariable: any; 
   currentRoute: string = '';  // Store the current route
-  inviteLinkBannerIsVisible: boolean = false;
+  // inviteLinkBannerIsVisible: boolean = false;
+  inviteLinkBannerIsVisible: boolean = true;
+  inviteCode: string = "";
   title = 'angular-boilerplate-1';
   user: any = {};
   userIsSeller: boolean = false;
   userIsBuyer: boolean = false;
+  displayInviteLink: boolean = false;
   // sessionC: SessionComponent;
   // myGlobalVariable: any;
 
@@ -38,6 +41,12 @@ export class AppComponent implements OnInit{
 
     ngOnInit() {
       let user:any = this.sessionComponent.getUser();
+      if (user["inviteCode"]){
+        this.inviteCode = user["inviteCode"];
+        console.log(user)
+        console.log("this.inviteCode", this.inviteCode)
+        this.inviteLinkBannerIsVisible = true;
+      }
       if (user.hasOwnProperty('sellerDetails')) {
         this.userIsSeller = true;
       }
@@ -71,5 +80,29 @@ export class AppComponent implements OnInit{
     this.sessionComponent.clearUser();  
   }
   
+  copyLink(){
+    console.log("copyLink: executing")
+    // navigator.clipboard.writeText("https://localhost:8080/singup/"+this.inviteCode)
+    // .then(() => {
+    //     // Notify the user that the text was copied
+    //     // alert("Link copied to clipboard!");
+    // })
+    // .catch(err => {
+    //     // Handle errors (e.g., if the clipboard API is not supported)
+    //     console.error('Failed to copy: ', err);
+    // });
+  }
+  generateInviteLink(){
+    this.displayInviteLink = true;
+    if (this.user["inviteCode"]){
+      this.inviteCode = this.user["inviteCode"];
+      console.log(this.user)
+      console.log("this.inviteCode", this.inviteCode)
+      this.inviteLinkBannerIsVisible = true;
+    }
+  }
+  getInviteLink(){
+    return "http://localhost:8080/signup/"+this.inviteCode;
+  }
 }
 

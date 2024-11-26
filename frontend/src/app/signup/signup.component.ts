@@ -6,6 +6,9 @@ import { NgIf } from '@angular/common'; // Import NgFor for template rendering
 import { Observable } from 'rxjs'; 
 import { SessionComponent } from './../session.component'; // Adjust the path if needed
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+              
 
 @Component({
   selector: 'app-signup',
@@ -20,11 +23,15 @@ export class SignupComponent {
   isSeller = false;
   isBuyer = false;
   errorMessage = '';
+  inviteCode: string | null = "";
+  inviteCode2: string = "";
 
   constructor(private fb: FormBuilder, 
               private http: HttpClient, 
               private sessionComponent: SessionComponent, 
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute,
+            ) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required],
@@ -35,6 +42,18 @@ export class SignupComponent {
       stateProvince: [''],
       postalCode: [''],
       country: ['']
+    });
+  }
+
+  ngOnInit() {
+    // Fetch the inviteCode from the route
+    this.route.paramMap.subscribe(params => {
+      this.inviteCode = params.get('inviteCode');
+      if (this.inviteCode) {
+        console.log('Received invite code:', this.inviteCode);
+        this.inviteCode2 = this.inviteCode;
+        // Optionally, save the invite code to localStorage or pass it to the backend
+      }
     });
   }
 
@@ -53,6 +72,7 @@ export class SignupComponent {
       email: string,
       username: string,
       password: string,
+      inviteCode: string,
       buyerDetails?: { ShippingAddress: string },
       sellerDetails?: {
         StreetAddress: string,
@@ -65,6 +85,7 @@ export class SignupComponent {
       email: formData.email,
       username: formData.username,
       password: formData.password, 
+      inviteCode: this.inviteCode2,
       // Include buyerDetails if isBuyer is true
       buyerDetails: this.isBuyer ? { ShippingAddress: formData.shippingAddress } : undefined, 
       // Include sellerDetails if isSeller is true
@@ -73,7 +94,7 @@ export class SignupComponent {
         City: formData.city,
         StateProvince: formData.stateProvince,
         PostalCode: formData.postalCode,
-        Country: formData.country
+        Country: formData.country,
       } : undefined
     };
 
