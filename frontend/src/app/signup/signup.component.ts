@@ -23,9 +23,7 @@ export class SignupComponent {
   isSeller = false;
   isBuyer = false;
   errorMessage = '';
-  // inviteCode: string | null = "";
-  inviteCode: string | null = "" as string;
-
+  inviteCode: string | null = "";
   inviteCode2: string = "";
 
   constructor(private fb: FormBuilder, 

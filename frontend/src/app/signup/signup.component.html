@@ -82,9 +82,9 @@
 
         <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
                 <!-- Invite Code Field added at the end -->
-                <div *ngIf="inviteCode" class="form-group mt-3">
+                <div *ngIf="inviteCode2.length > 0 " class="form-group mt-3">
                   <label for="inviteCode">Invite Code:</label>
-                  <input type="text" id="inviteCode" class="form-control" [value]="inviteCode" readonly>
+                  <input type="text" id="inviteCode" class="form-control" [value]="inviteCode2" readonly>
           </div>
       </form>
 

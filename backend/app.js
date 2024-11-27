@@ -8,6 +8,17 @@ const db = require('./db.js');
 app.use(cors());
 app.use(express.json());
 
+const nodemailer = require('nodemailer'); 
+
+// Set up nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'developer.tester.0000@gmail.com',
+    pass: 'securepassword',
+  },
+});
+
 function generateUniqueId() {
   return crypto.randomBytes(5).toString('hex'); // Generates a 10-character ID
 }
@@ -349,6 +360,7 @@ app.post('/api/bid', (req, res) => {
     res.status(201).json({ message: 'Bid successfully placed!', results });
   });
 });
+
 
 app.get('/api/bids/:auctionId', (req, res) => {
   const auctionId = req.params.auctionId;
