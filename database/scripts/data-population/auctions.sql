@@ -23,12 +23,11 @@ INSERT INTO `Auctions` (`SellerID`, `ItemName`, `ItemDescription`, `StartingPric
     (2, 'IKEA Wooden Table', 'IKEA wooden table.', 300.00, 315.00, 400.00, 'https://i.ibb.co/23h1MkQ/Screenshot-2024-11-16-at-3-59-38-PM.png', DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 14 WEEK), 3); -- Home & Garden
 
 
-
--- 1. Insert the auction with AuctionStatusID = 2 and ReservePrice
+-- Insert the auction with AuctionStatusID = 2 and ReservePrice
 INSERT INTO `Auctions` 
     (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `WinnerPrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`, `AuctionStatusID`, `ReservePrice`) -- Include ReservePrice
 SELECT 
-    1,  
+    6,  
     'iPhone 12 Phone Case', 
     'Protective and stylish phone case for iPhone 12. Excellent condition.', 
     5.00, 
@@ -39,3 +38,20 @@ SELECT
     1,  
     2,  -- Set AuctionStatusID to 2 (closed)
     10;  
+
+
+--  Insert similar actions (so as they can be recommended to user's)
+INSERT INTO `Auctions` 
+    (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `ReservePrice`, `WinnerPrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`, `AuctionStatusID`) 
+SELECT 
+    6,  
+    'Wireless iPhone Charger', 
+    'Brand new phone charger ', 
+    12.00, 
+    15.00, 
+    25.00, 
+    'https://i.ibb.co/H4hHYn9/Screenshot-2024-11-26-at-11-38-25-PM.png', 
+    DATE_SUB(CURDATE(), INTERVAL 2 MONTH),  
+    DATE_ADD(CURDATE(), INTERVAL 3 MONTH),  -- Change EndDate to 3 months from now
+    1,  
+    1;  -- Set AuctionStatusID to 1 (open)

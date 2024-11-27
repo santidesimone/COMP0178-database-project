@@ -836,7 +836,10 @@ app.get('/api/recommendations/:UserID', (req, res) => {
     res.status(200).json(results);
   });
 });
-
+// mysql> SELECT DISTINCT b.BidderID, u.Username  -- Select distinct BidderID and Username
+//     -> FROM Bids b
+//     -> JOIN Users u ON b.BidderID = u.UserID  -- Join Bids with Users to get Username
+//     -> WHERE b.AuctionID IN (1, 2, 3, 4, 5);  -- Filter bids by AuctionID
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });

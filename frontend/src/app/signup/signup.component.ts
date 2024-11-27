@@ -23,7 +23,9 @@ export class SignupComponent {
   isSeller = false;
   isBuyer = false;
   errorMessage = '';
-  inviteCode: string | null = "";
+  // inviteCode: string | null = "";
+  inviteCode: string | null = "" as string;
+
   inviteCode2: string = "";
 
   constructor(private fb: FormBuilder, 
@@ -54,6 +56,9 @@ export class SignupComponent {
         this.inviteCode2 = this.inviteCode;
         // Optionally, save the invite code to localStorage or pass it to the backend
       }
+      // else{
+      //   this.inviteCode = "";
+      // }
     });
   }
 

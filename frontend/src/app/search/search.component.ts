@@ -19,12 +19,18 @@ import { SessionComponent } from '../session.component'; // Adjust the path if n
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
-    searchForm: FormGroup;
-    errorMessage = '';
-    searchResults: any[] = []; // Use any[] to store the JSON result
-    favorites: number[] = []; // Array to hold favorite auction IDs
+  searchForm: FormGroup;
+  errorMessage = '';
+  searchResults: any[] = []; // Use any[] to store the JSON result
+  favorites: number[] = []; // Array to hold favorite auction IDs
+  recommendations: any[] = []; // Array to store recommendations
 
-result: any;
+  displayInviteLink: boolean = false;
+  inviteLinkBannerIsVisible: boolean = true;
+  inviteCode: string = "";
+  user: any = {};
+
+  result: any;
 
 constructor(private fb: FormBuilder, 
     private http: HttpClient, 
@@ -67,6 +73,7 @@ constructor(private fb: FormBuilder,
     if(!this.sessionComponent.getUser()){
       this.router.navigate(['/signin']); 
     }
+    this.fetchRecommendations();
   }
 
   onSearch() {
@@ -131,6 +138,22 @@ constructor(private fb: FormBuilder,
     });
   }
 
+  fetchRecommendations() {
+    let user = this.sessionComponent.getUser();
+    let userID = user != null ? user["userID"] : 1;  // Use the userID from session or default to 1 if not available
+    
+    // Assuming the recommendations endpoint accepts userID as a query parameter
+    this.http.get<any[]>(`http://localhost:3000/api/recommendations/${userID}`).subscribe({
+      next: (data) => {
+        this.recommendations = data;  // Assuming 'data' contains an array of recommended items
+      },
+      error: (error) => {
+        console.error('Error fetching recommendations:', error);
+      }
+    });
+  }
+  
+
   isFavorite(auctionId: number): boolean {
     return this.favorites.includes(auctionId);
   }
@@ -162,6 +185,24 @@ constructor(private fb: FormBuilder,
     }
   }
 
+  generateInviteLink(){
+    this.displayInviteLink = true;
+    let user:any = this.sessionComponent.getUser();
+    console.log("- - - - - - - - - - - ")
+    console.log(user)
+    console.log("- - - - - - - - - - - ")
+    console.log("this.inviteCode 0", this.inviteCode)
+
+    if (user != null && user["inviteCode"]){
+      this.inviteCode = user["inviteCode"];
+      console.log(this.user)
+      console.log("this.inviteCode 1", this.inviteCode)
+      this.inviteLinkBannerIsVisible = true;
+    }
+  }
+  getInviteLink(){
+    return "http://localhost:8080/signup/"+this.inviteCode;
+  }
 
 
 }

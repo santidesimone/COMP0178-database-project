@@ -21,13 +21,10 @@ export class AppComponent implements OnInit{
   myVariable: any; 
   currentRoute: string = '';  // Store the current route
   // inviteLinkBannerIsVisible: boolean = false;
-  inviteLinkBannerIsVisible: boolean = true;
-  inviteCode: string = "";
-  title = 'angular-boilerplate-1';
+  title = 'auctions-app';
   user: any = {};
   userIsSeller: boolean = false;
   userIsBuyer: boolean = false;
-  displayInviteLink: boolean = false;
   // sessionC: SessionComponent;
   // myGlobalVariable: any;
 
@@ -41,21 +38,22 @@ export class AppComponent implements OnInit{
 
     ngOnInit() {
       let user:any = this.sessionComponent.getUser();
-      if (user["inviteCode"]){
-        this.inviteCode = user["inviteCode"];
-        console.log(user)
-        console.log("this.inviteCode", this.inviteCode)
-        this.inviteLinkBannerIsVisible = true;
-      }
-      if (user.hasOwnProperty('sellerDetails')) {
-        this.userIsSeller = true;
-      }
-      else{
-        this.userIsSeller = false;
-      }
-      console.log("this.userIsSeller")
-      console.log(this.userIsSeller)
-      console.log("this.userIsSeller")
+      // if (user != null && user["inviteCode"]){
+      //   this.inviteCode = user["inviteCode"];
+      //   console.log(user)
+      //   console.log("this.inviteCode", this.inviteCode)
+      //   this.inviteLinkBannerIsVisible = true;
+      // }
+      // console.log(user)
+      // if (user != null && user.hasOwnProperty('sellerDetails')) {
+      //   this.userIsSeller = true;
+      // }
+      // else{
+      //   this.userIsSeller = false;
+      // }
+      // console.log("this.userIsSeller")
+      // console.log(this.userIsSeller)
+      // console.log("this.userIsSeller")
     }
 
     toggleCart() {
@@ -92,17 +90,6 @@ export class AppComponent implements OnInit{
     //     console.error('Failed to copy: ', err);
     // });
   }
-  generateInviteLink(){
-    this.displayInviteLink = true;
-    if (this.user["inviteCode"]){
-      this.inviteCode = this.user["inviteCode"];
-      console.log(this.user)
-      console.log("this.inviteCode", this.inviteCode)
-      this.inviteLinkBannerIsVisible = true;
-    }
-  }
-  getInviteLink(){
-    return "http://localhost:8080/signup/"+this.inviteCode;
-  }
+
 }
 

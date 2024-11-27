@@ -8,3 +8,21 @@
     color: blue; /* Changes the color to blue on hover */
     text-decoration: underline; /* Adds an underline on hover */
 }
+
+.left-col {
+    background-color: #e3e5e8; /* Example color */
+    height: 100vh; /* Use vh for full viewport height */
+
+}
+.right-col {
+    /* background-color: #e6e6e6;  Example color */
+    height: 100vh; /* Use vh for full viewport height */
+
+}
+.middle-col {
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: 100vh; /* Use vh for full viewport height */
+
+}
+
+

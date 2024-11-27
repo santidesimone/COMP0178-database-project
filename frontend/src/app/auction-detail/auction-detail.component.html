@@ -1,10 +1,10 @@
 <div class="container mt-5">
 
-<div class="row">
+<div class="row" style="padding-top: 100px;">
   <div class="col-md-6">
-    <img [src]="data.ImageURL" class="img-fluid" alt="{{ data.ImageURL }}">
+    <img [src]="data.ImageURL" class="img-fluid" style="max-width: 500px;" alt="{{ data.ImageURL }}">
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6" style=" background: #e3e5e8; padding: 17px;border-radius: 6px;">
     <h2>{{ data.ItemName }}</h2>
     <p><strong>Description:</strong> {{ data.ItemDescription }}</p>
     <p><strong>Starting Price:</strong> {{ data.StartingPrice }}</p>
@@ -44,7 +44,15 @@
   </ul>
 </div>
 
+<div style="width: 100%; height: 15px;"></div>
+<hr>
+<div style="width: 100%; height: 15px;"></div>
+
 <p *ngIf="bids && bids.length === 0">There are currently no bids for this item.</p>
+
+<div style="width: 100%; height: 15px;"></div>
+<hr>
+<div style="width: 100%; height: 15px;"></div>
 
 <!-- Section to add a question -->
 <div class="mt-4">

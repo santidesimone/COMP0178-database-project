@@ -50,26 +50,10 @@
         </button> -->
         <!-- Signin Icon Button -->
 
-<div class="container">
-
-  <div style="width: 100%; height: 52px;"></div>
 
   <router-outlet />
 
   <!--  Current route: {{currentRoute}} -->
   
-</div>
 
-<!-- -->
-<div  *ngIf="inviteLinkBannerIsVisible"  class="position-fixed" style="bottom: 10px; left: 10px; width: 340px;">
-  <div class="card text-center">
-    <div class="card-body">
-      <h5 class="card-title">Share Your Invite Link</h5>
-      <p class="card-text">When 2 friends sign up using your link, you’ll receive a 10% discount on your next purchase!</p>
-      <!-- <input type="text" class="form-control" value="http://localhost:8080/signup/{{inviteCode}}" readonly> -->
-      <button class="btn btn-primary mt-2" (click)="generateInviteLink()" >Generate Invite Link</button>
-      <input *ngIf="displayInviteLink" type="text" class="form-control" [value]="getInviteLink()" readonly>
-    </div>
-  </div>
-</div>
 

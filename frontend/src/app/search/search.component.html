@@ -1,122 +1,147 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3 mt-3"> 
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="sticky-top"> 
-        <div class="form-group mb-3">
-          <label for="keywords" class="form-label">Keywords:</label>
-          <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="minPrice" class="form-label">Min Price:</label>
-          <input type="number" id="minPrice" name="minPrice" formControlName="minPrice" class="form-control">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="maxPrice" class="form-label">Max Price:</label>
-          <input type="number" id="maxPrice" name="maxPrice" formControlName="maxPrice" class="form-control">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="category" class="form-label">Category:</label>
-          <select id="category" name="category" formControlName="category" class="form-control">
-            <option value="">Select Category</option>
-            <option value="1">Electronics</option>
-            <option value="2"> Fashion </option>
-            <option value="3"> Home & Garden </option>
-            <option value="4"> Art & Collectibles </option>
-            <option value="5"> Toys & Hobbies </option>
-            <option value="6"> Sports & Outdoors </option>
-            <option value="7"> Automotive </option>
-            <option value="8"> Books </option>
-          </select>
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="city" class="form-label">City:</label>
-          <input type="text" id="city" name="city" formControlName="city" class="form-control">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="stateProvince" class="form-label">State/Province:</label>
-          <input type="text" id="stateProvince" name="stateProvince" formControlName="stateProvince" class="form-control">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="endDate" class="form-label">End Date:</label>
-          <input type="date" id="endDate" name="endDate" formControlName="endDate" class="form-control">
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">Search</button>
-      </form>
+<!-- -->
+<div  *ngIf="inviteLinkBannerIsVisible"  class="position-fixed" style="bottom: 10px; left: 10px; width: 340px;">
+  <div class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">Share Your Invite Link</h5>
+      <p class="card-text">When 2 friends sign up using your link, you’ll receive a 10% discount on your next purchase!</p>
+      <!-- <input type="text" class="form-control" value="http://localhost:8080/signup/{{inviteCode}}" readonly> -->
+      <button class="btn btn-primary mt-2" (click)="generateInviteLink()" >Generate Invite Link</button>
+      <input *ngIf="displayInviteLink" type="text" class="form-control" [value]="getInviteLink()" readonly>
     </div>
-
-    <!-- <div class="col-md-9">
-      <div class="container mt-5">
-        <div class="row">
-          <div 
-            *ngFor="let result of searchResults; let i = index" 
-            class="col-md-4 mb-4"
-          >
-            <a class="text-decoration-none text-dark" (click)="navigateToAuctionDetail(result)">
-
-              <div class="card h-100">
-                <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
-                <div class="card-body">
-                  <h5 class="card-title">{{ result.ItemName }}</h5>
-                  <p class="card-text">Price: ${{ result.StartingPrice }}</p>
-                  <button class="btn btn-outline-secondary">
-                    <i class="fa fa-heart"></i> 
-                  </button>
-                  <p class="card-text">{{ result.ItemDescription }}</p>
-                  <p class="card-text">Ends Before (MM-DD-YYY): {{ result.EndDate }}</p>
-                  <p class="card-text">City: {{ result.City }}</p>
-                  <p class="card-text">StateProvince: {{ result.StateProvince }}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>  -->
-    <div class="col-md-9">
-      <div class="container mt-5">
-        <div class="row">
-          <div 
-            *ngFor="let result of searchResults; let i = index" 
-            class="col-md-4 mb-4"
-          >
-            <!-- <a class="text-decoration-none text-dark" > -->
-              <div class="card h-100">
-                <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
-                <div class="card-body">
-                  <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(result)">{{ result.ItemName }}</h5>
-                  <!-- Align price and favorite button in the same row -->
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <p class="card-text mb-0">Price: ${{ result.StartingPrice }}</p>
-                    <!-- <button class="btn btn-outline-secondary">
-                      <i class="fa fa-heart"></i>
-                    </button> -->
-                    <button 
-                      class="btn btn-outline-primary" 
-                      (click)="toggleFavorite(result.AuctionID)"
-                    >
-                      <i class="fa" [ngClass]="isFavorite(result.AuctionID) ? 
-                        'fas fa-eye' : 'far fa-eye'
-                      "></i>
-                    </button>
-                  </div>
-                  <p class="card-text">{{ result.ItemDescription }}</p>
-                  <p class="card-text">Ends Before (MM-DD-YYY): {{ result.EndDate }}</p>
-                  <p class="card-text">City: {{ result.City }}</p>
-                  <p class="card-text">StateProvince: {{ result.StateProvince }}</p>
-                </div>
-              </div>
-            <!-- </a> -->
-          </div>
-        </div>
-      </div>
-    </div>
-    
   </div>
 </div>
+
+
+<div class="container-fluid">
+  
+        <div class="row">
+            <div class="col-md-2 left-col">
+              <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="sticky-top" style="padding: 20px;padding-top: 100px;"> 
+                <div class="form-group mb-3">
+                  <label for="keywords" class="form-label">Keywords:</label>
+                  <input type="text" id="keywords" name="keywords" formControlName="keywords" class="form-control" placeholder="Enter your search term">
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="minPrice" class="form-label">Min Price:</label>
+                  <input type="number" id="minPrice" name="minPrice" formControlName="minPrice" class="form-control">
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="maxPrice" class="form-label">Max Price:</label>
+                  <input type="number" id="maxPrice" name="maxPrice" formControlName="maxPrice" class="form-control">
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="category" class="form-label">Category:</label>
+                  <select id="category" name="category" formControlName="category" class="form-control">
+                    <option value="">Select Category</option>
+                    <option value="1">Electronics</option>
+                    <option value="2"> Fashion </option>
+                    <option value="3"> Home & Garden </option>
+                    <option value="4"> Art & Collectibles </option>
+                    <option value="5"> Toys & Hobbies </option>
+                    <option value="6"> Sports & Outdoors </option>
+                    <option value="7"> Automotive </option>
+                    <option value="8"> Books </option>
+                  </select>
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="city" class="form-label">City:</label>
+                  <input type="text" id="city" name="city" formControlName="city" class="form-control">
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="stateProvince" class="form-label">State/Province:</label>
+                  <input type="text" id="stateProvince" name="stateProvince" formControlName="stateProvince" class="form-control">
+                </div>
+        
+                <div class="form-group mb-3">
+                  <label for="endDate" class="form-label">End Date:</label>
+                  <input type="date" id="endDate" name="endDate" formControlName="endDate" class="form-control">
+                </div>
+        
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+              </form>
+                </div>
+            <div class="col-md-8 middle-col">
+              <div style="max-width: 1000px; margin-left: 50px;padding-top: 100px;">
+                <div class="row">
+                  <div 
+                    *ngFor="let result of searchResults; let i = index" 
+                    class="col-md-4 mb-4"
+                  >
+                    <!-- <a class="text-decoration-none text-dark" > -->
+                      <div class="card h-100">
+                        <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
+                        <div class="card-body">
+                          <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(result)">{{ result.ItemName }}</h5>
+                          <!-- Align price and favorite button in the same row -->
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <p class="card-text mb-0">Price: ${{ result.StartingPrice }}</p>
+                            <!-- <button class="btn btn-outline-secondary">
+                              <i class="fa fa-heart"></i>
+                            </button> -->
+                            <button 
+                              class="btn btn-outline-primary" 
+                              (click)="toggleFavorite(result.AuctionID)"
+                            >
+                              <i class="fa" [ngClass]="isFavorite(result.AuctionID) ? 
+                                'fas fa-eye' : 'far fa-eye'
+                              "></i>
+                            </button>
+                          </div>
+                          <p class="card-text">{{ result.ItemDescription }}</p>
+                          <p class="card-text">Ends Before (MM-DD-YYY): {{ result.EndDate }}</p>
+                          <p class="card-text">City: {{ result.City }}</p>
+                          <p class="card-text">StateProvince: {{ result.StateProvince }}</p>
+                        </div>
+                      </div>
+                    <!-- </a> -->
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-2 right-col">
+                <div  style="padding-top: 100px;">
+                  <!-- <h2>Right Column</h2>
+                  <p>This column is fixed.</p> -->
+                  <div *ngIf="recommendations.length > 0" class="recommendations-container">
+                    <h2>Recommended </h2>
+                    <div class="row">
+                      {{recommendations.length}}
+                      <div class="col-12" *ngFor="let item of recommendations">
+                        <div class="card h-100">
+                          <!-- <img  [src]="item.ImageURL" class="card-img-top" alt="{{ item.ItemName }}"> -->
+                          <div class="card-body" style="margin-bottom: 5px;">
+                            <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(item)">{{ item.ItemName }}</h5>
+                            <!-- Align price and favorite button in the same row -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <p class="card-text mb-0">Price: ${{ item.StartingPrice }}</p>
+                              <button 
+                                class="btn btn-outline-primary" 
+                                (click)="toggleFavorite(item.AuctionID)"
+                              >
+                                <i class="fa" [ngClass]="isFavorite(item.AuctionID) ? 
+                                  'fas fa-eye' : 'far fa-eye'
+                                "></i>
+                              </button>
+                            </div>
+                            <p class="card-text">{{ item.ItemDescription }}</p>
+                            <p class="card-text">Ends Before (MM-DD-YYYY): {{ item.EndDate }}</p>
+                            <p *ngIf="item.City" class="card-text">City: {{ item.City }}</p>
+                            <p *ngIf="item.StateProvince" class="card-text">State/Province: {{ item.StateProvince }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+
+            </div>
+        </div>
+
