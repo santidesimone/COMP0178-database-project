@@ -1,5 +1,5 @@
-// app.js
 const crypto = require('crypto');
+const nodemailer = require('nodemailer'); 
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -7,17 +7,6 @@ const port = 3000;
 const db = require('./db.js');
 app.use(cors());
 app.use(express.json());
-
-const nodemailer = require('nodemailer'); 
-
-// Set up nodemailer transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'developer.tester.0000@gmail.com',
-    pass: 'securepassword',
-  },
-});
 
 function generateUniqueId() {
   return crypto.randomBytes(5).toString('hex'); // Generates a 10-character ID
@@ -315,6 +304,175 @@ app.post('/api/search/all', (req, res) => {
   });
 });
 
+// app.post('/api/bid', (req, res) => {
+//   const { BidAmount, AuctionID, BidderUserID } = req.body;
+
+//   const query = `
+//     INSERT INTO Bids (BidAmount, BidderID, AuctionID)
+//     SELECT 
+//         ?, -- BidAmount
+//         ?, -- BidderID
+//         ?  -- AuctionID
+//     FROM Auctions
+//     WHERE 
+//         AuctionID = ? AND
+//         StartingPrice <= ? AND
+//         EXISTS (SELECT 1 FROM BuyerDetails WHERE UserID = ?) AND
+//         SellerID != ?;
+//   `;
+
+//   const values = [
+//     BidAmount,       
+//     BidderUserID,    
+//     AuctionID,       
+//     AuctionID,       
+//     BidAmount,       
+//     BidderUserID,    
+//     BidderUserID,    
+//   ];
+
+//   db.query(query, values, (err, results) => {
+//     if (err) {
+//       console.error('Error inserting bid:', err.stack);
+//       res.status(500).send('Error inserting bid');
+//       return;
+//     }
+
+//     if (results.affectedRows === 0) {
+//       return res
+//         .status(400)
+//         .send(
+//           'Invalid bid: The bid amount is too low, the user is not a buyer, or the bidder is the seller.'
+//         );
+//     }
+
+//     res.status(201).json({ message: 'Bid successfully placed!', results });
+//   });
+// });
+
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+// Function to handle notifications for watchers
+const notifyWatchers = (AuctionID, BidAmount, remainingTime, ItemName) => {
+  getWatchersForAuction(AuctionID, (err, watchers) => {
+    if (err) {
+      console.error('Error fetching watchers:', err.stack);
+      return;
+    }
+
+    console.log("////////////////////")
+    console.log("watchers", watchers)
+    console.log("////////////////////")
+
+
+    getHighestBidForAuction(AuctionID, (err, highestBid) => {
+      if (err) {
+        console.error('Error fetching highest bid:', err.stack);
+        return;
+      }
+
+      watchers.forEach((watcher) => {
+        const { UserID, Email } = watcher;
+
+        // Email for new bid notification
+        const newBidMail = {
+          from: 'auctions@gmail.com',
+          to: Email,
+          subject: `New Bid on Auction: ${ItemName}`,
+          text: `
+            A new bid of $${BidAmount} has been placed on the auction you're watching: "${ItemName}".
+            Remaining time in auction: ${Math.floor(remainingTime / (1000 * 60 * 60 * 24))} days.
+          `,
+        };
+        sendEmail(newBidMail);
+
+        // Check if user has been outbid
+        if (highestBid < BidAmount) {
+          const outbidMail = {
+            from: 'auctions@gmail.com',
+            to: Email,
+            subject: `You've Been Outbid on Auction: ${ItemName}`,
+            text: `
+              You have been outbid on the auction: "${ItemName}".
+              The highest bid is now $${BidAmount}.
+            `,
+          };
+          sendEmail(outbidMail);
+        }
+      });
+    });
+  });
+};
+
+// // Set up nodemailer transporter
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'developer.tester.0000@gmail.com',
+//     pass: 'securepassword',
+//   },
+// });
+
+var transporter = nodemailer.createTransport({
+  host: "smtp-mail.outlook.com", // hostname
+  secureConnection: false, 
+  port: 587,
+  auth: {
+      user: "ucabsd5@ucl.ac.uk",
+      pass: "viernes100AM!"
+  },
+  tls: {
+      ciphers:'SSLv3'
+  }
+});
+// Function to send an email
+const sendEmail = (emailOptions) => {
+  transporter.sendMail(emailOptions, (err, info) => {
+    if (err) {
+      console.error('Error sending email:', err.stack);
+    }
+    console.log("sending email", emailOptions)
+  });
+};
+// Function to fetch watchers for an auction
+const getWatchersForAuction = (AuctionID, callback) => {
+  // w.CurrentBidAmount
+  const query = `
+    SELECT w.UserID, u.Email 
+    FROM Watchlist w
+    JOIN Users u ON w.UserID = u.UserID
+    WHERE w.AuctionID = ?;
+  `;
+  db.query(query, [AuctionID], callback);
+};
+
+// Function to fetch auction details
+const getAuctionDetails = (AuctionID, callback) => {
+  const query = `
+    SELECT ItemName, EndDate 
+    FROM Auctions 
+    WHERE AuctionID = ?;
+  `;
+  db.query(query, [AuctionID], callback);
+};
+
+const getHighestBidForAuction = (AuctionID, callback) => {
+  const query = `
+    SELECT MAX(BidAmount) AS CurrentBidAmount
+    FROM Bids
+    WHERE AuctionID = ?
+  `;
+
+  db.query(query, [AuctionID], (err, results) => {
+    if (err) {
+      return callback(err);
+    }
+    const currentBid = results[0]?.CurrentBidAmount || 0; // Default to 0 if no bids
+    callback(null, currentBid);
+  });
+};
+// Main API route to place a bid
 app.post('/api/bid', (req, res) => {
   const { BidAmount, AuctionID, BidderUserID } = req.body;
 
@@ -333,13 +491,13 @@ app.post('/api/bid', (req, res) => {
   `;
 
   const values = [
-    BidAmount,       
-    BidderUserID,    
-    AuctionID,       
-    AuctionID,       
-    BidAmount,       
-    BidderUserID,    
-    BidderUserID,    
+    BidAmount,
+    BidderUserID,
+    AuctionID,
+    AuctionID,
+    BidAmount,
+    BidderUserID,
+    BidderUserID,
   ];
 
   db.query(query, values, (err, results) => {
@@ -357,10 +515,31 @@ app.post('/api/bid', (req, res) => {
         );
     }
 
-    res.status(201).json({ message: 'Bid successfully placed!', results });
+    // If bid was successfully placed, fetch auction details and notify watchers
+    getAuctionDetails(AuctionID, (err, auctionDetails) => {
+      if (err) {
+        console.error('Error fetching auction details:', err.stack);
+        res.status(500).send('Error fetching auction details');
+        return;
+      }
+
+      const { ItemName, EndDate } = auctionDetails[0];
+      const remainingTime = new Date(EndDate) - new Date();
+
+      console.log("auctionDetails ///////")
+      console.log("auctionDetails", auctionDetails)
+      console.log("auctionDetails ///////")
+      
+      // Notify watchers of the auction
+      notifyWatchers(AuctionID, BidAmount, remainingTime, ItemName);
+
+      res.status(201).json({ message: 'Bid successfully placed and notifications sent!' });
+    });
   });
 });
 
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 app.get('/api/bids/:auctionId', (req, res) => {
   const auctionId = req.params.auctionId;
