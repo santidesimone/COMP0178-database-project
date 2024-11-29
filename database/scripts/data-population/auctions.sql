@@ -55,3 +55,20 @@ SELECT
     DATE_ADD(CURDATE(), INTERVAL 3 MONTH),  -- Change EndDate to 3 months from now
     1,  
     1;  -- Set AuctionStatusID to 1 (open)
+
+
+--  Insert similar actions (so as they can be recommended to user's)
+INSERT INTO `Auctions` 
+    (`SellerID`, `ItemName`, `ItemDescription`, `StartingPrice`, `ReservePrice`, `WinnerPrice`, `ImageURL`, `StartDate`, `EndDate`, `CategoryID`, `AuctionStatusID`) 
+SELECT 
+    6,  
+    'Samsung Galaxy', 
+    'Used phone ', 
+    30.00, 
+    35.00, 
+    45.00, 
+    'https://i.ibb.co/ZTWMZ8N/Screenshot-2024-11-29-at-1-35-16-PM.png', 
+    DATE_SUB(CURDATE(), INTERVAL 2 MONTH),  
+    DATE_ADD(CURDATE(), INTERVAL 3 MONTH),  -- Change EndDate to 3 months from now
+    1,  
+    1;  -- Set AuctionStatusID to 1 (open)

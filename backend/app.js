@@ -405,15 +405,6 @@ const notifyWatchers = (AuctionID, BidAmount, remainingTime, ItemName) => {
   });
 };
 
-// // Set up nodemailer transporter
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'developer.tester.0000@gmail.com',
-//     pass: 'securepassword',
-//   },
-// });
-
 var transporter = nodemailer.createTransport({
   host: "smtp-mail.outlook.com", // hostname
   secureConnection: false, 
@@ -1027,10 +1018,41 @@ app.get('/api/recommendations/:UserID', (req, res) => {
     res.status(200).json(results);
   });
 });
-// mysql> SELECT DISTINCT b.BidderID, u.Username  -- Select distinct BidderID and Username
-//     -> FROM Bids b
-//     -> JOIN Users u ON b.BidderID = u.UserID  -- Join Bids with Users to get Username
-//     -> WHERE b.AuctionID IN (1, 2, 3, 4, 5);  -- Filter bids by AuctionID
+
+app.get('/api/auction/seller-details/:auctionId', (req, res) => {
+  const auctionId = req.params.auctionId;
+  const query = `
+      SELECT 
+      u.Email, 
+      u.Username,
+      AVG(ar.Rating) AS Rating 
+    FROM 
+      Auctions a
+    JOIN 
+      Users u ON a.SellerID = u.UserID 
+    LEFT JOIN 
+      AuctionRatings ar ON a.AuctionID = ar.AuctionID  
+    WHERE 
+      u.UserID = (SELECT SellerID FROM Auctions WHERE AuctionID = ?)  
+    GROUP BY 
+      u.UserID;
+  `;
+
+  db.query(query, [auctionId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving seller information:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length > 0) {
+      const sellerInfo = results[0];
+      return res.json(sellerInfo);
+    } else {
+      return res.status(404).json({ error: 'Auction not found or no seller information available' });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);
 });
