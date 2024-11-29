@@ -80,9 +80,6 @@
                           <!-- Align price and favorite button in the same row -->
                           <div class="d-flex justify-content-between align-items-center mb-2">
                             <p class="card-text mb-0">Price: ${{ result.StartingPrice }}</p>
-                            <!-- <button class="btn btn-outline-secondary">
-                              <i class="fa fa-heart"></i>
-                            </button> -->
                             <button 
                               class="btn btn-outline-primary" 
                               (click)="toggleFavorite(result.AuctionID)"
@@ -106,8 +103,6 @@
             </div>
             <div class="col-md-2 right-col">
                 <div  style="padding-top: 100px;">
-                  <!-- <h2>Right Column</h2>
-                  <p>This column is fixed.</p> -->
                   <div *ngIf="recommendations.length > 0" class="recommendations-container">
                     <h2>Recommended </h2>
                     <div class="row">
