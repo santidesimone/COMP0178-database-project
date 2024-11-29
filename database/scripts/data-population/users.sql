@@ -1,6 +1,6 @@
 -- User 1
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-    VALUES ('sellerbuyer0001@example.com', 'sellerbuyer1990', 'secure', 1, 'f77225b63d', 'Pending');
+    VALUES ('sellerbuyer0001@example.com', 'sellerbuyer1990', SHA('secure'), 1, 'f77225b63d', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
     VALUES (
@@ -16,7 +16,7 @@ INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`,
 
 -- User 2
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-    VALUES ('sellerbuyer0002@example.com', 'sellerbuyer1991', 'secure', 1, '6fb198c593', 'Pending');
+    VALUES ('sellerbuyer0002@example.com', 'sellerbuyer1991', SHA('secure'), 1, '6fb198c593', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
     VALUES (
@@ -32,7 +32,7 @@ VALUES (
 
 -- User 3
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('sellerbuyer0003@example.com', 'sellerbuyer0003', 'secure', 1, '778a742df5', 'Pending');
+VALUES ('sellerbuyer0003@example.com', 'sellerbuyer0003', SHA('secure'), 1, '778a742df5', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -48,7 +48,7 @@ VALUES (
 
 -- User 4
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('sellerbuyer0004@example.com', 'sellerbuyer0004', 'secure', 1, '3d6474594b', 'Pending');
+VALUES ('sellerbuyer0004@example.com', 'sellerbuyer0004', SHA('secure'), 1, '3d6474594b', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -64,7 +64,7 @@ VALUES (
 
 -- User 5
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('sellerbuyer0005@example.com', 'sellerbuyer0005', 'secure', 1, '7877af8530', 'Pending');
+VALUES ('sellerbuyer0005@example.com', 'sellerbuyer0005', SHA('secure'), 1, '7877af8530', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -80,7 +80,7 @@ VALUES (
 
 -- User 6
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('sellerbuyer0006@example.com', 'sellerbuyer0006', 'secure', 1, '48c9f373fc', 'Pending');
+VALUES ('sellerbuyer0006@example.com', 'sellerbuyer0006', SHA('secure'), 1, '48c9f373fc', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -96,7 +96,7 @@ VALUES (
 
 -- User 7
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('onlybuyer0001@example.com', 'onlybuyer0001', 'secure', 1, '017cae5575', 'Pending');
+VALUES ('onlybuyer0001@example.com', 'onlybuyer0001', SHA('secure'), 1, '017cae5575', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -106,7 +106,7 @@ VALUES (
 
 -- User 8
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('onlybuyer0002@example.com', 'onlybuyer0002', 'secure', 1, '2dde4868db', 'Pending');
+VALUES ('onlybuyer0002@example.com', 'onlybuyer0002', SHA('secure'), 1, '2dde4868db', 'Pending');
 
 INSERT INTO `BuyerDetails` (`UserID`, `ShippingAddress`) 
 VALUES (
@@ -116,7 +116,7 @@ VALUES (
 
 -- User 9
 INSERT INTO `Users` (`Email`, `Username`, `Password`, `StatusID`, `InviteCode`, `ReferralRewardStatus`) 
-VALUES ('onlyseller0002@example.com', 'onlyseller0002', 'secure', 1, 'bd3f07bbfc', 'Pending');
+VALUES ('onlyseller0002@example.com', 'onlyseller0002', SHA('secure'), 1, 'bd3f07bbfc', 'Pending');
 
 INSERT INTO `SellerDetails` (`UserID`, `StreetAddress`, `City`, `StateProvince`, `PostalCode`, `Country`)  
 VALUES (

@@ -18,7 +18,7 @@ app.post('/api/signup', (req, res) => {
   // Constants for SQL queries
   const SQL_INSERT_USER = `
   INSERT INTO Users (Email, Username, Password, StatusID, InviteCode) 
-  VALUES (?, ?, ?, 1, ?);
+  VALUES (?, ?, SHA(?), 1, ?);
   `;
 
   const SQL_INSERT_BUYER_DETAILS = `
@@ -131,7 +131,9 @@ app.post('/api/signin', (req, res) => {
   const body = req.body;
   let responseData = {};
 
-  const query = `SELECT * FROM Users WHERE email = '${body.email}' AND password = '${body.password}';`;
+  const query = `SELECT * FROM Users 
+      WHERE email = '${body.email}' 
+      AND password = SHA('${body.password}');`;
 
   db.query(query, (err, results) => {
     if (err) {
