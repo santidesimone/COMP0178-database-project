@@ -61,7 +61,7 @@ VALUES
     ('Sports & Outdoors'),
     ('Automotive'),
     ('Books');
-
+    
 -- ?. Create the `AuctionStatus` Table
 CREATE TABLE `AuctionStatus` (`StatusID` INT AUTO_INCREMENT PRIMARY KEY, `StatusName` VARCHAR(255) NOT NULL);
 -- Insert default AuctionStatus values
@@ -79,13 +79,11 @@ CREATE TABLE `Auctions` (
     `ImageURL` VARCHAR(255),
     `StartDate` DATETIME,
     `EndDate` DATETIME,
-    -- `HighestBid` INT,
     `AuctionStatusID` INT DEFAULT 1,  -- Add this line
     `CategoryID` INT NOT NULL,
-    -- FOREIGN KEY (`SellerID`) REFERENCES `SellerDetails`(`SellerID`),
     FOREIGN KEY (`SellerID`) REFERENCES `Users`(`UserID`),
-    -- FOREIGN KEY (`HighestBid`) REFERENCES `Bids`(`BidID`),
-    FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`)
+    FOREIGN KEY (`CategoryID`) REFERENCES `ItemCategory`(`CategoryID`),
+    FOREIGN KEY (`AuctionStatusID`) REFERENCES `AuctionStatus`(`StatusID`)
 );
 
 -- 7. Create the `Bids` Table
