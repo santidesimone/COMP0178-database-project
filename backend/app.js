@@ -1004,7 +1004,8 @@ app.get('/api/recommendations/:UserID', (req, res) => {
     SELECT a.AuctionID, a.ItemName, a.ItemDescription, a.EndDate, a.StartingPrice
     FROM Auctions a
     WHERE a.AuctionID IN (SELECT AuctionID FROM RecommendedAuctions)
-    AND a.EndDate > NOW() -- Only include active auctions 
+    AND a.AuctionStatusID = 2 -- Only include open auctions
+    AND a.EndDate > NOW() -- 
     ORDER BY a.EndDate ASC -- Optional: Order by soonest ending auctions
     LIMIT 5; -- Limit to top 5 recommendations
   `;
