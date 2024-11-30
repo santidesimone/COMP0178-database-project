@@ -8,8 +8,6 @@ import { SessionComponent } from './../session.component'; // Adjust the path if
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
-              
-
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -46,17 +44,12 @@ export class SignupComponent {
   }
 
   ngOnInit() {
-    // Fetch the inviteCode from the route
     this.route.paramMap.subscribe(params => {
       this.inviteCode = params.get('inviteCode');
       if (this.inviteCode) {
         console.log('Received invite code:', this.inviteCode);
         this.inviteCode2 = this.inviteCode;
-        // Optionally, save the invite code to localStorage or pass it to the backend
       }
-      // else{
-      //   this.inviteCode = "";
-      // }
     });
   }
 
@@ -104,19 +97,14 @@ export class SignupComponent {
     this.http.post('http://localhost:3000/api/signup', requestBody).subscribe({
       next: (response) => {
         console.log('Signup successful:', response);
-        // Handle successful signup (e.g., redirect to login page)
-        // this.sessionComponent.setUser(requestBody);  
-        // redirect to search page
         this.router.navigate(['/signin']); 
         //
       },
       error: (error) => {
         console.error('Signup failed:', error);
         this.errorMessage = 'Signup failed. Please try again later.';
-        // Handle signup error (e.g., display error message)
       },
       complete: () => {
-        // Optional: Handle completion if needed
         console.log('Signup request completed.');
       }
     });

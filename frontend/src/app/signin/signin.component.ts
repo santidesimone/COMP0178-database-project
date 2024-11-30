@@ -53,30 +53,20 @@ export class SigninComponent {
       email: formData.email,
       password: formData.password, 
     };
-    // console.log(requestBody)
+
     this.http.post('http://localhost:3000/api/signin', requestBody).subscribe({
       next: (response) => {
         console.log('- - - - - - - - - - - - ');
         console.log('Signin successful:', response);
         console.log('- - - - - - - - - - - - ');
-      //   {
-      //     "UserID": 1,
-      //     "Email": "santiagox@example.com",
-      //     "CreatedDate": "2024-11-10T11:31:48.000Z",
-      //     "Username": "santiagox1990",
-      //     "Password": "securepasswordhash",
-      //     "StatusID": 1
-      // }
       this.sessionComponent.setUser(response);  
       console.log("signin response")
       console.log(response)
       console.log("---------------")
       this.router.navigate(['/search']); 
-        // Handle successful signin, e.g., redirect to another page
       },
       error: (error) => {
         console.error('Signin failed:', error);
-        // Handle signin error, e.g., display an error message
       }
     });
   }

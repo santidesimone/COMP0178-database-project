@@ -11,8 +11,7 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
 export const routes: Routes = [
   { path: 'signup/:inviteCode', component: SignupComponent },  
   { path: 'signup', component: SignupComponent },  
-  // { path: 'signin', component: SigninComponent },   
-  { path: 'signin', component: SigninComponent }, // Added route with optional parameter
+  { path: 'signin', component: SigninComponent },
   { path: 'search', component: SearchComponent },  
   { path: 'auction-detail', component: AuctionDetailComponent },  
   { path: 'bids-and-purchases', component: BidsAndPurchasesComponent },  

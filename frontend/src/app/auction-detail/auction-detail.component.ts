@@ -104,7 +104,7 @@ export class AuctionDetailComponent implements OnInit {
 
     const requestBody = {
       BidAmount: this.offerAmount,
-      BidderUserID: bidderUserID, // Assuming you have BuyerID in buyerDetails
+      BidderUserID: bidderUserID, 
       AuctionID:  this.data.AuctionID
     };
 

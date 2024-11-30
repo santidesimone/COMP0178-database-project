@@ -21,7 +21,6 @@
             <button class="btn btn-primary" (click)="getWinnerDetails(sale.AuctionID)">
               See Details
             </button>
-            <!-- Winner Details Object: {{winnerDetails | json}} -->
             <div *ngIf="winnerDetails[sale.AuctionID]">
               <div *ngIf="winnerDetails[sale.AuctionID].username && winnerDetails[sale.AuctionID].email">
                 <strong>Winner: </strong>

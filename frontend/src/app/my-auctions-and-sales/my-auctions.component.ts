@@ -26,7 +26,7 @@ export class MyAuctionsAndSalesComponent implements OnInit {
   auction: any;
   data: any;
   bids: any;
-  offerAmount: number = 0; // To store the offer amount
+  offerAmount: number = 0; 
   userId: any;
   user: any;
   sellerUserID: any;

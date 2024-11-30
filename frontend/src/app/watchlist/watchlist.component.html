@@ -1,9 +1,6 @@
-
 <div class="container mt-5" style="padding-top: 100px;">
     <h3>My Watchlist</h3>
-    <!---->
     <div class="row"  *ngIf="favorites && favorites.length > 0;"  >
-        <!-- {{ favorites | json }} -->
         <div class="col-md-4 mb-4" *ngFor="let favorite of favorites">
             <div class="card h-100">
                 <img *ngIf="favorite.ImageURL" [src]="favorite.ImageURL" class="card-img-top" alt="{{ favorite.ItemName }}">
@@ -22,7 +19,6 @@
                     <p class="card-text"><strong>Price:</strong> ${{ favorite.StartingPrice }}</p>
                     <p class="card-text"><strong>Description:</strong> {{ favorite.ItemDescription }}</p>
                     <p class="card-text"><strong>Ends On:</strong> {{ favorite.EndDate }}</p>
-                    <!-- <p class="card-text"><strong>Location:</strong> {{ favorite.City }}, {{ favorite.StateProvince }}</p> -->
                 </div>
             </div>
         </div>

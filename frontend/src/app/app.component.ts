@@ -20,13 +20,10 @@ import { JsonPipe } from '@angular/common';
 export class AppComponent implements OnInit{
   myVariable: any; 
   currentRoute: string = '';  // Store the current route
-  // inviteLinkBannerIsVisible: boolean = false;
   title = 'auctions-app';
   user: any = {};
   userIsSeller: boolean = false;
   userIsBuyer: boolean = false;
-  // sessionC: SessionComponent;
-  // myGlobalVariable: any;
 
 
   constructor(
@@ -38,22 +35,6 @@ export class AppComponent implements OnInit{
 
     ngOnInit() {
       let user:any = this.sessionComponent.getUser();
-      // if (user != null && user["inviteCode"]){
-      //   this.inviteCode = user["inviteCode"];
-      //   console.log(user)
-      //   console.log("this.inviteCode", this.inviteCode)
-      //   this.inviteLinkBannerIsVisible = true;
-      // }
-      // console.log(user)
-      // if (user != null && user.hasOwnProperty('sellerDetails')) {
-      //   this.userIsSeller = true;
-      // }
-      // else{
-      //   this.userIsSeller = false;
-      // }
-      // console.log("this.userIsSeller")
-      // console.log(this.userIsSeller)
-      // console.log("this.userIsSeller")
     }
 
     toggleCart() {
@@ -80,15 +61,6 @@ export class AppComponent implements OnInit{
   
   copyLink(){
     console.log("copyLink: executing")
-    // navigator.clipboard.writeText("https://localhost:8080/singup/"+this.inviteCode)
-    // .then(() => {
-    //     // Notify the user that the text was copied
-    //     // alert("Link copied to clipboard!");
-    // })
-    // .catch(err => {
-    //     // Handle errors (e.g., if the clipboard API is not supported)
-    //     console.error('Failed to copy: ', err);
-    // });
   }
 
 }

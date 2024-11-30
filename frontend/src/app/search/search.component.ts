@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
-// import { Router } from '@angular/router';
 import { NgFor, NgIf, NgClass} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { JsonPipe } from '@angular/common'; 
 import { SessionComponent } from '../session.component'; // Adjust the path if needed
-
  
 @Component({
   selector: 'app-search',
@@ -21,9 +19,9 @@ import { SessionComponent } from '../session.component'; // Adjust the path if n
 export class SearchComponent {
   searchForm: FormGroup;
   errorMessage = '';
-  searchResults: any[] = []; // Use any[] to store the JSON result
-  favorites: number[] = []; // Array to hold favorite auction IDs
-  recommendations: any[] = []; // Array to store recommendations
+  searchResults: any[] = []; 
+  favorites: number[] = []; 
+  recommendations: any[] = []; 
 
   displayInviteLink: boolean = false;
   inviteLinkBannerIsVisible: boolean = true;
@@ -57,13 +55,11 @@ constructor(private fb: FormBuilder,
         },
         error: (error) => {
           console.error('Search failed:', error);
-          // Handle signin error, e.g., display an error message
         }
       });
 
   }
   navigateToAuctionDetail(auction: any): void {
-    // this.router.navigate(['/auction-detail', auctionID]);
     this.router.navigateByUrl('/auction-detail', { state: auction });
     console.log("----------------------------")
     console.log(auction)
@@ -111,15 +107,14 @@ constructor(private fb: FormBuilder,
     console.log("-----------------")
 
     this.http.post('http://localhost:3000/api/search', requestBody).subscribe({
-        next: (response: any) => { // Use any for the response type
-            this.searchResults = response; // Store the JSON result in the array
+        next: (response: any) => { 
+            this.searchResults = response; 
             console.log('/ / / / / / / / / /');
             console.log('Search successful:', this.searchResults);
             console.log('/ / / / / / / / / /');
         },
         error: (error) => {
           console.error('Search failed:', error);
-          // Handle signin error, e.g., display an error message
         }
       });
   }
@@ -142,7 +137,6 @@ constructor(private fb: FormBuilder,
     let user = this.sessionComponent.getUser();
     let userID = user != null ? user["userID"] : 1;  // Use the userID from session or default to 1 if not available
     
-    // Assuming the recommendations endpoint accepts userID as a query parameter
     this.http.get<any[]>(`http://localhost:3000/api/recommendations/${userID}`).subscribe({
       next: (data) => {
         this.recommendations = data;  // Assuming 'data' contains an array of recommended items

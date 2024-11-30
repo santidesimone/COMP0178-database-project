@@ -47,7 +47,6 @@
               </div>
           </div>
   
-            <!-- Rating Form -->
             <hr>
             <form (ngSubmit)="submitRating(purchase)">
               <label for="rating-{{ purchase.AuctionID }}">Rate this purchase:</label>
@@ -62,7 +61,6 @@
     </div>
   </div>
   
-  <!-- <p *ngIf="userIsBuyer && purchases && purchases.length === 0"> -->
   <p *ngIf=" purchases && purchases.length === 0">
       You haven't won any auctions yet.
   </p>
@@ -70,7 +68,6 @@
   <h3>My Bids</h3>
   <hr>
   
-  <!-- <div *ngIf="userIsBuyer && bids && bids.length > 0"> -->
   <div *ngIf="bids && bids.length > 0">
       <ul>
       <li *ngFor="let bid of bids">
@@ -81,14 +78,8 @@
     </ul>
   </div>
   
-  <!-- <p *ngIf="userIsBuyer && bids && bids.length === 0">You haven't placed any bids yet.</p> -->
   <p *ngIf=" bids && bids.length === 0">You haven't placed any bids yet.</p>
   
-  <!-- <p *ngIf="!userIsBuyer"> -->
-    <!-- <p >
-      Your account has a Seller-only profile.
-    <a routerLink="/change-profile">Update your profile</a> to Buyer-Seller to participate in auctions as a bidder.
-  </p> -->
-  
+
 </div>
 

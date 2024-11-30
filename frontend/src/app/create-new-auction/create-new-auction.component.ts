@@ -84,8 +84,6 @@ export class CreateNewAuctionComponent {
       ReservePrice: formData.ReservePrice,
       WinnerPrice: formData.WinnerPrice,
       StartDate: formatDateToMySQL(new Date()), 
-      // EndDate: new Date(formData.EndDate), 
-      // EndDate: new Date(formatDateToMySQL(formData.EndDate)),
       EndDate: formatDateToMySQL(new Date(formData.EndDate)),
       CategoryID: formData.CategoryID, 
       ImageURL: formData.ImageURL

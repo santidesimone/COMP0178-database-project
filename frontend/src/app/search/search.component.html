@@ -4,7 +4,6 @@
     <div class="card-body">
       <h5 class="card-title">Share Your Invite Link</h5>
       <p class="card-text">When 2 friends sign up using your link, you’ll receive a 10% discount on your next purchase!</p>
-      <!-- <input type="text" class="form-control" value="http://localhost:8080/signup/{{inviteCode}}" readonly> -->
       <button class="btn btn-primary mt-2" (click)="generateInviteLink()" >Generate Invite Link</button>
       <input *ngIf="displayInviteLink" type="text" class="form-control" [value]="getInviteLink()" readonly>
     </div>
@@ -72,12 +71,10 @@
                     *ngFor="let result of searchResults; let i = index" 
                     class="col-md-4 mb-4"
                   >
-                    <!-- <a class="text-decoration-none text-dark" > -->
                       <div class="card h-100">
                         <img *ngIf="result.ImageURL" [src]="result.ImageURL" class="card-img-top" alt="{{ result.ItemName }}">
                         <div class="card-body">
                           <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(result)">{{ result.ItemName }}</h5>
-                          <!-- Align price and favorite button in the same row -->
                           <div class="d-flex justify-content-between align-items-center mb-2">
                             <p class="card-text mb-0">Price: ${{ result.StartingPrice }}</p>
                             <button 
@@ -95,7 +92,6 @@
                           <p class="card-text">StateProvince: {{ result.StateProvince }}</p>
                         </div>
                       </div>
-                    <!-- </a> -->
                   </div>
                 </div>
               </div>
@@ -109,10 +105,8 @@
                       {{recommendations.length}}
                       <div class="col-12" *ngFor="let item of recommendations">
                         <div class="card h-100">
-                          <!-- <img  [src]="item.ImageURL" class="card-img-top" alt="{{ item.ItemName }}"> -->
                           <div class="card-body" style="margin-bottom: 5px;">
                             <h5 class="card-title blue-on-hover" (click)="navigateToAuctionDetail(item)">{{ item.ItemName }}</h5>
-                            <!-- Align price and favorite button in the same row -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                               <p class="card-text mb-0">Price: ${{ item.StartingPrice }}</p>
                               <button 

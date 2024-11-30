@@ -7,7 +7,7 @@ import { NgIf, NgFor } from '@angular/common'; // Import NgFor for template rend
 import { CommonModule } from '@angular/common';
 
 interface User {
-  userID: number; // Add userID to the User interface
+  userID: number; 
   buyerDetails?: any;
 }
 
@@ -18,7 +18,7 @@ interface User {
   styleUrls: ['./bids-and-purchases.component.css'],
   imports: [
     CommonModule,
-    FormsModule,  // Import FormsModule to use ngModel
+    FormsModule, 
     ReactiveFormsModule, 
     NgIf,
     NgFor
@@ -28,7 +28,7 @@ export class BidsAndPurchasesComponent implements OnInit {
   userId: number | null = null;
   purchases: any[] = [];
   bids: any[] = [];
-  user: User | null = null;  // Assuming user can be null as well
+  user: User | null = null;  
   userIsBuyer: boolean = false;
   user2: any;
   winnerDetails: { 
@@ -85,7 +85,6 @@ export class BidsAndPurchasesComponent implements OnInit {
   }
 
   navigateToAuctionDetail(auction: any): void {
-    // this.router.navigate(['/auction-detail', auctionID]);
     this.router.navigateByUrl('/auction-detail', { state: auction });
     console.log("----------------------------")
     console.log(auction)
@@ -122,7 +121,6 @@ export class BidsAndPurchasesComponent implements OnInit {
   
     this.http.post('http://localhost:3000/api/invite-link-discount', body).subscribe(
       (response: any) => {
-        // Check if the response is an object (successful discount response)
         if (response && response.user) {
 
           console.log("will apply discount !!!!")
@@ -141,7 +139,6 @@ export class BidsAndPurchasesComponent implements OnInit {
         }
       },
       (error) => {
-        // Handle errors, if any
         console.error('Error during invite link discount process:', error);
       }
     );
@@ -157,7 +154,6 @@ export class BidsAndPurchasesComponent implements OnInit {
             email: winner.WinnerEmail,
             winningBidAmount: winner.WinningBidAmount,
           };
-          // Apply discount using the winner's email and purchase ID
           const purchase = this.purchases.find(p => p.AuctionID === auctionID);
           if (purchase) {
             this.applyInviteLinkDiscount(winner.WinnerEmail, auctionID);

@@ -306,54 +306,6 @@ app.post('/api/search/all', (req, res) => {
   });
 });
 
-// app.post('/api/bid', (req, res) => {
-//   const { BidAmount, AuctionID, BidderUserID } = req.body;
-
-//   const query = `
-//     INSERT INTO Bids (BidAmount, BidderID, AuctionID)
-//     SELECT 
-//         ?, -- BidAmount
-//         ?, -- BidderID
-//         ?  -- AuctionID
-//     FROM Auctions
-//     WHERE 
-//         AuctionID = ? AND
-//         StartingPrice <= ? AND
-//         EXISTS (SELECT 1 FROM BuyerDetails WHERE UserID = ?) AND
-//         SellerID != ?;
-//   `;
-
-//   const values = [
-//     BidAmount,       
-//     BidderUserID,    
-//     AuctionID,       
-//     AuctionID,       
-//     BidAmount,       
-//     BidderUserID,    
-//     BidderUserID,    
-//   ];
-
-//   db.query(query, values, (err, results) => {
-//     if (err) {
-//       console.error('Error inserting bid:', err.stack);
-//       res.status(500).send('Error inserting bid');
-//       return;
-//     }
-
-//     if (results.affectedRows === 0) {
-//       return res
-//         .status(400)
-//         .send(
-//           'Invalid bid: The bid amount is too low, the user is not a buyer, or the bidder is the seller.'
-//         );
-//     }
-
-//     res.status(201).json({ message: 'Bid successfully placed!', results });
-//   });
-// });
-
-
-////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 // Function to handle notifications for watchers
 const notifyWatchers = (AuctionID, BidAmount, remainingTime, ItemName) => {
@@ -465,7 +417,7 @@ const getHighestBidForAuction = (AuctionID, callback) => {
     callback(null, currentBid);
   });
 };
-// Main API route to place a bid
+// main API route to place a bid
 app.post('/api/bid', (req, res) => {
   const { BidAmount, AuctionID, BidderUserID } = req.body;
 
@@ -530,8 +482,6 @@ app.post('/api/bid', (req, res) => {
     });
   });
 });
-
-////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
 app.get('/api/bids/:auctionId', (req, res) => {
@@ -1005,7 +955,7 @@ app.get('/api/recommendations/:UserID', (req, res) => {
     FROM Auctions a
     WHERE a.AuctionID IN (SELECT AuctionID FROM RecommendedAuctions)
     AND a.AuctionStatusID = 2 -- Only include open auctions
-    AND a.EndDate > NOW() -- 
+    AND a.EndDate > NOW() -- Exclude 
     ORDER BY a.EndDate ASC -- Optional: Order by soonest ending auctions
     LIMIT 5; -- Limit to top 5 recommendations
   `;

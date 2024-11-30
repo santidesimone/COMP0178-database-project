@@ -70,18 +70,6 @@ export class WatchlistComponent implements OnInit {
           console.error('Error removing favorite:', error);
         }
       });
-    // } else {
-    //   // Add favorite
-    //   this.http.post('http://localhost:3000/api/favorites', { userId: userID, auctionId }).subscribe({
-    //     next: () => {
-    //       console.log('Added to favorites');
-    //       this.favorites.push(auctionId); // Update the favorites array
-    //     },
-    //     error: (error) => {
-    //       console.error('Error adding favorite:', error);
-    //     }
-    //   });
-    // }
   }
 
 }
